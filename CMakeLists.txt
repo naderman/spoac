@@ -1,0 +1,14 @@
+cmake_minimum_required(VERSION 2.6.3 FATAL_ERROR)
+
+# project name
+project(spoac)
+
+# project version
+set(SPOAC_PROJECT_VERSION_MAJOR "0")
+set(SPOAC_PROJECT_VERSION_MINOR "1")
+set(SPOAC_PROJECT_VERSION_MAINTENANCE "0")
+
+set(SPOAC_PROJECT_VERSION ${SPOAC_PROJECT_VERSION_MAJOR}.${SPOAC_PROJECT_VERSION_MINOR}.${SPOAC_PROJECT_VERSION_MAINTENANCE})
+
+# Set up everything else
+include(cmake/Setup.cmake)
