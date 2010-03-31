@@ -11,6 +11,6 @@
 set(SPOAC_SLICE_SOURCE_FILES
     # definitions
     # interfaces
-    SymbolicExecution.ice
-    Planning.ice
+    spoac/SymbolicExecution.ice
+    spoac/Planning.ice
 )

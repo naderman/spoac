@@ -16,6 +16,10 @@ if (COMMAND cmake_policy)
     cmake_policy(SET CMP0011 NEW)
 endif (COMMAND cmake_policy)
 
+include(cmake/SetupOs.cmake)
+include(cmake/SetupDirectories.cmake)
+include(cmake/TargetUtils.cmake)
+
 # Dependency 1: ZeroC Ice
 include(${SPOAC_CMAKE_DIR}/FindIce.cmake)
 SPOAC_ASSERT(ICE_FOUND

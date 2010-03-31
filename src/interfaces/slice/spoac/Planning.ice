@@ -1,7 +1,7 @@
 #ifndef _PLANNING_SLICE
 #define _PLANNING_SLICE
 
-#include <SymbolicExecution.ice>
+#include <spoac/SymbolicExecution.ice>
 
 module spoac
 {
