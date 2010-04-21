@@ -30,7 +30,7 @@ endif( ICE_HOME MATCHES /usr )
 # are orca/<included file>. slice2py will automatically prepend orca_ to the names of each of the imported modules unless
 # the SLICE_ORCA_SOURCE_DIR directory is also included. See Sec. 22.15.2 in the Ice manual for how code generation works for
 # python.
-set( SLICE_ARGS ${SLICE_PROJECT_ARGS} -I${SLICE_SOURCE_DIR} -I${SLICE_SOURCE_DIR} -I${ice_slice_dir} --output-dir ${SLICE2PY_BINARY_DIR} )
+set( SLICE_ARGS --prefix spoac_ -I${SLICE_SOURCE_DIR} -I${SLICE_SOURCE_DIR} -I${ice_slice_dir} --output-dir ${SLICE2PY_BINARY_DIR} )
 
 #
 # byte-compile all the python interfaces to produce .pyc files
@@ -38,7 +38,7 @@ set( SLICE_ARGS ${SLICE_PROJECT_ARGS} -I${SLICE_SOURCE_DIR} -I${SLICE_SOURCE_DIR
 add_custom_command(
     OUTPUT    ${SLICE2PY_BINARY_DIR}/${INTERFACE_NAMESPACE}/spoac_ice.pyc
     COMMAND   ${PYTHON_EXECUTABLE}
-    ARGS      -m compileall ${SLICE2PY_BINARY_DIR}/${INTERFACE_NAMESPACE}
+    ARGS      -m compileall ${SLICE2PY_BINARY_DIR}
     DEPENDS   ${SLICE2PY_BINARY_DIR}/${INTERFACE_NAMESPACE}/__init__.py
     COMMENT   "Creating byte-compiled files for Python interfaces"
   )

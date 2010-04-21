@@ -22,7 +22,7 @@ include(cmake/TargetUtils.cmake)
 
 # Dependency 1: ZeroC Ice
 include(${SPOAC_CMAKE_DIR}/FindIce.cmake)
-SPOAC_ASSERT(ICE_FOUND
+GBX_ASSERT(ICE_FOUND
     "Looking for Ice - not found. Please install Ice, ** delete CMakeCache.txt **, then re-run CMake."
     "Looking for Ice - found in ${ICE_HOME}"
     1
@@ -30,7 +30,7 @@ SPOAC_ASSERT(ICE_FOUND
 
 # Test Ice installation
 include(${SPOAC_CMAKE_DIR}/TestIce.cmake)
-SPOAC_ASSERT(ICE_WORKS
+GBX_ASSERT(ICE_WORKS
     "Testing Ice - failed. Please check or reinstall it, ** delete CMakeCache.txt **, then re-run CMake."
     "Testing Ice - ok."
     1
@@ -67,8 +67,8 @@ include(${SPOAC_CMAKE_DIR}/CheckCommonDependencies.cmake)
 # the RPATH to be used when installing
 set(CMAKE_INSTALL_RPATH
         ${ICE_LIB_DIR}
-        ${SPOAC_LINK_DIR}        # this is where satellite projects found Orca
-        ${SPOAC_LIB_INSTALL_DIR}  # this is where Orca project will install libs
+        ${GBX_LINK_DIR}        # this is where satellite projects found Orca
+        ${GBX_LIB_INSTALL_DIR}  # this is where Orca project will install libs
 )
 # message( STATUS CMAKE_INSTALL_RPATH=${CMAKE_INSTALL_RPATH} )
 

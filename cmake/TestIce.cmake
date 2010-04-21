@@ -36,7 +36,7 @@ else( ICE_VERSION MATCHES "3\\.[3-9]" )
     set( ICE_VERSION_OK 0 )
 endif( ICE_VERSION MATCHES "3\\.[3-9]" )
 
-SPOAC_ASSERT ( ICE_VERSION_OK
+GBX_ASSERT ( ICE_VERSION_OK
             "Checking Ice version - ${ICE_VERSION} - failed. Orca requires Ice v. 3.3.0 or newer."
             "Checking Ice version - ${ICE_VERSION} - ok"
             1 )

@@ -45,9 +45,9 @@ include(${CMAKE_ROOT}/Modules/FindJava.cmake)
 if( JAVA_RUNTIME )
     set( JAVA_FOUND 1 )
 endif( JAVA_RUNTIME )
-SPOAC_ASSERT( JAVA_FOUND "Looking for Java - not found" "Looking for Java - found" )
+GBX_ASSERT( JAVA_FOUND "Looking for Java - not found" "Looking for Java - found" )
 
 # Check for Python interpreter installation
 include(${CMAKE_ROOT}/Modules/FindPythonInterp.cmake)
-SPOAC_ASSERT( PYTHONINTERP_FOUND "Looking for the Python interpreter - not found" "Looking for the Python interpreter - found" )
+GBX_ASSERT( PYTHONINTERP_FOUND "Looking for the Python interpreter - not found" "Looking for the Python interpreter - found" )
 

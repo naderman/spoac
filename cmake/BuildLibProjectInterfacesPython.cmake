@@ -41,6 +41,7 @@ if( build )
         # http://www.cmake.org/Wiki/CMake_FAQ#How_do_I_use_CMake_to_build_LaTeX_documents.3F
         ADD_CUSTOM_TARGET( ${PYTHON_INTERFACE} ALL echo
             DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${INTERFACE_NAMESPACE}/${PYTHON_INTERFACE} ${SPOAC_SLICE_SOURCE_FILE_PATHS} )
+
         endforeach( PYTHON_INTERFACE ${SLICE_GENERATED_PY_FILES} )
 
         #
@@ -55,14 +56,15 @@ if( build )
         # install the .py, .pyc files, and the package for the spoac python module
         #
 
+        # install the orca python module
+        install( DIRECTORY ${SLICE2PY_BINARY_DIR}/${INTERFACE_NAMESPACE} DESTINATION ${GBX_SHARE_INSTALL_DIR}/python )
+        message( STATUS "Will install Python files into ${GBX_SHARE_INSTALL_DIR}/python/${slice_module}" )
+
         # install .py files
-        INSTALL_FILES( /python/spoac FILES ${SLICE_GENERATED_PY_FILES} )
+        install( FILES ${SLICE_GENERATED_PY_FILES} DESTINATION ${GBX_SHARE_INSTALL_DIR}/python/${INTERFACE_NAMESPACE} )
         # install .pyc files
         string( REGEX REPLACE "\\.py" .pyc SLICE_GENERATED_PYC_FILES "${SLICE_GENERATED_PY_FILES}" )
-        INSTALL_FILES( /python/spoac FILES ${SLICE_GENERATED_PYC_FILES} )
-        # install the spoac python module
-        install(DIRECTORY ${SLICE2PY_BINARY_DIR}/spoac DESTINATION ${GBX_SHARE_INSTALL_DIR}/python/spoac )
-        message( STATUS "Will install Python files into ${GBX_SHARE_INSTALL_DIR}/python/spoac" )
+        install( FILES ${SLICE_GENERATED_PYC_FILES} DESTINATION ${GBX_SHARE_INSTALL_DIR}/python/${INTERFACE_NAMESPACE} )
 
     else( PYTHONINTERP_FOUND AND SPOAC_BUILD_PYTHON )
         message( STATUS "Will not build Python interfaces : PYTHONINTERP_FOUND=${PYTHON_FOUND}, SPOAC_BUILD_PYTHON=${SPOAC_BUILD_PYTHON}" )
