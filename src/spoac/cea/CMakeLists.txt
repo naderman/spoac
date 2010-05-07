@@ -3,9 +3,6 @@ ORCA_SET_LIBRARY_NAME(SpoacCEA)
 set(build TRUE)
 GBX_REQUIRE_OPTION(build LIB ${LIB_NAME} ON)
 
-set(dep_libs SpoacInterfaces)
-GBX_REQUIRE_LIBS(build LIB ${LIB_NAME} ${dep_libs})
-
 if (build)
 
     include(${SPOAC_CMAKE_DIR}/UseComponentRules.cmake)
