@@ -49,7 +49,6 @@ set( GBX_CMAKE_PKGCONFIG_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/${GBX_CMAKE_PKGCONF
 set( GBX_LIB_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/${GBX_LIB_INSTALL_SUFFIX} )
 set( GBX_PKGCONFIG_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/${GBX_PKGCONFIG_INSTALL_SUFFIX} )
 
-message (STATUS ">>>>>>>>>>>>>>>>>>>>>>>>> ${CMAKE_INSTALL_PREFIX}")
 #
 # It's sometimes useful to refer to the top level of the project.
 # CMake provides the right variables but, as all variables, they are poorly documented.

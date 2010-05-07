@@ -1,0 +1,16 @@
+include(${SPOAC_CMAKE_DIR}/UseComponentRules.cmake)
+
+link_libraries(SpoacCEA)
+link_libraries(boost_unit_test_framework-mt)
+
+#add_executable( ceatest ceatest.cpp )
+#GBX_ADD_TEST( spoac_CEA ceatest )
+
+add_executable( OACTest OACTest.cpp )
+GBX_ADD_TEST( spoac_OAC OACTest )
+
+add_executable( ActionTest ActionTest.cpp )
+GBX_ADD_TEST( spoac_Action ActionTest )
+
+add_executable( ActivityControllerTest ActivityControllerTest.cpp )
+GBX_ADD_TEST( spoac_ActivityController ActivityControllerTest )

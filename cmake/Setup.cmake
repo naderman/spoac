@@ -2,7 +2,6 @@
 # Based on Orca Robotics cmake file.
 # http://orca-robotics.sourceforge.net
 #
-include(cmake/Assert.cmake)
 
 set(SPOAC_CMAKE_DIR ${${PROJECT_NAME}_SOURCE_DIR}/cmake)
 message(STATUS "Running CMake scripts in ${SPOAC_CMAKE_DIR}")
@@ -16,9 +15,12 @@ if (COMMAND cmake_policy)
     cmake_policy(SET CMP0011 NEW)
 endif (COMMAND cmake_policy)
 
-include(cmake/SetupOs.cmake)
-include(cmake/SetupDirectories.cmake)
-include(cmake/TargetUtils.cmake)
+include(${SPOAC_CMAKE_DIR}/SetupOs.cmake)
+include(${SPOAC_CMAKE_DIR}/SetupDirectories.cmake)
+include(${SPOAC_CMAKE_DIR}/Assert.cmake)
+include(${SPOAC_CMAKE_DIR}/TargetUtils.cmake)
+include(${SPOAC_CMAKE_DIR}/DependencyUtils.cmake)
+include(${SPOAC_CMAKE_DIR}/NameUtils.cmake)
 
 # Dependency 1: ZeroC Ice
 include(${SPOAC_CMAKE_DIR}/FindIce.cmake)
@@ -72,9 +74,20 @@ set(CMAKE_INSTALL_RPATH
 )
 # message( STATUS CMAKE_INSTALL_RPATH=${CMAKE_INSTALL_RPATH} )
 
+# Enable testing by including the Dart module
+# (must be done *before* entering source directories )
+include(${CMAKE_ROOT}/Modules/Dart.cmake)
+enable_testing()
+
 add_subdirectory(cmake)
 
 add_subdirectory(src)
 add_subdirectory(scripts)
 
 message(STATUS "Ice version: ${ICE_VERSION}")
+
+# Print results of CMake activity
+GBX_CONFIG_REPORT( "Nothing special" )
+
+# House-keeping, clear lists of targets, licenses, options, etc.
+GBX_RESET_ALL_TARGET_LISTS()
