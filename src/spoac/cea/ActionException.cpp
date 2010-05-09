@@ -21,34 +21,17 @@
 *             GNU General Public License
 */
 
-#include <spoac/cea/Action.h>
-
-#include <boost/lexical_cast.hpp>
+#include <spoac/cea/ActionException.h>
 
 using namespace spoac;
 
-ObjectPtr Action::singleObject(
-    const std::vector<ObjectPtr>& objects,
-    const std::string& name)
+ActionException::ActionException(const std::string& message) throw():
+    std::exception(),
+    message(message)
 {
-    if (objects.size() != 1)
-    {
-        throw ActionException(
-            std::string("Incorrect number of parameters: ") +
-            boost::lexical_cast<std::string>(objects.size())
-        );
-    }
+}
 
-    ObjectPtr object = objects.at(0);
-
-    if (object->getName() != name)
-    {
-        throw ActionException(
-            std::string("Incorrect parameter name: '") +
-            object->getName() + std::string("' expected '") +
-            name + std::string("'")
-        );
-    }
-
-    return object;
+const char* ActionException::what() const throw()
+{
+    return message.c_str();
 }

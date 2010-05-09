@@ -24,7 +24,7 @@
 #ifndef SPOAC_CEA_OBJECT_H
 #define SPOAC_CEA_OBJECT_H
 
-#include <vector>
+#include <string>
 #include <boost/shared_ptr.hpp>
 
 namespace spoac
@@ -35,6 +35,30 @@ namespace spoac
     class Object
     {
     public:
+        /**
+        * Creates an empty object with a name.
+        *
+        * @param name The (type) name of the object, for example "cup".
+        * @param id   The identifier of the object, for example "cup1" or
+        *             "first green cup".
+        */
+        Object(const std::string& name, const std::string& id);
+
+        /**
+        * Getter for object (type) name.
+        * @return Object's name.
+        */
+        std::string getName();
+
+        /**
+        * Returns the object's id.
+        * @return Object's id.
+        */
+        std::string getId();
+
+    protected:
+        std::string name;
+        std::string id;
     };
 
     /**

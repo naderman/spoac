@@ -25,4 +25,18 @@
 
 using namespace spoac;
 
+Object::Object(const std::string& name, const std::string& id) :
+    name(name),
+    id(id)
+{
+}
 
+std::string Object::getName()
+{
+    return name;
+}
+
+std::string Object::getId()
+{
+    return id;
+}

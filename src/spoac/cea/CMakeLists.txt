@@ -1,4 +1,5 @@
 ORCA_SET_LIBRARY_NAME(SpoacCEA)
+set(LIB_INSTALL cea)
 
 set(build TRUE)
 GBX_REQUIRE_OPTION(build LIB ${LIB_NAME} ON)
