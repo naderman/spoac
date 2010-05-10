@@ -24,6 +24,8 @@
 #ifndef SPOAC_CEA_OBJECT_H
 #define SPOAC_CEA_OBJECT_H
 
+#include <spoac/cea/VariantMap.h>
+
 #include <string>
 #include <boost/shared_ptr.hpp>
 
@@ -32,7 +34,7 @@ namespace spoac
     /**
     * Abstract base class for all objects any action can deal with.
     */
-    class Object
+    class Object : public VariantMap<std::string, std::string, int, double>
     {
     public:
         /**
