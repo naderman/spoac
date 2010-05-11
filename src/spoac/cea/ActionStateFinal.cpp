@@ -25,7 +25,7 @@
 
 using namespace spoac;
 
-void ActionStateFinal::setup(const std::vector<ObjectPtr>& objects)
+void ActionStateFinal::setup(const ObjectVector& objects)
 {
 }
 

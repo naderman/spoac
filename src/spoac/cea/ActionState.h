@@ -24,9 +24,8 @@
 #ifndef SPOAC_CEA_ACTIONSTATE_H
 #define SPOAC_CEA_ACTIONSTATE_H
 
-#include <spoac/cea/Object.h>
+#include <spoac/cea/ObjectVector.h>
 
-#include <vector>
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
@@ -51,7 +50,7 @@ namespace spoac
         *
         * @param objects The objects this action should be applied on.
         */
-        virtual void setup(const std::vector<ObjectPtr>& objects) = 0;
+        virtual void setup(const ObjectVector& objects) = 0;
 
         /**
         * Executes this state of the action on the robot.

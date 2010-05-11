@@ -24,11 +24,9 @@
 #ifndef SPOAC_CEA_ACTION_H
 #define SPOAC_CEA_ACTION_H
 
-#include <vector>
 #include <boost/shared_ptr.hpp>
 
-#include <spoac/cea/Object.h>
-#include <spoac/cea/ActionException.h>
+#include <spoac/cea/ObjectVector.h>
 
 namespace spoac
 {
@@ -43,7 +41,7 @@ namespace spoac
         *
         * @param objects The objects this action should be applied on.
         */
-        virtual void setup(const std::vector<ObjectPtr>& objects) = 0;
+        virtual void setup(const ObjectVector& objects) = 0;
 
         /**
         * Executes the action on the robot.
@@ -60,19 +58,6 @@ namespace spoac
         * @return True if the action has been completed, false otherwise.
         */
         virtual bool isFinished() const = 0;
-
-        /**
-        * Throws an ActionException unless there is a single object of the given
-        * name in the given vector.
-        *
-        * @param  objects A vector of parameter objects
-        * @param  name    The single object needs to have this name.
-        * @return         The object contained in the vector
-        */
-        ObjectPtr singleObject(
-            const std::vector<ObjectPtr>& objects,
-            const std::string& name
-        );
     };
 
     /**

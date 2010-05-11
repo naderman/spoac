@@ -25,7 +25,6 @@
 #include <spoactest/test.h>
 
 #include <iostream>
-#include <vector>
 #include <spoac/cea/ActionStateMachine.h>
 #include <spoac/cea/ActionStateFinal.h>
 
@@ -36,9 +35,9 @@ namespace spoactest
     public:
         spoac::ObjectPtr counter;
 
-        virtual void setup(const std::vector<spoac::ObjectPtr>& objects)
+        virtual void setup(const spoac::ObjectVector& objects)
         {
-            counter = objects[0];
+            counter = objects.getValidated("counter");
         }
 
         virtual spoac::ActionStatePtr run()
@@ -63,9 +62,9 @@ namespace spoactest
     public:
         spoac::ObjectPtr counter;
 
-        virtual void setup(const std::vector<spoac::ObjectPtr>& objects)
+        virtual void setup(const spoac::ObjectVector& objects)
         {
-            counter = objects[0];
+            counter = objects.getValidated("counter");
         }
 
         virtual spoac::ActionStatePtr run()
@@ -98,7 +97,7 @@ BOOST_AUTO_TEST_CASE(testDummyActionStateMachine)
     spoac::ObjectPtr counter(new spoac::Object("counter", "counter1"));
     (*counter)["value"] = 0;
 
-    std::vector<spoac::ObjectPtr> objects;
+    spoac::ObjectVector objects;
     objects.push_back(counter);
 
     action->setup(objects);

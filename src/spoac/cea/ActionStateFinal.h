@@ -25,9 +25,7 @@
 #define SPOAC_CEA_ACTIONSTATEFINAL_H
 
 #include <spoac/cea/ActionState.h>
-#include <spoac/cea/Object.h>
 
-#include <vector>
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
@@ -45,7 +43,7 @@ namespace spoac
         *
         * @param objects The objects this action should be applied on.
         */
-        virtual void setup(const std::vector<ObjectPtr>& objects);
+        virtual void setup(const ObjectVector& objects);
 
         /**
         * Does nothing but return the same state.

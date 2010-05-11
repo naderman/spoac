@@ -23,32 +23,4 @@
 
 #include <spoac/cea/Action.h>
 
-#include <boost/lexical_cast.hpp>
-
 using namespace spoac;
-
-ObjectPtr Action::singleObject(
-    const std::vector<ObjectPtr>& objects,
-    const std::string& name)
-{
-    if (objects.size() != 1)
-    {
-        throw ActionException(
-            std::string("Incorrect number of parameters: ") +
-            boost::lexical_cast<std::string>(objects.size())
-        );
-    }
-
-    ObjectPtr object = objects.at(0);
-
-    if (object->getName() != name)
-    {
-        throw ActionException(
-            std::string("Incorrect parameter name: '") +
-            object->getName() + std::string("' expected '") +
-            name + std::string("'")
-        );
-    }
-
-    return object;
-}

@@ -30,7 +30,7 @@ ActionStateMachine::ActionStateMachine(ActionStatePtr startState) :
 {
 }
 
-void ActionStateMachine::setup(const std::vector<ObjectPtr>& objects)
+void ActionStateMachine::setup(const ObjectVector& objects)
 {
     this->objects = objects;
     // setup start state

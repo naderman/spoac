@@ -25,7 +25,6 @@
 #include <spoactest/test.h>
 
 #include <iostream>
-#include <vector>
 #include <spoac/cea/Action.h>
 
 namespace spoactest
@@ -35,7 +34,7 @@ namespace spoactest
     public:
         int counter;
 
-        virtual void setup(const std::vector<spoac::ObjectPtr>& objects)
+        virtual void setup(const spoac::ObjectVector& objects)
         {
             counter = 0;
         }
@@ -54,7 +53,7 @@ namespace spoactest
     class EmptyAction : public spoac::Action
     {
     public:
-        virtual void setup(const std::vector<spoac::ObjectPtr>& objects)
+        virtual void setup(const spoac::ObjectVector& objects)
         {
         }
 
@@ -73,7 +72,7 @@ BOOST_AUTO_TEST_CASE(testCountTwoAction)
 {
     spoactest::CountTwoAction action;
 
-    action.setup(std::vector<spoac::ObjectPtr>());
+    action.setup(spoac::ObjectVector());
 
     while (!action.isFinished())
     {
@@ -83,41 +82,3 @@ BOOST_AUTO_TEST_CASE(testCountTwoAction)
     BOOST_CHECK_EQUAL(action.counter, 2);
 }
 
-BOOST_AUTO_TEST_CASE(testSingleObjectValidation)
-{
-    spoac::ObjectPtr obj1, obj2, result;
-    spoactest::EmptyAction action;
-
-    obj1.reset(new spoac::Object("foo", "foo1"));
-
-    std::vector<spoac::ObjectPtr> objects;
-
-    // no object => exception
-    BOOST_CHECK_THROW(
-        action.singleObject(objects, "foo"),
-        spoac::ActionException
-    );
-
-    // one object => check if correct object?
-    objects.push_back(obj1);
-
-    result = action.singleObject(objects, "foo");
-    BOOST_CHECK_EQUAL(result->getId(), obj1->getId());
-
-    // two objects => exception
-    objects.push_back(obj1);
-
-    BOOST_CHECK_THROW(
-        action.singleObject(objects, "foo"),
-        spoac::ActionException
-    );
-
-    // wrong object => exception
-    objects.clear();
-    obj2.reset(new spoac::Object("bar", "bar1"));
-
-    BOOST_CHECK_THROW(
-        action.singleObject(objects, "foo"),
-        spoac::ActionException
-    );
-}
