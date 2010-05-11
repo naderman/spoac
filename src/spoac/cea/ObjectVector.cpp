@@ -99,9 +99,14 @@ void ObjectVector::validate(
     validate(names);
 }
 
-ObjectPtr ObjectVector::getValidated(
-    ObjectVector::size_type i, const std::string& name
-) const
+ObjectPtr ObjectVector::getValidated() const
+{
+    validate(1);
+
+    return objects.at(0);
+}
+
+ObjectPtr ObjectVector::getValidated(ObjectVector::size_type i) const
 {
     if (objects.size() <= i)
     {
@@ -111,7 +116,14 @@ ObjectPtr ObjectVector::getValidated(
         );
     }
 
-    ObjectPtr object = objects.at(i);
+    return objects.at(i);
+}
+
+ObjectPtr ObjectVector::getValidated(
+    ObjectVector::size_type i, const std::string& name
+) const
+{
+    ObjectPtr object = getValidated(i);
 
     validateName(object, name);
 

@@ -40,6 +40,7 @@ BOOST_AUTO_TEST_CASE(testEmpty)
 
     BOOST_CHECK_THROW(objects.validate(1), ActionException);
     BOOST_CHECK_THROW(objects.validate("foo"), ActionException);
+    BOOST_CHECK_THROW(objects.getValidated(), ActionException);
     BOOST_CHECK_THROW(objects.getValidated("foo"), ActionException);
     BOOST_CHECK_THROW(objects.getValidated(0, "foo"), ActionException);
 }
@@ -52,6 +53,8 @@ BOOST_AUTO_TEST_CASE(testSingleElement)
     objects.push_back(foo1);
 
     BOOST_CHECK_EQUAL(objects.size(), 1);
+    BOOST_CHECK_EQUAL(objects.getValidated()->getId(), "foo1");
+    BOOST_CHECK_EQUAL(objects.getValidated(0)->getId(), "foo1");
     BOOST_CHECK_EQUAL(objects.getValidated("foo")->getId(), "foo1");
     BOOST_CHECK_EQUAL(objects.getValidated(0, "foo")->getId(), "foo1");
 
@@ -77,6 +80,8 @@ BOOST_AUTO_TEST_CASE(testTwoElements)
     BOOST_CHECK_EQUAL(objects.size(), 2);
     BOOST_CHECK_EQUAL(objects.getValidated(0, "foo")->getId(), "foo1");
     BOOST_CHECK_EQUAL(objects.getValidated(1, "bar")->getId(), "bar1");
+    BOOST_CHECK_EQUAL(objects.getValidated(0)->getId(), "foo1");
+    BOOST_CHECK_EQUAL(objects.getValidated(1)->getId(), "bar1");
 
     BOOST_CHECK_NO_THROW(objects.validate(2));
     BOOST_CHECK_NO_THROW(objects.validate("foo", "bar"));

@@ -104,14 +104,35 @@ namespace spoac
         ) const;
 
         /**
+        * Validates that there is exactly one object and returns it.
+        *
+        * @return The first object in the vector
+        */
+        ObjectPtr getValidated() const;
+
+        /**
+        * Validates that the object at the given position exists and returns it.
+        *
+        * @param  i The index of the requested object
+        * @return   The object at position i.
+        */
+        ObjectPtr getValidated(size_type i) const;
+
+        /**
         * Validates that the object at the given position has the correct name
         * and returns it.
+        *
+        * @param i    The index of the requested object
+        * @param name Expected object name
+        * @return     The object if successful.
         */
         ObjectPtr getValidated(size_type i, const std::string& name) const;
 
         /**
         * Validates that there is exactly one object of the correct name and
         * returns it.
+        *
+        * @param name The expected object name
         */
         ObjectPtr getValidated(const std::string& name) const;
 
