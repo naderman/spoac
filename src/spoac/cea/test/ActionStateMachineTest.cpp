@@ -43,11 +43,11 @@ namespace spoactest
 
         virtual spoac::ActionStatePtr run()
         {
-            double value = counter->get<double>("value");
+            int value = counter->get<int>("value");
 
-            if (value < 1.999)
+            if (value < 20)
             {
-                (*counter)["value"] = value + 0.2;
+                (*counter)["value"] = value + 2;
 
                 // stay in same state
                 return shared_from_this();
@@ -70,11 +70,11 @@ namespace spoactest
 
         virtual spoac::ActionStatePtr run()
         {
-            double value = counter->get<double>("value");
+            int value = counter->get<int>("value");
 
-            if (value < 0.999)
+            if (value < 10)
             {
-                (*counter)["value"] = value + 0.1;
+                (*counter)["value"] = value + 1;
 
                 // stay in same state
                 return shared_from_this();
@@ -96,7 +96,7 @@ BOOST_AUTO_TEST_CASE(testDummyActionStateMachine)
 
     // set up a counter
     spoac::ObjectPtr counter(new spoac::Object("counter", "counter1"));
-    (*counter)["value"] = 0.0;
+    (*counter)["value"] = 0;
 
     std::vector<spoac::ObjectPtr> objects;
     objects.push_back(counter);
@@ -108,5 +108,5 @@ BOOST_AUTO_TEST_CASE(testDummyActionStateMachine)
         action->run();
     }
 
-    BOOST_CHECK_CLOSE(counter->get<double>("value"), 2.0, 0.00001);
+    BOOST_CHECK_EQUAL(counter->get<int>("value"), 20);
 }
