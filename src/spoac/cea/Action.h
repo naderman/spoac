@@ -26,7 +26,7 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include <spoac/cea/ObjectVector.h>
+#include <spoac/stm/ObjectVector.h>
 
 namespace spoac
 {

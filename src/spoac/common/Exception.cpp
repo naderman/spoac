@@ -21,34 +21,17 @@
 *             GNU General Public License
 */
 
-#define BOOST_TEST_MODULE spoac_Object
-#include <spoactest/test.h>
+#include <spoac/common/Exception.h>
 
-#include <iostream>
-#include <vector>
-#include <spoac/cea/Object.h>
+using namespace spoac;
 
-BOOST_AUTO_TEST_CASE(testEmptyObject)
+Exception::Exception(const std::string& message) throw():
+    std::exception(),
+    message(message)
 {
-    spoac::Object object("foo", "foo1");
-
-    BOOST_CHECK_EQUAL(object.getId(), "foo1");
-    BOOST_CHECK_EQUAL(object.getName(), "foo");
-
-    BOOST_CHECK(object.empty());
-    BOOST_CHECK_EQUAL(object.get<std::string>("bar"), std::string(""));
-    BOOST_CHECK_EQUAL(object.get<int>("bar", 5), 5);
 }
 
-BOOST_AUTO_TEST_CASE(testOneElementObject)
+const char* Exception::what() const throw()
 {
-    spoac::Object object("foo", "foo1");
-
-    object["bar"] = std::string("bar");
-
-    BOOST_CHECK(!object.empty());
-    BOOST_CHECK_EQUAL(object.size(), 1);
-
-    BOOST_CHECK_EQUAL(object.get<std::string>("bar"), std::string("bar"));
-    BOOST_CHECK_EQUAL(object.get<int>("bar", 5), 5);
+    return message.c_str();
 }

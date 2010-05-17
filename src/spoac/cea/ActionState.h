@@ -24,7 +24,7 @@
 #ifndef SPOAC_CEA_ACTIONSTATE_H
 #define SPOAC_CEA_ACTIONSTATE_H
 
-#include <spoac/cea/ObjectVector.h>
+#include <spoac/stm/ObjectVector.h>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>

@@ -26,9 +26,9 @@
 
 #include <iostream>
 #include <vector>
-#include <spoac/cea/ObjectVector.h>
+#include <spoac/stm/ObjectVector.h>
 
-using spoac::ActionException;
+using spoac::ParameterException;
 
 BOOST_AUTO_TEST_CASE(testEmpty)
 {
@@ -38,11 +38,11 @@ BOOST_AUTO_TEST_CASE(testEmpty)
 
     BOOST_CHECK_NO_THROW(objects.validate(0));
 
-    BOOST_CHECK_THROW(objects.validate(1), ActionException);
-    BOOST_CHECK_THROW(objects.validate("foo"), ActionException);
-    BOOST_CHECK_THROW(objects.getValidated(), ActionException);
-    BOOST_CHECK_THROW(objects.getValidated("foo"), ActionException);
-    BOOST_CHECK_THROW(objects.getValidated(0, "foo"), ActionException);
+    BOOST_CHECK_THROW(objects.validate(1), ParameterException);
+    BOOST_CHECK_THROW(objects.validate("foo"), ParameterException);
+    BOOST_CHECK_THROW(objects.getValidated(), ParameterException);
+    BOOST_CHECK_THROW(objects.getValidated("foo"), ParameterException);
+    BOOST_CHECK_THROW(objects.getValidated(0, "foo"), ParameterException);
 }
 
 BOOST_AUTO_TEST_CASE(testSingleElement)
@@ -61,11 +61,12 @@ BOOST_AUTO_TEST_CASE(testSingleElement)
     BOOST_CHECK_NO_THROW(objects.validate(1));
     BOOST_CHECK_NO_THROW(objects.validate("foo"));
 
-    BOOST_CHECK_THROW(objects.validate(0), ActionException);
-    BOOST_CHECK_THROW(objects.validate(2), ActionException);
-    BOOST_CHECK_THROW(objects.validate("foo", "bar"), ActionException);
-    BOOST_CHECK_THROW(objects.validate("foo", "bar", "foo23"), ActionException);
-    BOOST_CHECK_THROW(objects.getValidated(1, "foo"), ActionException);
+    BOOST_CHECK_THROW(objects.validate(0), ParameterException);
+    BOOST_CHECK_THROW(objects.validate(2), ParameterException);
+    BOOST_CHECK_THROW(objects.validate("foo", "bar"), ParameterException);
+    BOOST_CHECK_THROW(
+        objects.validate("foo", "bar", "foo23"), ParameterException);
+    BOOST_CHECK_THROW(objects.getValidated(1, "foo"), ParameterException);
 }
 
 BOOST_AUTO_TEST_CASE(testTwoElements)
@@ -86,11 +87,12 @@ BOOST_AUTO_TEST_CASE(testTwoElements)
     BOOST_CHECK_NO_THROW(objects.validate(2));
     BOOST_CHECK_NO_THROW(objects.validate("foo", "bar"));
 
-    BOOST_CHECK_THROW(objects.validate(0), ActionException);
-    BOOST_CHECK_THROW(objects.validate(1), ActionException);
-    BOOST_CHECK_THROW(objects.validate(3), ActionException);
-    BOOST_CHECK_THROW(objects.validate("foo"), ActionException);
-    BOOST_CHECK_THROW(objects.validate("foo", "bar", "foo23"), ActionException);
-    BOOST_CHECK_THROW(objects.getValidated("foo"), ActionException);
-    BOOST_CHECK_THROW(objects.getValidated(1, "foo"), ActionException);
+    BOOST_CHECK_THROW(objects.validate(0), ParameterException);
+    BOOST_CHECK_THROW(objects.validate(1), ParameterException);
+    BOOST_CHECK_THROW(objects.validate(3), ParameterException);
+    BOOST_CHECK_THROW(objects.validate("foo"), ParameterException);
+    BOOST_CHECK_THROW(
+        objects.validate("foo", "bar", "foo23"), ParameterException);
+    BOOST_CHECK_THROW(objects.getValidated("foo"), ParameterException);
+    BOOST_CHECK_THROW(objects.getValidated(1, "foo"), ParameterException);
 }

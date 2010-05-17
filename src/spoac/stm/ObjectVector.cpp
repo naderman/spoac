@@ -21,8 +21,8 @@
 *             GNU General Public License
 */
 
-#include <spoac/cea/ObjectVector.h>
-#include <spoac/cea/ActionException.h>
+#include <spoac/stm/ObjectVector.h>
+#include <spoac/stm/ParameterException.h>
 
 #include <boost/lexical_cast.hpp>
 
@@ -38,11 +38,16 @@ ObjectVector::size_type ObjectVector::size() const
     return objects.size();
 }
 
+ObjectPtr ObjectVector::operator[](const int& i) const
+{
+    return getValidated(i);
+}
+
 void ObjectVector::validate(ObjectVector::size_type n) const
 {
     if (objects.size() != n)
     {
-        throw ActionException(
+        throw ParameterException(
             std::string("Incorrect number of parameters: ") +
             boost::lexical_cast<std::string>(objects.size())
         );
@@ -110,7 +115,7 @@ ObjectPtr ObjectVector::getValidated(ObjectVector::size_type i) const
 {
     if (objects.size() <= i)
     {
-        throw ActionException(
+        throw ParameterException(
             std::string("Undefined object vector offset: ") +
             boost::lexical_cast<std::string>(i)
         );
@@ -141,7 +146,7 @@ void ObjectVector::validateName(ObjectPtr obj, const std::string& name) const
 {
     if (obj->getName() != name)
     {
-        throw ActionException(
+        throw ParameterException(
             std::string("Incorrect parameter name: '") +
             obj->getName() + std::string("' expected '") +
             name + std::string("'")

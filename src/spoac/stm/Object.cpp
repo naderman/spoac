@@ -21,11 +21,23 @@
 *             GNU General Public License
 */
 
-#include <spoac/cea/ActionException.h>
+#include <spoac/stm/Object.h>
 
 using namespace spoac;
 
-ActionException::ActionException(const std::string& message) throw():
-    spoac::Exception(message)
+Object::Object(const std::string& name, const std::string& id) :
+    VariantMap<std::string, std::string, int, double>(),
+    name(name),
+    id(id)
 {
+}
+
+std::string Object::getName()
+{
+    return name;
+}
+
+std::string Object::getId()
+{
+    return id;
 }

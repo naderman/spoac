@@ -21,23 +21,38 @@
 *             GNU General Public License
 */
 
-#include <spoac/cea/Object.h>
+#ifndef SPOAC_COMMON_EXCEPTION_H
+#define SPOAC_COMMON_EXCEPTION_H
 
-using namespace spoac;
+#include <string>
 
-Object::Object(const std::string& name, const std::string& id) :
-    VariantMap<std::string, std::string, int, double>(),
-    name(name),
-    id(id)
+namespace spoac
 {
+    /**
+    * Base Exception for all SPOAC exceptions
+    */
+    class Exception : public std::exception
+    {
+    public:
+        /**
+        * Constructs new Exception with an error message.
+        */
+        Exception(const std::string& message) throw();
+
+        /**
+        * Empty destructor which does not throw.
+        */
+        virtual ~Exception() throw() {};
+
+        /**
+        * Returns the error message.
+        */
+        virtual const char* what() const throw();
+
+    protected:
+        std::string message;
+    };
 }
 
-std::string Object::getName()
-{
-    return name;
-}
+#endif
 
-std::string Object::getId()
-{
-    return id;
-}

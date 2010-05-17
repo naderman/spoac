@@ -1,10 +1,10 @@
-ORCA_SET_LIBRARY_NAME(SpoacCEA)
-set(LIB_INSTALL cea)
+ORCA_SET_LIBRARY_NAME(SpoacSTM)
+set(LIB_INSTALL stm)
 
 set(build TRUE)
 GBX_REQUIRE_OPTION(build LIB ${LIB_NAME} ON)
 
-set( dep_libs SpoacCommon SpoacSTM )
+set( dep_libs SpoacCommon )
 GBX_REQUIRE_LIBS( build LIB ${LIB_NAME} ${dep_libs} )
 
 if (build)

@@ -21,10 +21,10 @@
 *             GNU General Public License
 */
 
-#ifndef SPOAC_CEA_OBJECT_H
-#define SPOAC_CEA_OBJECT_H
+#ifndef SPOAC_STM_OBJECT_H
+#define SPOAC_STM_OBJECT_H
 
-#include <spoac/cea/VariantMap.h>
+#include <spoac/stm/VariantMap.h>
 
 #include <string>
 #include <boost/shared_ptr.hpp>

@@ -1,11 +1,8 @@
-ORCA_SET_LIBRARY_NAME(SpoacCEA)
-set(LIB_INSTALL cea)
+ORCA_SET_LIBRARY_NAME(SpoacCommon)
+set(LIB_INSTALL common)
 
 set(build TRUE)
 GBX_REQUIRE_OPTION(build LIB ${LIB_NAME} ON)
-
-set( dep_libs SpoacCommon SpoacSTM )
-GBX_REQUIRE_LIBS( build LIB ${LIB_NAME} ${dep_libs} )
 
 if (build)
 
@@ -18,8 +15,8 @@ if (build)
     target_link_libraries(${LIB_NAME} ${dep_libs})
     GBX_ADD_HEADERS(${LIB_INSTALL} ${hdrs})
 
-    if (SPOAC_BUILD_TESTS)
-        add_subdirectory(test)
-    endif (SPOAC_BUILD_TESTS)
+    #if (SPOAC_BUILD_TESTS)
+    #    add_subdirectory(test)
+    #endif (SPOAC_BUILD_TESTS)
 
 endif (build)

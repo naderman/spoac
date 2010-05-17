@@ -24,14 +24,14 @@
 #ifndef SPOAC_CEA_ACTIONEXCEPTION_H
 #define SPOAC_CEA_ACTIONEXCEPTION_H
 
-#include <string>
+#include <spoac/common/Exception.h>
 
 namespace spoac
 {
     /**
     * Exception for all errors occuring in an action.
     */
-    class ActionException : public std::exception
+    class ActionException : public spoac::Exception
     {
     public:
         /**
@@ -42,15 +42,7 @@ namespace spoac
         /**
         * Empty destructor which does not throw.
         */
-        ~ActionException() throw() {};
-
-        /**
-        * Returns the error message.
-        */
-        virtual const char* what() const throw();
-
-    protected:
-        std::string message;
+        virtual ~ActionException() throw() {};
     };
 }
 

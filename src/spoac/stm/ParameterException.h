@@ -21,11 +21,33 @@
 *             GNU General Public License
 */
 
-#include <spoac/cea/ActionException.h>
+#ifndef SPOAC_CEA_ACTIONEXCEPTION_H
+#define SPOAC_CEA_ACTIONEXCEPTION_H
 
-using namespace spoac;
+#include <spoac/common/Exception.h>
 
-ActionException::ActionException(const std::string& message) throw():
-    spoac::Exception(message)
+namespace spoac
 {
+    /**
+    * All exceptions resulting from handling ObjectVectors.
+    *
+    * ObjectVectors are mostly used for action parameters which is the reason
+    * for this exception's name.
+    */
+    class ParameterException : public spoac::Exception
+    {
+    public:
+        /**
+        * Constructs new ParameterException with an error message.
+        */
+        ParameterException(const std::string& message) throw();
+
+        /**
+        * Empty destructor which does not throw.
+        */
+        virtual ~ParameterException() throw() {};
+    };
 }
+
+#endif
+

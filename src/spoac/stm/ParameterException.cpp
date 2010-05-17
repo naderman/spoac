@@ -21,11 +21,11 @@
 *             GNU General Public License
 */
 
-#include <spoac/cea/ActionException.h>
+#include <spoac/stm/ParameterException.h>
 
 using namespace spoac;
 
-ActionException::ActionException(const std::string& message) throw():
+ParameterException::ParameterException(const std::string& message) throw():
     spoac::Exception(message)
 {
 }
