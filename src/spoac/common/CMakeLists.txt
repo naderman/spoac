@@ -15,8 +15,8 @@ if (build)
     target_link_libraries(${LIB_NAME} ${dep_libs})
     GBX_ADD_HEADERS(${LIB_INSTALL} ${hdrs})
 
-    #if (SPOAC_BUILD_TESTS)
-    #    add_subdirectory(test)
-    #endif (SPOAC_BUILD_TESTS)
+    if (SPOAC_BUILD_TESTS)
+        add_subdirectory(test)
+    endif (SPOAC_BUILD_TESTS)
 
 endif (build)
