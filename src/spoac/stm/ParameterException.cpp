@@ -26,6 +26,6 @@
 using namespace spoac;
 
 ParameterException::ParameterException(const std::string& message) throw():
-    spoac::Exception(message)
+    Exception(message)
 {
 }

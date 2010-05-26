@@ -26,6 +26,6 @@
 using namespace spoac;
 
 ActionException::ActionException(const std::string& message) throw():
-    spoac::Exception(message)
+    Exception(message)
 {
 }

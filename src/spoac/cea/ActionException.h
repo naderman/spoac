@@ -31,7 +31,7 @@ namespace spoac
     /**
     * Exception for all errors occuring in an action.
     */
-    class ActionException : public spoac::Exception
+    class ActionException : public Exception
     {
     public:
         /**

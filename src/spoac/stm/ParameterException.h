@@ -21,8 +21,8 @@
 *             GNU General Public License
 */
 
-#ifndef SPOAC_CEA_ACTIONEXCEPTION_H
-#define SPOAC_CEA_ACTIONEXCEPTION_H
+#ifndef SPOAC_STM_PARAMETEREXCEPTION_H
+#define SPOAC_STM_PARAMETEREXCEPTION_H
 
 #include <spoac/common/Exception.h>
 
