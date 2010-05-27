@@ -104,6 +104,40 @@ namespace spoac
         }
 
         /**
+        * Set the instance used for a shared service.
+        *
+        * @param instance A pointer to the instance for this service.
+        */
+        template<typename ServiceT>
+        void setService(boost::shared_ptr<ServiceT> instance)
+        {
+            if (instance.get() == NULL)
+            {
+                throw spoac::Exception("setService: Called with NULL pointer");
+            }
+
+            try
+            {
+                Service& service = findService<ServiceT>();
+                service.instance = boost::static_pointer_cast<void>(instance);
+            }
+            catch (const spoac::Exception& e)
+            {
+                // not registered yet
+                registerService<ServiceT>(
+                    &DependencyManager::throwOnCreate, true
+                );
+                Service& service = findService<ServiceT>();
+                service.instance = boost::static_pointer_cast<void>(instance);
+            }
+        }
+
+        static boost::shared_ptr<void> throwOnCreate(DependencyManagerPtr m)
+        {
+            throw spoac::Exception("An unregistered service cannot be created");
+        }
+
+        /**
         * Registers a service for retrieval with getService().
         *
         * @param create The instantiation function for this service.

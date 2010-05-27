@@ -117,3 +117,49 @@ BOOST_AUTO_TEST_CASE(testSharedService)
     BOOST_CHECK(s1.get() != NULL);
     BOOST_CHECK(s1.get() == s2.get());
 }
+
+BOOST_AUTO_TEST_CASE(testSetSharedService)
+{
+    spoac::DependencyManagerPtr manager(new spoac::DependencyManager);
+
+    boost::shared_ptr<spoactest::UnsharedService> u1(
+        new spoactest::UnsharedService
+    );
+
+    boost::shared_ptr<spoactest::SharedService> s1(
+        new spoactest::SharedService(u1)
+    );
+    boost::shared_ptr<spoactest::SharedService> s2;
+
+    BOOST_REQUIRE_NO_THROW(
+        manager->setService(s1)
+    );
+
+    BOOST_REQUIRE_NO_THROW(
+        s2 = manager->getService<spoactest::SharedService>()
+    );
+
+    BOOST_CHECK(s2.get() != NULL);
+    BOOST_CHECK(s1.get() == s2.get());
+}
+
+BOOST_AUTO_TEST_CASE(testSetUnregisteredService)
+{
+    spoac::DependencyManagerPtr manager(new spoac::DependencyManager);
+
+    boost::shared_ptr<spoactest::UnregisteredService> u1(
+        new spoactest::UnregisteredService
+    );
+    boost::shared_ptr<spoactest::UnregisteredService> u2;
+
+    BOOST_REQUIRE_NO_THROW(
+        manager->setService<spoactest::UnregisteredService>(u1)
+    );
+
+    BOOST_REQUIRE_NO_THROW(
+        u2 = manager->getService<spoactest::UnregisteredService>()
+    );
+
+    BOOST_CHECK(u2.get() != NULL);
+    BOOST_CHECK(u1.get() == u2.get());
+}
