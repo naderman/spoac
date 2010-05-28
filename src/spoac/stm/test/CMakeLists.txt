@@ -11,3 +11,6 @@ GBX_ADD_TEST( spoac_ObjectVector ObjectVectorTest )
 
 add_executable( ObjectSetTest ObjectSetTest.cpp )
 GBX_ADD_TEST( spoac_ObjectSet ObjectSetTest )
+
+add_executable( STMTest STMTest.cpp )
+GBX_ADD_TEST( spoac_STM STMTest )
