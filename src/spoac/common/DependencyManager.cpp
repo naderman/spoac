@@ -25,4 +25,4 @@
 
 using namespace spoac;
 
-DependencyManager::ServiceMap DependencyManager::services;
+DependencyManager::ServiceDefinitionMap DependencyManager::serviceDefinitions;

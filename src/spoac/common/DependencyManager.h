@@ -58,17 +58,26 @@ namespace spoac
         /**
         * Structure of a service stored in the dependency manager.
         */
-        struct Service
+        struct ServiceDefinition
         {
             CreateFun create;
             bool shared;
+        };
+
+        struct Service
+        {
+            ServiceDefinition definition;
             boost::shared_ptr<void> instance;
         };
 
     public:
+        /**
+        * Map type for the typeid.name -> ServiceDefinition lookup table.
+        */
+        typedef std::map<std::string, ServiceDefinition> ServiceDefinitionMap;
 
         /**
-        * Map type for the typeid.name -> Service lookup table.
+        * Map type for the typeid.name -> service lookup table.
         */
         typedef std::map<std::string, Service> ServiceMap;
 
@@ -86,11 +95,11 @@ namespace spoac
             boost::shared_ptr<void> instance;
             Service& service = findService<ServiceT>();
 
-            if (!service.shared || service.instance.get() == NULL)
+            if (!service.definition.shared || service.instance.get() == NULL)
             {
-                instance = service.create(shared_from_this());
+                instance = service.definition.create(shared_from_this());
 
-                if (service.shared)
+                if (service.definition.shared)
                 {
                     service.instance = instance;
                 }
@@ -132,6 +141,11 @@ namespace spoac
             }
         }
 
+        /**
+        * Service creation method which always throws an exception.
+        *
+        * @param m
+        */
         static boost::shared_ptr<void> throwOnCreate(DependencyManagerPtr m)
         {
             throw spoac::Exception("An unregistered service cannot be created");
@@ -147,12 +161,13 @@ namespace spoac
         template<typename ServiceT>
         static void registerService(CreateFun create, bool shared = true)
         {
-            Service service;
+            ServiceDefinition serviceDefinition;
 
-            service.create = create;
-            service.shared = shared;
+            serviceDefinition.create = create;
+            serviceDefinition.shared = shared;
 
-            services[std::string(typeid(ServiceT).name())] = service;
+            serviceDefinitions[std::string(typeid(ServiceT).name())] =
+                serviceDefinition;
         }
 
         /**
@@ -182,19 +197,50 @@ namespace spoac
 
     protected:
         /**
-        * Looks up a service in the ServiceMap and throws an exception if it
-        * does not exist.
+        * Looks up a service in the service map and throws an exception there is
+        * no definition for it.
         *
-        * @return An instance of the service class for the given template type.
+        * If necessary an empty service will be created from the definition of
+        * this service
+        *
+        * @return A Service for the given template type.
         */
         template<typename ServiceT>
         Service& findService()
         {
             std::string serviceName(typeid(ServiceT).name());
 
+            ServiceDefinition& serviceDefinition =
+                findServiceDefinition<ServiceT>();
+
             ServiceMap::iterator it = services.find(serviceName);
 
             if (it == services.end())
+            {
+                Service service;
+                service.definition = serviceDefinition;
+
+                services[serviceName] = service;
+            }
+
+            return services[serviceName];
+        }
+
+        /**
+        * Looks up a service definition, throws an exception if it does not
+        * exist.
+        *
+        * @return The service definition.
+        */
+        template <typename ServiceT>
+        static ServiceDefinition& findServiceDefinition()
+        {
+            std::string serviceName(typeid(ServiceT).name());
+
+            ServiceDefinitionMap::iterator it =
+                serviceDefinitions.find(serviceName);
+
+            if (it == serviceDefinitions.end())
             {
                 throw Exception(std::string("No such service: ") + serviceName);
             }
@@ -202,7 +248,8 @@ namespace spoac
             return it->second;
         }
 
-        static ServiceMap services;
+        static ServiceDefinitionMap serviceDefinitions;
+        ServiceMap services;
     };
 }
 
