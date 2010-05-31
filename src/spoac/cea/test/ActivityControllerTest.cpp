@@ -26,10 +26,11 @@
 
 #include <iostream>
 #include <spoac/cea/ActivityController.h>
+#include "DummyActivityController.h"
 
 namespace spoactest
 {
-    class DummyCEA : public spoac::CEAInterface
+    class DummyCEA : public spoac::CEAControl
     {
         virtual void startOAC
             (spoac::ActivityControllerPtr src, spoac::OACPtr oac) {}
@@ -39,46 +40,15 @@ namespace spoactest
         virtual void pause(spoac::ActivityControllerPtr src) {}
         virtual void reset(spoac::ActivityControllerPtr src) {}
     };
-
-    class DummyActivityController : public spoac::ActivityController
-    {
-    public:
-        DummyActivityController(spoac::CEAWeakPtr cea) :
-            spoac::ActivityController(cea)
-        {
-        }
-
-        void start(spoac::OACPtr oac)
-        {
-            if (spoac::CEAPtr cea = weakCEA.lock())
-            {
-                cea->startOAC(shared_from_this(), oac);
-            }
-        }
-
-        void stop(spoac::OACPtr oac)
-        {
-            if (spoac::CEAPtr cea = weakCEA.lock())
-            {
-                cea->stopOAC(shared_from_this(), oac);
-            }
-        }
-
-        virtual void oacStarted(spoac::OACPtr oac) {}
-        virtual void oacFinished(spoac::OACPtr oac) {}
-        virtual void oacStopped(spoac::OACPtr oac) {}
-        virtual void pause() {}
-        virtual void reset() {}
-    };
 }
 
 BOOST_AUTO_TEST_CASE(testDummyActivityController)
 {
-    spoac::CEAPtr cea(new spoactest::DummyCEA());
+    spoac::CEAControlPtr cea(new spoactest::DummyCEA());
     spoac::OACPtr oac(new spoac::OAC("no-action", std::vector<std::string>()));
 
     boost::shared_ptr<spoactest::DummyActivityController> activityController(
-        new spoactest::DummyActivityController(spoac::CEAWeakPtr(cea))
+        new spoactest::DummyActivityController(spoac::CEAControlWeakPtr(cea))
     );
 
     activityController->start(oac);

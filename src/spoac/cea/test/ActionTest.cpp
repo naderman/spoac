@@ -27,46 +27,7 @@
 #include <iostream>
 #include <spoac/cea/Action.h>
 
-namespace spoactest
-{
-    class CountTwoAction : public spoac::Action
-    {
-    public:
-        int counter;
-
-        virtual void setup(const spoac::ObjectVector& objects)
-        {
-            counter = 0;
-        }
-
-        virtual void run()
-        {
-            counter++;
-        }
-
-        virtual bool isFinished() const
-        {
-            return counter >= 2;
-        }
-    };
-
-    class EmptyAction : public spoac::Action
-    {
-    public:
-        virtual void setup(const spoac::ObjectVector& objects)
-        {
-        }
-
-        virtual void run()
-        {
-        }
-
-        virtual bool isFinished() const
-        {
-            return true;
-        }
-    };
-}
+#include "CountTwoAction.h"
 
 BOOST_AUTO_TEST_CASE(testCountTwoAction)
 {
@@ -79,6 +40,6 @@ BOOST_AUTO_TEST_CASE(testCountTwoAction)
         action.run();
     }
 
-    BOOST_CHECK_EQUAL(action.counter, 2);
+    BOOST_CHECK_EQUAL(spoactest::CountTwoAction::counter, 2);
 }
 

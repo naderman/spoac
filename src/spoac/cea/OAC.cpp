@@ -25,8 +25,8 @@
 
 using namespace spoac;
 
-OAC::OAC(const std::string& name, const std::vector<std::string>& objects) :
-    name(name), objects(objects)
+OAC::OAC(const std::string& name, const std::vector<std::string>& objectIds) :
+    name(name), objectIds(objectIds)
 {
 }
 
@@ -35,8 +35,20 @@ std::string OAC::getName() const
     return name;
 }
 
-std::vector<std::string> OAC::getObjects() const
+std::vector<std::string> OAC::getObjectIds() const
 {
-    return objects;
+    return objectIds;
+}
+
+ActionPtr OAC::setupAction(DependencyManagerPtr manager) const
+{
+    STMPtr stm = manager->getService<STM>();
+
+    ObjectVector objects = stm->vectorFromIds(getObjectIds());
+
+    ActionPtr action = Action::fromName(getName(), manager);
+    action->setup(objects);
+
+    return action;
 }
 

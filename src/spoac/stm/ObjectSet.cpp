@@ -52,3 +52,8 @@ ObjectPtr ObjectSet::operator[](const std::string& id)
 
     return *(objIt->second);
 }
+
+ObjectPtr ObjectSet::get(const std::string& id)
+{
+    return operator[](id);
+}

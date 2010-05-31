@@ -27,6 +27,7 @@
 #include <spoac/common/Exception.h>
 #include <map>
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
 namespace spoac
@@ -37,6 +38,11 @@ namespace spoac
     * Pointer type to reduce typing for shared pointers.
     */
     typedef boost::shared_ptr<DependencyManager> DependencyManagerPtr;
+
+    /**
+    * Pointer type to reduce typing for shared pointers.
+    */
+    typedef boost::weak_ptr<DependencyManager> DependencyManagerWeakPtr;
 
     /**
     * The dependency manager is a very simple dependency injection container

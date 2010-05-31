@@ -25,6 +25,14 @@
 
 using namespace spoac;
 
+STM::RegisterService STM::r;
+
+boost::shared_ptr<void> STM::createService(DependencyManagerPtr manager)
+{
+    boost::shared_ptr<void> stm(new STM);
+    return stm;
+}
+
 void STM::addPerceptionHandler(PerceptionHandlerPtr handler)
 {
     handlers.push_back(handler);
@@ -68,4 +76,17 @@ void STM::update()
     {
         (*it)->update(shared_from_this());
     }
+}
+
+ObjectVector STM::vectorFromIds(const std::vector<std::string>& ids)
+{
+    ObjectVector vector;
+    std::vector<std::string>::const_iterator id;
+
+    for (id = ids.begin(); id != ids.end(); ++id)
+    {
+        vector.push_back(get(*id));
+    }
+
+    return vector;
 }

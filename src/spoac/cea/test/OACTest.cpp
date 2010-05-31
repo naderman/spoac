@@ -36,5 +36,5 @@ BOOST_AUTO_TEST_CASE(testOAC)
 
     BOOST_CHECK_EQUAL(oac.getName(), name);
     //BOOST_CHECK(oac.getObjects() == objects);
-    BOOST_CHECK(oac.getObjects() == objects);
+    BOOST_CHECK(oac.getObjectIds() == objects);
 }

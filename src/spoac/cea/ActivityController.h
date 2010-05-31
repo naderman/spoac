@@ -24,7 +24,7 @@
 #ifndef SPOAC_CEA_ACTIVITYCONTROLLER_H
 #define SPOAC_CEA_ACTIVITYCONTROLLER_H
 
-#include <spoac/cea/CEAInterface.h>
+#include <spoac/cea/CEAControl.h>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
@@ -50,7 +50,7 @@ namespace spoac
         *            pointer to avoid circular references, because the CEA
         *            manages all ActivityControllers.
         */
-        ActivityController(CEAWeakPtr cea);
+        ActivityController(CEAControlWeakPtr cea);
 
         /**
         * Informs the ActivityController that the CEA has started an OAC.
@@ -87,7 +87,7 @@ namespace spoac
         virtual void reset() = 0;
 
     protected:
-        CEAWeakPtr weakCEA;
+        CEAControlWeakPtr weakCEA;
     };
 
     /**

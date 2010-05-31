@@ -28,6 +28,9 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 
+#include <spoac/stm/STM.h>
+#include <spoac/cea/Action.h>
+
 namespace spoac
 {
     /**
@@ -44,7 +47,10 @@ namespace spoac
         * @param name    Name of the OAC's action.
         * @param objects Vector of short term memory object identifiers.
         */
-        OAC(const std::string& name, const std::vector<std::string>& objects);
+        OAC(
+            const std::string& name,
+            const std::vector<std::string>& objectIds
+        );
 
         /**
         * Getter for the OAC action name.
@@ -52,13 +58,20 @@ namespace spoac
         std::string getName() const;
 
         /**
-        * Getter for the involved objects.
+        * Getter for the involved objects' names.
         */
-        std::vector<std::string> getObjects() const;
+        std::vector<std::string> getObjectIds() const;
+
+        /**
+        * Retrieve the action ready for running on the robot.
+        *
+        * @param manager Required to satisfy the action's dependencies
+        */
+        ActionPtr setupAction(DependencyManagerPtr manager) const;
 
     protected:
         std::string name;
-        std::vector<std::string> objects;
+        std::vector<std::string> objectIds;
     };
 
     /**

@@ -30,6 +30,7 @@
 
 #include <spoac/common/DependencyManager.h>
 #include <spoac/stm/ObjectSet.h>
+#include <spoac/stm/ObjectVector.h>
 #include <spoac/stm/PerceptionHandler.h>
 
 namespace spoac
@@ -40,6 +41,14 @@ namespace spoac
     class STM : public ObjectSet, public boost::enable_shared_from_this<STM>
     {
     public:
+        /**
+        * Creates an instance of this class with dependencies.
+        *
+        * @param manager The DependencyManager used to satisfy requirements
+        */
+        static boost::shared_ptr<void> createService(
+            DependencyManagerPtr manager);
+
         /**
         * Adds a perception handler to the ones called by update().
         *
@@ -77,8 +86,16 @@ namespace spoac
         */
         void update();
 
+        /**
+        * Resolve a vector of object ids to an ObjectVector
+        */
+        ObjectVector vectorFromIds(const std::vector<std::string>& ids);
+
     protected:
         std::vector<PerceptionHandlerPtr> handlers;
+
+        typedef DependencyManager::RegisterService<STM> RegisterService;
+        static RegisterService r;
     };
 
     /**

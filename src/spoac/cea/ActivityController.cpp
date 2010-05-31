@@ -25,7 +25,7 @@
 
 using namespace spoac;
 
-ActivityController::ActivityController(CEAWeakPtr cea) :
+ActivityController::ActivityController(CEAControlWeakPtr cea) :
     weakCEA(cea)
 {
 }

@@ -75,6 +75,14 @@ namespace spoac
         */
         ObjectPtr operator[](const std::string& id);
 
+        /**
+        * Alias of operator[] - used to access objects by id
+        *
+        * @param  id The id of the requested object
+        * @return    The object with the requested id.
+        */
+        ObjectPtr get(const std::string& id);
+
     protected:
         SetType objects;
         MapType objectMap;

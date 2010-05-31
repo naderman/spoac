@@ -36,7 +36,7 @@ namespace spoac
     /**
     * Interface definition for the Central Executive Agent.
     */
-    class CEAInterface
+    class CEAControl
     {
     public:
         /**
@@ -80,12 +80,12 @@ namespace spoac
     /**
     * Pointer type to reduce typing for shared pointers.
     */
-    typedef boost::shared_ptr<CEAInterface> CEAPtr;
+    typedef boost::shared_ptr<CEAControl> CEAControlPtr;
 
     /**
     * Pointer type to reduce typing for shared pointers.
     */
-    typedef boost::weak_ptr<CEAInterface> CEAWeakPtr;
+    typedef boost::weak_ptr<CEAControl> CEAControlWeakPtr;
 }
 
 #endif

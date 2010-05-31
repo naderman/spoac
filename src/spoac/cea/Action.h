@@ -26,6 +26,8 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include <spoac/common/AbstractFactoryMethod.h>
+#include <spoac/common/DependencyManager.h>
 #include <spoac/stm/ObjectVector.h>
 
 namespace spoac
@@ -33,9 +35,21 @@ namespace spoac
     /**
     * Abstract base class for all actions the CEA should be able to execute.
     */
-    class Action
+    class Action : public AbstractFactoryMethod<Action, DependencyManagerPtr>
     {
     public:
+        /**
+        * Static method returning the action's name
+        */
+        static std::string getName();
+
+        /**
+        * Create an instance of this class, satisfying all its dependencies
+        */
+        static boost::shared_ptr<Action> createInstance(
+            DependencyManagerPtr manager
+        );
+
         /**
         * Prepares an action for execution with a vector of parameter objects.
         *
