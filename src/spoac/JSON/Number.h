@@ -54,6 +54,8 @@ namespace JSON
 		double doubleValue;
 		bool exactInt;
 	};
+
+    typedef boost::shared_ptr<Number> NumberPtr;
 }
 
 #endif

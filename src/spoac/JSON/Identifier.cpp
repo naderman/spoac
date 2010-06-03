@@ -20,7 +20,7 @@
 
 using namespace JSON;
 
-Identifier::Identifier(boost::shared_ptr<Number> n) :
+Identifier::Identifier(NumberPtr n) :
 	type(NUMBER),
 	value(n)
 {
@@ -32,7 +32,7 @@ Identifier::Identifier(const Number& n) :
 {
 }
 
-Identifier::Identifier(boost::shared_ptr<String> s) :
+Identifier::Identifier(StringPtr s) :
 	type(STRING),
 	value(s)
 {
@@ -67,20 +67,20 @@ ValueType Identifier::getType() const
 	return type;
 }
 
-boost::shared_ptr<String> Identifier::getString() const
+StringPtr Identifier::getString() const
 {
 	if (getType() != STRING)
 	{
-		return boost::shared_ptr<String>();
+		return StringPtr();
 	}
 	return boost::dynamic_pointer_cast<String>(value);
 }
 
-boost::shared_ptr<Number> Identifier::getNumber() const
+NumberPtr Identifier::getNumber() const
 {
 	if (getType() != NUMBER)
 	{
-		return boost::shared_ptr<Number>();
+		return NumberPtr();
 	}
 	return boost::dynamic_pointer_cast<Number>(value);
 }
@@ -99,11 +99,11 @@ Identifier& Identifier::operator=(const Identifier& i)
 			case STRING:
 				value.reset(new String(*(i.getString())));
 			break;
-	
+
 			case NUMBER:
 				value.reset(new Number(*(i.getNumber())));
 			break;
-	
+
 			default:
 			break;
 		}
@@ -129,7 +129,7 @@ bool Identifier::operator==(const Identifier& i) const
 	COMPARE(==)
 }
 
-bool Identifier::operator!=(const Identifier& i) const 
+bool Identifier::operator!=(const Identifier& i) const
 {
 	COMPARE(!=)
 }

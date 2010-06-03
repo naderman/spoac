@@ -84,8 +84,8 @@ namespace JSON
 		void reset();
 		void read(const std::string& data);
 		void read(const char* data, size_t len);
-		boost::shared_ptr<Value> readFromFile(const std::string& path);
-		boost::shared_ptr<Value> finish();
+		ValuePtr readFromFile(const std::string& path);
+		ValuePtr finish();
 	private:
 		Parser(const Parser&) {}; // do not allow copying
 		Parser& operator=(const Parser&) { return *this; }; // do not allow assignment
@@ -96,11 +96,11 @@ namespace JSON
 		inline bool isConnectorPunctuation(char c);
 		inline void pushState(ParserState state);
 		inline ParserState popState();
-		inline void pushValue(boost::shared_ptr<Value> value);
-		inline boost::shared_ptr<Value> popValue();
-		inline boost::shared_ptr<String> topString();
+		inline void pushValue(ValuePtr value);
+		inline ValuePtr popValue();
+		inline StringPtr topString();
 
-		std::stack<boost::shared_ptr<Value> > values;
+		std::stack<ValuePtr> values;
 		std::stack<ParserState> states;
 
 		ParserState state;

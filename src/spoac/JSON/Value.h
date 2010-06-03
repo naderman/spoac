@@ -78,6 +78,8 @@ namespace JSON
 	protected:
 		ValueType type;
 	};
+
+    typedef boost::shared_ptr<Value> ValuePtr;
 }
 
 #endif

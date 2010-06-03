@@ -31,12 +31,14 @@ namespace JSON
 	{
 	public:
 		Bool(bool b);
-		
+
 		bool toBool() const;
 		void _toJSON(std::string& json, const std::string& indent) const;
 	private:
 		bool value;
 	};
+
+    typedef boost::shared_ptr<Bool> BoolPtr;
 }
 
 #endif

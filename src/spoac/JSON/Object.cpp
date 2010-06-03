@@ -77,12 +77,12 @@ Object& Object::operator=(const Object& o)
 Object::value_type& Object::operator[](const Identifier& key)
 {
 	Object::value_type& value = map[key];
-	
+
 	if (value == Object::value_type()) // make sure it's a valid pointer
 	{
 		value = Object::value_type(new Value);
 	}
-	
+
 	return map[key];
 }
 
@@ -334,7 +334,7 @@ void Object::_toJSON(std::string& json, const std::string& indent) const
 	{
 		json.append("{\n");
 		json.append(subindent);
-	
+
 		for (Object::const_iterator it = begin(); it != end(); ++it)
 		{
 			if (it != begin())
@@ -342,7 +342,7 @@ void Object::_toJSON(std::string& json, const std::string& indent) const
 				json.append(",\n");
 				json.append(subindent);
 			}
-			
+
 			it->first._toJSON(json, subindent);
 			json.append(": ");
 			if (it->second)
@@ -354,7 +354,7 @@ void Object::_toJSON(std::string& json, const std::string& indent) const
 				json.append("null");
 			}
 		}
-	
+
 		json.append("\n");
 		json.append(indent);
 		json.append("}");

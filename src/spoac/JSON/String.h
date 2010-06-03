@@ -60,6 +60,8 @@ namespace JSON
 	private:
 		std::string string;
 	};
+
+    typedef boost::shared_ptr<String> StringPtr;
 }
 
 #endif

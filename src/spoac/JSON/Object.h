@@ -25,7 +25,7 @@ namespace JSON
 	class Identifier;
 	class Number;
 	class String;
-	
+
 	/**
 	* Represents a JSON Object containing key value pairs.
 	*
@@ -43,12 +43,12 @@ namespace JSON
 	class Object : public Value
 	{
 	public:
-		typedef boost::shared_ptr<Value> value_type;
+		typedef ValuePtr value_type;
 		typedef boost::shared_ptr<const Value> const_value_type;
 		typedef std::map<Identifier, value_type> map_type;
 		typedef map_type::iterator iterator;
 		typedef map_type::const_iterator const_iterator;
-	
+
 		Object();
 		Object(const Object& o);
 
@@ -114,6 +114,8 @@ namespace JSON
 	private:
 		map_type map;
 	};
+
+    typedef boost::shared_ptr<Object> ObjectPtr;
 }
 
 #endif

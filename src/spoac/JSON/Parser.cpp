@@ -31,12 +31,12 @@ void Parser::reset()
 	{
 		values.pop();
 	}
-	
+
 	while (!states.empty())
 	{
 		states.pop();
 	}
-	
+
 	states.push(STATE_END);
 	state = STATE_WAIT_VALUE;
 
@@ -81,9 +81,9 @@ void Parser::read(const std::string& data)
 
 void Parser::read(const char* data, size_t len)
 {
-	boost::shared_ptr<Value> value;
-	boost::shared_ptr<Value> tmp;
-	boost::shared_ptr<Identifier> key;
+	ValuePtr value;
+	ValuePtr tmp;
+	IdentifierPtr key;
 	lineNumberIndex = -1;
 
 	for (size_t i = 0; i < len; ++i)
@@ -133,42 +133,42 @@ void Parser::read(const char* data, size_t len)
 						value.reset(new String());
 						pushValue(value);
 					break;
-			
+
 					case '\'':
 						state = STATE_STRING_SINGLE_QUOTE;
 						value.reset(new String());
 						pushValue(value);
 					break;
-			
+
 					case '{':
 						state = STATE_OBJECT;
 						value.reset(new Object());
 						pushValue(value);
 						init = true;
 					break;
-			
+
 					case '[':
 						state = STATE_ARRAY;
 						value.reset(new Array());
 						pushValue(value);
 						init = true;
 					break;
-			
+
 					case 'n':
 						state = STATE_NULL_N;
 					break;
-			
+
 					case 'f':
 						state = STATE_BOOL_F;
 					break;
-			
+
 					case 't':
 						state = STATE_BOOL_T;
 					break;
-			
+
 					CASE_START_NUMBER
 					break;
-			
+
 					default:
 						PARSE_ERROR("Unexpected character data, expecting a value: found '", std::string(1, c), "'");
 					break;
@@ -177,7 +177,7 @@ void Parser::read(const char* data, size_t len)
 
 			case STATE_ARRAY:
 				SKIP_WHITESPACE(c);
-				
+
 				if (!init)
 				{
 					// get the value
@@ -186,7 +186,7 @@ void Parser::read(const char* data, size_t len)
 					// put it in the array
 					boost::dynamic_pointer_cast<Array>(values.top())->push_back(value);
 				}
-				
+
 				switch (c)
 				{
 					case ']':
@@ -198,7 +198,7 @@ void Parser::read(const char* data, size_t len)
 						pushState(STATE_ARRAY);
 						state = STATE_READ_VALUE_SKIP_WHITESPACE_AND_COMMA;
 					break;
-				
+
 					default:
 						if (init)
 						{
@@ -299,7 +299,7 @@ void Parser::read(const char* data, size_t len)
 						pushValue(value);
 						pushState(STATE_OBJECT_VALUE);
 					break;
-			
+
 					case '\'':
 						state = STATE_STRING_SINGLE_QUOTE;
 						value.reset(new String());
@@ -880,50 +880,50 @@ inline ParserState Parser::popState()
 	return state;
 }
 
-inline void Parser::pushValue(boost::shared_ptr<Value> value)
+inline void Parser::pushValue(ValuePtr value)
 {
 	values.push(value);
 }
 
-inline boost::shared_ptr<Value> Parser::popValue()
+inline ValuePtr Parser::popValue()
 {
 	if (values.empty())
 	{
-		return boost::shared_ptr<Value>();
+		return ValuePtr();
 	}
 
-	boost::shared_ptr<Value> v = values.top();
+	ValuePtr v = values.top();
 	values.pop();
 
 	return v;
 }
 
-inline boost::shared_ptr<String> Parser::topString()
+inline StringPtr Parser::topString()
 {
 	return boost::dynamic_pointer_cast<String>(values.top());
 }
 
-boost::shared_ptr<Value> Parser::readFromFile(const std::string& path)
+ValuePtr Parser::readFromFile(const std::string& path)
 {
 	std::ifstream file;
 	std::string line;
-		
+
 	file.open(path.c_str());
-	
+
 	if (!file.is_open())
 			PARSE_ERROR_SIMPLE("file could not be opened");
-		
+
 	while (!file.eof())
 	{
 		getline(file, line);
 		this->read(line.c_str(), line.size());
 	}
-	
+
 	file.close();
 	return this->finish();
 }
 
-boost::shared_ptr<Value> Parser::finish()
+ValuePtr Parser::finish()
 {
 	// read a space to make sure everything is over
 	read(" ", 1);
@@ -931,10 +931,10 @@ boost::shared_ptr<Value> Parser::finish()
 	if (state != STATE_END)
 	{
 		PARSE_ERROR_SIMPLE("Incomplete JSON structure");
-		return boost::shared_ptr<Value>();
+		return ValuePtr();
 	}
 
-	boost::shared_ptr<Value> result = popValue();
+	ValuePtr result = popValue();
 
 	// restore initial state
 	reset();

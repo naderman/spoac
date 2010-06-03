@@ -36,6 +36,8 @@ namespace JSON
 		void _toJSON(std::string& json, const std::string& indent) const;
 	private:
 	};
+
+    typedef boost::shared_ptr<Null> NullPtr;
 }
 
 #endif

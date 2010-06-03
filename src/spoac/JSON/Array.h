@@ -38,12 +38,12 @@ namespace JSON
 	class Array : public Value
 	{
 	public:
-		typedef boost::shared_ptr<Value> value_type;
+		typedef ValuePtr value_type;
 		typedef boost::shared_ptr<const Value> const_value_type;
 		typedef std::vector<value_type> vector_type;
 		typedef vector_type::iterator iterator;
 		typedef vector_type::const_iterator const_iterator;
-	
+
 		Array();
 		Array(const Array& a);
 
@@ -73,6 +73,8 @@ namespace JSON
 	private:
 		vector_type vector;
 	};
+
+    typedef boost::shared_ptr<Array> ArrayPtr;
 }
 
 #endif

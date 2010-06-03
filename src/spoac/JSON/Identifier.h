@@ -22,20 +22,22 @@
 namespace JSON
 {
 	class String;
+    typedef boost::shared_ptr<String> StringPtr;
 	class Number;
+    typedef boost::shared_ptr<Number> NumberPtr;
 
 	class Identifier
 	{
 	public:
-		Identifier(boost::shared_ptr<Number> n);
+		Identifier(NumberPtr n);
 		Identifier(const Number& n);
-		Identifier(boost::shared_ptr<String> s);
+		Identifier(StringPtr s);
 		Identifier(const String& s);
 		Identifier(const Identifier& i);
 
 		ValueType getType() const;
-		boost::shared_ptr<String> getString() const;
-		boost::shared_ptr<Number> getNumber() const;
+		StringPtr getString() const;
+		NumberPtr getNumber() const;
 		void _toJSON(std::string& json, const std::string& indent) const;
 
 		Identifier& operator=(const Identifier& i);
@@ -47,8 +49,10 @@ namespace JSON
 		bool operator<=(const Identifier& i) const;
 	private:
 		ValueType type;
-		boost::shared_ptr<Value> value;
+		ValuePtr value;
 	};
+
+    typedef boost::shared_ptr<Identifier> IdentifierPtr;
 }
 
 #endif
