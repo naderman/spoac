@@ -38,6 +38,7 @@ namespace spoactest
             (spoac::ActivityControllerPtr src, spoac::OACPtr oac) {}
         virtual void taskCompleted(spoac::ActivityControllerPtr src) {}
         virtual void pause(spoac::ActivityControllerPtr src) {}
+        virtual void unpause(spoac::ActivityControllerPtr src) {}
         virtual void reset(spoac::ActivityControllerPtr src) {}
     };
 }

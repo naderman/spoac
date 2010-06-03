@@ -76,6 +76,13 @@ void CEA::pause(ActivityControllerPtr src)
     paused = true;
 }
 
+void CEA::unpause(ActivityControllerPtr src)
+{
+    UnpauseNotifier n;
+    notifyActivityControllers(&n);
+    paused = false;
+}
+
 void CEA::reset(ActivityControllerPtr src)
 {
     ResetNotifier n;
@@ -91,6 +98,11 @@ void CEA::reset(ActivityControllerPtr src)
 
 void CEA::run()
 {
+    if (paused)
+    {
+        return;
+    }
+
     stm->update();
 
     if (runningAction.get() != NULL)

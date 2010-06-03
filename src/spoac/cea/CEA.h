@@ -102,6 +102,13 @@ namespace spoac
         virtual void pause(ActivityControllerPtr src);
 
         /**
+        * Asks the CEA to unpause the robot, when it has been paused.
+        *
+        * @param src The ActivityController which made the request.
+        */
+        virtual void unpause(ActivityControllerPtr src);
+
+        /**
         * Asks the CEA to reset the robot immediately.
         *
         * @param src The ActivityController which made the request.
@@ -156,6 +163,18 @@ namespace spoac
             virtual void operator()(ActivityControllerPtr c)
             {
                 c->pause();
+            }
+        };
+
+        /**
+        * Notifier functor for unpausing ActivityControllers
+        */
+        class UnpauseNotifier : public Notifier
+        {
+        public:
+            virtual void operator()(ActivityControllerPtr c)
+            {
+                c->unpause();
             }
         };
 

@@ -70,6 +70,13 @@ namespace spoac
         virtual void pause(ActivityControllerPtr src) = 0;
 
         /**
+        * Asks the CEA to unpause the robot.
+        *
+        * @param src The ActivityController which made the request.
+        */
+        virtual void unpause(ActivityControllerPtr src) = 0;
+
+        /**
         * Asks the CEA to reset the robot immediately.
         *
         * @param src The ActivityController which made the request.

@@ -86,6 +86,12 @@ namespace spoac
         virtual void pause() = 0;
 
         /**
+        * The robot is being unpaused.
+        * Processing and communication can continue
+        */
+        virtual void unpause() = 0;
+
+        /**
         * The robot is being reset.
         * All processing and communication has to be stopped and reinitialized.
         */

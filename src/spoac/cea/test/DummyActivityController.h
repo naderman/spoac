@@ -57,6 +57,7 @@ namespace spoactest
             start();
         }
         virtual void pause() {}
+        virtual void unpause() {}
         virtual void reset() {}
 
     protected:
