@@ -36,7 +36,7 @@ namespace spoac
     * Abstract base class for all objects any action can deal with.
     */
     class Object : public VariantMap<
-        std::string, std::string, int, double, JSON::Value
+        std::string, std::string, int, double, JSON::ValuePtr
     >
     {
     public:
@@ -61,7 +61,50 @@ namespace spoac
         */
         std::string getId();
 
+        /**
+        * Copies all data into a JSON::Object representation.
+        *
+        * @return The JSON object.
+        */
+        JSON::ObjectPtr toJSON();
+
+        /**
+        * Encodes all data as JSON.
+        *
+        * @return A JSON string representing this object.
+        */
+        std::string toJSONString();
+
     protected:
+        /**
+        * A visitor which encodes the variant as a JSON object.
+        */
+        struct JSONVisitor : boost::static_visitor<JSON::ValuePtr>
+        {
+            JSON::ValuePtr operator()(const int& x) const
+            {
+                JSON::ValuePtr value(new JSON::Number(x));
+                return value;
+            }
+
+            JSON::ValuePtr operator()(const double& x) const
+            {
+                JSON::ValuePtr value(new JSON::Number(x));
+                return value;
+            }
+
+            JSON::ValuePtr operator()(const JSON::ValuePtr& x) const
+            {
+                return x;
+            }
+
+            JSON::ValuePtr operator()(const std::string& x) const
+            {
+                JSON::ValuePtr value(new JSON::String(x));
+                return value;
+            }
+        };
+
         std::string name;
         std::string id;
     };

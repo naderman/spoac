@@ -40,3 +40,24 @@ std::string Object::getId()
 {
     return id;
 }
+
+std::string Object::toJSONString()
+{
+    JSON::ObjectPtr object = toJSON();
+
+    return object->toJSON();
+}
+
+JSON::ObjectPtr Object::toJSON()
+{
+    JSONVisitor visitor;
+    JSON::ObjectPtr object(new JSON::Object);
+    iterator it;
+
+    for (it = begin(); it != end(); ++it)
+    {
+        (*object)[it->first] = boost::apply_visitor(visitor, it->second);
+    }
+
+    return object;
+}

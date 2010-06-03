@@ -55,6 +55,26 @@ namespace spoac
         typedef SetType::size_type size_type;
 
         /**
+        * Set iterator type.
+        */
+        typedef SetType::iterator iterator;
+
+        /**
+        * Constant set iterator type.
+        */
+        typedef SetType::const_iterator const_iterator;
+
+        /**
+        * Map iterator type.
+        */
+        typedef MapType::iterator iterator_map;
+
+        /**
+        * Constant map iterator type.
+        */
+        typedef MapType::const_iterator const_iterator_map;
+
+        /**
         * Return size
         *
         * @return Number of elements
@@ -82,6 +102,30 @@ namespace spoac
         * @return    The object with the requested id.
         */
         ObjectPtr get(const std::string& id);
+
+        iterator           begin()          { return objects.begin(); }
+        const_iterator     begin()    const { return objects.begin(); }
+        iterator           end()            { return objects.end();   }
+        const_iterator     end()      const { return objects.end();   }
+
+        iterator_map       beginMap()       { return objectMap.begin(); }
+        const_iterator_map beginMap() const { return objectMap.begin(); }
+        iterator_map       endMap()         { return objectMap.end();   }
+        const_iterator_map endMap()   const { return objectMap.end();   }
+
+        /**
+        * Copies all data into a JSON::Object representation.
+        *
+        * @return The JSON object.
+        */
+        JSON::ObjectPtr toJSON();
+
+        /**
+        * Encodes all data as JSON.
+        *
+        * @return A JSON string representing this object.
+        */
+        std::string toJSONString();
 
     protected:
         SetType objects;

@@ -57,3 +57,23 @@ ObjectPtr ObjectSet::get(const std::string& id)
 {
     return operator[](id);
 }
+
+std::string ObjectSet::toJSONString()
+{
+    JSON::ObjectPtr object = toJSON();
+
+    return object->toJSON();
+}
+
+JSON::ObjectPtr ObjectSet::toJSON()
+{
+    JSON::ObjectPtr object(new JSON::Object);
+    iterator_map it;
+
+    for (it = beginMap(); it != endMap(); ++it)
+    {
+        (*object)[it->first] = (*(it->second))->toJSON();
+    }
+
+    return object;
+}

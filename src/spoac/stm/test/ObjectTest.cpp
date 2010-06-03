@@ -52,3 +52,31 @@ BOOST_AUTO_TEST_CASE(testOneElementObject)
     BOOST_CHECK_EQUAL(object.get<std::string>("bar"), std::string("bar"));
     BOOST_CHECK_EQUAL(object.get<int>("bar", 5), 5);
 }
+
+BOOST_AUTO_TEST_CASE(testJSON)
+{
+    spoac::Object object("foo", "foo1");
+
+    object["bar"] = std::string("bar");
+    object["foobar"] = 1337;
+    object["42"] = 0.23;
+
+    JSON::StringPtr s1(new JSON::String("abc"));
+    JSON::StringPtr s2(new JSON::String("def"));
+
+    JSON::ArrayPtr array(new JSON::Array());
+    array->push_back(s1);
+    array->push_back(s2);
+
+    object["json"] = array;
+
+    BOOST_CHECK_EQUAL(object.toJSONString(), "{\n"
+"\t\"42\": 0.23,\n"
+"\t\"bar\": \"bar\",\n"
+"\t\"foobar\": 1337,\n"
+"\t\"json\": [\n"
+"\t\t\"abc\",\n"
+"\t\t\"def\"\n"
+"\t]\n"
+"}");
+}
