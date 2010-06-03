@@ -26,38 +26,7 @@
 
 #include <iostream>
 #include <spoac/stm/STM.h>
-
-namespace spoactest
-{
-    class CountPerceptionHandler : public spoac::PerceptionHandler
-    {
-    public:
-        static std::string getName()
-        {
-            return "CountPerceptionHandler";
-        }
-
-        static boost::shared_ptr<spoac::PerceptionHandler> createInstance(
-            spoac::DependencyManagerPtr m)
-        {
-            boost::shared_ptr<spoac::PerceptionHandler> handler(
-                new CountPerceptionHandler);
-
-            return handler;
-        }
-
-        void update(spoac::STMPtr stm)
-        {
-            counter++;
-        }
-
-        static int counter;
-        static Register<CountPerceptionHandler> r;
-    };
-    CountPerceptionHandler::Register<CountPerceptionHandler>
-        CountPerceptionHandler::r;
-    int CountPerceptionHandler::counter;
-}
+#include "CountPerceptionHandler.h"
 
 using spoactest::CountPerceptionHandler;
 

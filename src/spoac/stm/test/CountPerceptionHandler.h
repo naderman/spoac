@@ -21,44 +21,34 @@
 *             GNU General Public License
 */
 
-#include <spoac/cea/OAC.h>
-#include <spoac/cea/ActionException.h>
-
-using namespace spoac;
-
-OAC::OAC(const std::string& name, const std::vector<std::string>& objectIds) :
-    name(name), objectIds(objectIds)
+namespace spoactest
 {
-}
-
-std::string OAC::getName() const
-{
-    return name;
-}
-
-std::vector<std::string> OAC::getObjectIds() const
-{
-    return objectIds;
-}
-
-ActionPtr OAC::setupAction(DependencyManagerPtr manager) const
-{
-    STMPtr stm = manager->getService<STM>();
-
-    ObjectVector objects = stm->vectorFromIds(getObjectIds());
-
-    ActionPtr action = Action::fromName(getName(), manager);
-
-    if (action.get() == NULL)
+    class CountPerceptionHandler : public spoac::PerceptionHandler
     {
-        throw ActionException(
-            std::string("Cannot create unregistered action: '") + getName() +
-            std::string("'")
-        );
-    }
+    public:
+        static std::string getName()
+        {
+            return "CountPerceptionHandler";
+        }
 
-    action->setup(objects);
+        static boost::shared_ptr<spoac::PerceptionHandler> createInstance(
+            spoac::DependencyManagerPtr m)
+        {
+            boost::shared_ptr<spoac::PerceptionHandler> handler(
+                new CountPerceptionHandler);
 
-    return action;
+            return handler;
+        }
+
+        void update(spoac::STMPtr stm)
+        {
+            counter++;
+        }
+
+        static int counter;
+        static Register<CountPerceptionHandler> r;
+    };
+    CountPerceptionHandler::Register<CountPerceptionHandler>
+        CountPerceptionHandler::r;
+    int CountPerceptionHandler::counter = 0;
 }
-

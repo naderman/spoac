@@ -75,6 +75,11 @@ namespace spoac
         virtual void oacStopped(OACPtr oac) = 0;
 
         /**
+        * The robot does not know what to do, so it is requesting an action.
+        */
+        virtual void requestAction() = 0;
+
+        /**
         * The robot is being paused.
         * All processing and communication should be paused.
         */

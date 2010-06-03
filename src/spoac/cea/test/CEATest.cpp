@@ -21,31 +21,32 @@
 *             GNU General Public License
 */
 
-#define BOOST_TEST_MODULE spoac_ActivityController
+#define BOOST_TEST_MODULE spoac_CEA
 #include <spoactest/test.h>
 
 #include <iostream>
-#include <spoac/cea/ActivityController.h>
+#include <vector>
+#include <spoac/stm/STM.h>
+#include <spoac/cea/CEA.h>
+#include <spoac/cea/Action.h>
+
 #include "DummyActivityController.h"
+#include "CountTwoAction.h"
+#include "../../stm/test/CountPerceptionHandler.h"
 
-namespace spoactest
+BOOST_AUTO_TEST_CASE(testCEAComplete)
 {
-    class DummyCEA : public spoac::CEAControl
-    {
-        virtual void startOAC
-            (spoac::ActivityControllerPtr src, spoac::OACPtr oac) {}
-        virtual void stopOAC
-            (spoac::ActivityControllerPtr src, spoac::OACPtr oac) {}
-        virtual void taskCompleted(spoac::ActivityControllerPtr src) {}
-        virtual void pause(spoac::ActivityControllerPtr src) {}
-        virtual void reset(spoac::ActivityControllerPtr src) {}
-    };
-}
+    spoac::DependencyManagerPtr manager(new spoac::DependencyManager);
 
-BOOST_AUTO_TEST_CASE(testDummyActivityController)
-{
-    spoac::CEAControlPtr cea(new spoactest::DummyCEA());
-    spoac::OACPtr oac(new spoac::OAC("no-action", std::vector<std::string>()));
+    spoac::STMPtr stm = manager->getService<spoac::STM>();
+
+    stm->addPerceptionHandler("CountPerceptionHandler", manager);
+
+    spoac::CEAPtr cea(new spoac::CEA(
+        manager->getService<spoac::STM>(),
+        manager
+    ));
+    spoac::OACPtr oac(new spoac::OAC("CountTwo", std::vector<std::string>()));
 
     boost::shared_ptr<spoactest::DummyActivityController> activityController(
         new spoactest::DummyActivityController(
@@ -53,15 +54,17 @@ BOOST_AUTO_TEST_CASE(testDummyActivityController)
         )
     );
 
-    activityController->start();
-    activityController->oacStarted(oac);
-    activityController->stop();
-    activityController->oacStopped(oac);
+    cea->addActivityController(activityController);
 
-    activityController->start();
-    activityController->oacStarted(oac);
-    activityController->oacFinished(oac);
+    spoactest::CountPerceptionHandler::counter = 0;
+    spoactest::CountTwoAction::counter = 0;
 
-    // important so the CEA is not deleted, we still need it for the weak ptr.
-    cea.reset();
+    // action should only be executed 2 times, last run should not do anything
+    cea->run();
+    cea->run();
+    cea->run();
+
+    BOOST_CHECK_EQUAL(spoactest::CountPerceptionHandler::counter, 3);
+    BOOST_CHECK_EQUAL(spoactest::CountTwoAction::counter, 2);
 }
+
