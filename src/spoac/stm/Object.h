@@ -24,6 +24,7 @@
 #ifndef SPOAC_STM_OBJECT_H
 #define SPOAC_STM_OBJECT_H
 
+#include <spoac/JSON/AllValueTypes.h>
 #include <spoac/stm/VariantMap.h>
 
 #include <string>
@@ -34,7 +35,9 @@ namespace spoac
     /**
     * Abstract base class for all objects any action can deal with.
     */
-    class Object : public VariantMap<std::string, std::string, int, double>
+    class Object : public VariantMap<
+        std::string, std::string, int, double, JSON::Value
+    >
     {
     public:
         /**

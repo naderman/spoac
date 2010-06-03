@@ -26,7 +26,6 @@
 using namespace spoac;
 
 Object::Object(const std::string& name, const std::string& id) :
-    VariantMap<std::string, std::string, int, double>(),
     name(name),
     id(id)
 {
