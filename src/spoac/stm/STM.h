@@ -59,7 +59,8 @@ namespace spoac
         /**
         * Adds a perception handler identified by its name.
         *
-        * @param handlerName Name of a PerceptionHandler implementation
+        * @param handlerName       Name of a PerceptionHandler implementation
+        * @param dependencyManager Required to satisfy new class's dependencies
         */
         void addPerceptionHandler(
             std::string handlerName,
@@ -75,6 +76,7 @@ namespace spoac
         * Clears the handler list and then adds all the given ones by name.
         *
         * @param handlerNames A vector of PerceptionHandler implementation names
+        * @param dependencyManager Required to satisfy new classes' dependencies
         */
         void setPerceptionHandlers(
             std::vector<std::string> handlerNames,

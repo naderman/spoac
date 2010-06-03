@@ -40,6 +40,7 @@ namespace spoac
     * pointers, the this pointer has to be one, too.
     */
     class ActivityController :
+        public AbstractFactoryMethod<ActivityController, DependencyManagerPtr>,
         public boost::enable_shared_from_this<ActivityController>
     {
     public:

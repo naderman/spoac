@@ -72,6 +72,33 @@ namespace spoac
         void addActivityController(ActivityControllerPtr activityController);
 
         /**
+        * Adds an activity controller identified by its name.
+        *
+        * @param controllerName    The identifier for the controller class
+        * @param dependencyManager Required to satisfy new class's dependencies
+        */
+        void addActivityController(
+            std::string controllerName,
+            DependencyManagerPtr dependencyManager
+        );
+
+        /**
+        * Throws away all activity controllers.
+        */
+        void clearActivityControllers();
+
+        /**
+        * Clears the controller list and then adds all the given ones by name.
+        *
+        * @param handlerNames A vector of Pactivity controler class identifiers
+        * @param dependencyManager Required to satisfy new classes' dependencies
+        */
+        void setActivityControllers(
+            std::vector<std::string> controllerNames,
+            DependencyManagerPtr dependencyManager
+        );
+
+        /**
         * Starts a particular OAC's execution.
         *
         * @param src The instructing ActivityController.

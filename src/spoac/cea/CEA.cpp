@@ -48,6 +48,36 @@ void CEA::addActivityController(ActivityControllerPtr activityController)
     activityControllers.push_back(activityController);
 }
 
+void CEA::addActivityController(
+    std::string controllerName, DependencyManagerPtr dependencyManager)
+{
+    ActivityControllerPtr controller = ActivityController::fromName(
+        controllerName,
+        dependencyManager
+    );
+
+    addActivityController(controller);
+}
+
+void CEA::clearActivityControllers()
+{
+    activityControllers.clear();
+}
+
+void CEA::setActivityControllers(
+    std::vector<std::string> controllerNames,
+    DependencyManagerPtr dependencyManager)
+{
+    std::vector<std::string>::iterator it;
+
+    clearActivityControllers();
+
+    for (it = controllerNames.begin(); it != controllerNames.end(); ++it)
+    {
+        addActivityController(*it, dependencyManager);
+    }
+}
+
 void CEA::startOAC(ActivityControllerPtr src, OACPtr oac)
 {
     plannedOACs.push(oac);
