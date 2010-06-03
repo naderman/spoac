@@ -26,7 +26,7 @@ if( build )
         # Work out the list of generated files from the list of slice sources
         #
         GENERATE_SLICE2PY_RULES( SLICE_GENERATED_PY_FILES ${SPOAC_SLICE_SOURCE_FILES} )
-
+	
         #
         # tell "make" to create the .py targets by looping through over each <interface>.py
         #
@@ -41,6 +41,9 @@ if( build )
         # http://www.cmake.org/Wiki/CMake_FAQ#How_do_I_use_CMake_to_build_LaTeX_documents.3F
         ADD_CUSTOM_TARGET( ${PYTHON_INTERFACE} ALL echo
             DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${INTERFACE_NAMESPACE}/${PYTHON_INTERFACE} ${SPOAC_SLICE_SOURCE_FILE_PATHS} )
+
+            APPEND(SLICE_GENERATED_PY_INSTALL_FILES "spoac_${PYTHON_INTERFACE}")
+            APPEND(SLICE_GENERATED_PYC_INSTALL_FILES "spoac_${PYTHON_INTERFACE}c")
 
         endforeach( PYTHON_INTERFACE ${SLICE_GENERATED_PY_FILES} )
 
@@ -61,10 +64,10 @@ if( build )
         message( STATUS "Will install Python files into ${GBX_SHARE_INSTALL_DIR}/python/${slice_module}" )
 
         # install .py files
-        install( FILES ${SLICE_GENERATED_PY_FILES} DESTINATION ${GBX_SHARE_INSTALL_DIR}/python/${INTERFACE_NAMESPACE} )
+        install( FILES ${SLICE_GENERATED_PY_INSTALL_FILES} DESTINATION ${GBX_SHARE_INSTALL_DIR}/python/${INTERFACE_NAMESPACE} )
         # install .pyc files
         string( REGEX REPLACE "\\.py" .pyc SLICE_GENERATED_PYC_FILES "${SLICE_GENERATED_PY_FILES}" )
-        install( FILES ${SLICE_GENERATED_PYC_FILES} DESTINATION ${GBX_SHARE_INSTALL_DIR}/python/${INTERFACE_NAMESPACE} )
+        install( FILES ${SLICE_GENERATED_PYC_INSTALL_FILES} DESTINATION ${GBX_SHARE_INSTALL_DIR}/python/${INTERFACE_NAMESPACE} )
 
     else( PYTHONINTERP_FOUND AND SPOAC_BUILD_PYTHON )
         message( STATUS "Will not build Python interfaces : PYTHONINTERP_FOUND=${PYTHON_FOUND}, SPOAC_BUILD_PYTHON=${SPOAC_BUILD_PYTHON}" )
