@@ -88,6 +88,11 @@ namespace spoac
         typedef std::map<std::string, Service> ServiceMap;
 
         /**
+        * Map type for the typeid.name -> void* (service instance) lookup table.
+        */
+        typedef std::map<std::string, void*> LegacyServiceMap;
+
+        /**
         * Retrieves the service identified by the given template parameter.
         *
         * It returns a new instance when the service is not shared. Otherwise
@@ -119,6 +124,31 @@ namespace spoac
         }
 
         /**
+        * Retrieves the legacyservice identified by the template parameter.
+        *
+        * This is for legacy services for which memory management takes place
+        * outside this manager's scope. It handles pure pointers and does not
+        * reference count.
+        *
+        * @return A ServiceT* to the value stored with setLegacyService().
+        */
+        template<typename ServiceT>
+        ServiceT* getLegacyService()
+        {
+            std::string serviceName(typeid(ServiceT).name());
+
+            LegacyServiceMap::iterator it = legacyServices.find(serviceName);
+
+            if (it == legacyServices.end())
+            {
+                throw Exception(std::string("No such legacy service: ") +
+                    serviceName);
+            }
+
+            return static_cast<ServiceT*>(it->second);
+        }
+
+        /**
         * Set the instance used for a shared service.
         *
         * @param instance A pointer to the instance for this service.
@@ -145,6 +175,25 @@ namespace spoac
                 Service& service = findService<ServiceT>();
                 service.instance = boost::static_pointer_cast<void>(instance);
             }
+        }
+
+        /**
+        * Set the instance used for a shared legacy service.
+        *
+        * @param instance A pointer to the instance for this service.
+        */
+        template<typename ServiceT>
+        void setLegacyService(ServiceT* instance)
+        {
+            std::string serviceName(typeid(ServiceT).name());
+
+            if (instance == NULL)
+            {
+                throw spoac::Exception("setLegacyService: Called with NULL"
+                    "pointer");
+            }
+
+            legacyServices[serviceName] = instance;
         }
 
         /**
@@ -256,6 +305,7 @@ namespace spoac
 
         static ServiceDefinitionMap serviceDefinitions;
         ServiceMap services;
+        LegacyServiceMap legacyServices;
     };
 }
 

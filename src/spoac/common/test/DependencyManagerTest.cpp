@@ -71,6 +71,12 @@ namespace spoactest
         static RegisterService r;
     };
     SharedService::RegisterService SharedService::r;
+
+    class LegacyService
+    {
+    public:
+            int x;
+    };
 }
 
 BOOST_AUTO_TEST_CASE(testUnregisteredServiceThrows)
@@ -162,4 +168,24 @@ BOOST_AUTO_TEST_CASE(testSetUnregisteredService)
 
     BOOST_CHECK(u2.get() != NULL);
     BOOST_CHECK(u1.get() == u2.get());
+}
+
+BOOST_AUTO_TEST_CASE(testLegacyService)
+{
+    spoac::DependencyManagerPtr manager(new spoac::DependencyManager);
+
+    spoactest::LegacyService* l1 = new spoactest::LegacyService;
+    spoactest::LegacyService* l2;
+
+    BOOST_REQUIRE_NO_THROW(
+        manager->setLegacyService<spoactest::LegacyService>(l1)
+    );
+
+    BOOST_REQUIRE_NO_THROW(
+        l2 = manager->getLegacyService<spoactest::LegacyService>()
+    );
+
+    BOOST_CHECK(l2 == l1);
+
+    delete l1;
 }
