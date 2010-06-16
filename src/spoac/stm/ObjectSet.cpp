@@ -58,6 +58,16 @@ ObjectPtr ObjectSet::get(const std::string& id)
     return operator[](id);
 }
 
+bool ObjectSet::exists(const std::string& id) const
+{
+    if (objectMap.find(id) == objectMap.end())
+    {
+        return false;
+    }
+
+    return true;
+}
+
 std::string ObjectSet::toJSONString()
 {
     JSON::ObjectPtr object = toJSON();

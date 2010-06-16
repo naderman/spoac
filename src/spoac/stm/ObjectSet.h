@@ -98,10 +98,20 @@ namespace spoac
         /**
         * Alias of operator[] - used to access objects by id
         *
+        * Throws a STMException if the object does not exist.
+        *
         * @param  id The id of the requested object
         * @return    The object with the requested id.
         */
         ObjectPtr get(const std::string& id);
+
+        /**
+        * Checks whether a particular object exists in short term memory
+        *
+        * @param id The id of the object to be looked up
+        * @return   True if the object exists, False otherwise
+        */
+        bool exists(const std::string& id) const;
 
         iterator           begin()          { return objects.begin(); }
         const_iterator     begin()    const { return objects.begin(); }

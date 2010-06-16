@@ -71,4 +71,7 @@ BOOST_AUTO_TEST_CASE(testTwoElements)
     BOOST_CHECK_EQUAL(objects["bar1"]->getId(), "bar1");
 
     BOOST_CHECK_THROW(objects["foobar23"], STMException);
+
+    BOOST_CHECK_EQUAL(objects.exists("foo1"), true);
+    BOOST_CHECK_EQUAL(objects.exists("foobar23"), false);
 }
