@@ -90,3 +90,19 @@ ObjectVector STM::vectorFromIds(const std::vector<std::string>& ids)
 
     return vector;
 }
+
+STM::size_type STM::sizeNonHardcoded() const
+{
+    STM::size_type counter = 0;
+
+    iterator it;
+    for (it = begin(); it != end(); ++it)
+    {
+        if ( ! (*it)->get<bool>("__hardcoded", false)) // false == default
+        {
+            counter++;
+        }
+    }
+
+    return counter;
+}

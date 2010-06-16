@@ -36,7 +36,7 @@ namespace spoac
     * Abstract base class for all objects any action can deal with.
     */
     class Object : public VariantMap<
-        std::string, std::string, int, double, JSON::ValuePtr
+        std::string, std::string, bool, int, double, JSON::ValuePtr
     >
     {
     public:

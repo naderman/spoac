@@ -73,3 +73,18 @@ BOOST_AUTO_TEST_CASE(testNamedHandlers)
 
     BOOST_CHECK_EQUAL(CountPerceptionHandler::counter, 2);
 }
+
+BOOST_AUTO_TEST_CASE(testHardcodedObjectSize)
+{
+    spoac::ObjectPtr foo1(new spoac::Object("foo", "foo1"));
+    (*foo1)["__hardcoded"] = true;
+    spoac::ObjectPtr bar1(new spoac::Object("bar", "bar1"));
+
+    spoac::STMPtr stm(new spoac::STM);
+
+    stm->insert(foo1);
+    stm->insert(bar1);
+
+    BOOST_CHECK_EQUAL(stm->size(), 2);
+    BOOST_CHECK_EQUAL(stm->sizeNonHardcoded(), 1);
+}

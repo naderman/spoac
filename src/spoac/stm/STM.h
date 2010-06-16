@@ -93,6 +93,14 @@ namespace spoac
         */
         ObjectVector vectorFromIds(const std::vector<std::string>& ids);
 
+        /**
+        * Returns the amount of objects which do not have the __hardcoded flag
+        * set to true.
+        *
+        * @return The result of counting the objects
+        */
+        size_type sizeNonHardcoded() const;
+
     protected:
         std::vector<PerceptionHandlerPtr> handlers;
 

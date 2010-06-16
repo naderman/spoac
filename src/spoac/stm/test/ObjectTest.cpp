@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE(testJSON)
     array->push_back(s1);
     array->push_back(s2);
 
-    object["json"] = array;
+    object["json"] = boost::dynamic_pointer_cast<JSON::Value>(array);
 
     BOOST_CHECK_EQUAL(object.toJSONString(), "{\n"
 "\t\"42\": 0.23,\n"
