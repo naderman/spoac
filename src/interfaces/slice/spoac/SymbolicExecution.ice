@@ -31,6 +31,7 @@ module spoac
             void taskComplete();
 
             void pause();
+            void unpause();
             void reset();
         };
 
@@ -50,6 +51,7 @@ module spoac
             void stateUpdated();
 
             void paused();
+            void unpaused();
             void resetted();
         };
 
