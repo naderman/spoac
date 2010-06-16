@@ -40,6 +40,7 @@ namespace spoactest
         virtual void pause(spoac::ActivityControllerPtr src) {}
         virtual void unpause(spoac::ActivityControllerPtr src) {}
         virtual void reset(spoac::ActivityControllerPtr src) {}
+        virtual spoac::OACPtr getCurrentOAC() {return spoac::OACPtr();}
     };
 }
 

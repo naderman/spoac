@@ -62,6 +62,9 @@ BOOST_AUTO_TEST_CASE(testCEAComplete)
     // action should only be executed 2 times, last run should not do anything
     cea->run();
     cea->run();
+
+    BOOST_CHECK_EQUAL(cea->getCurrentOAC(), oac);
+
     cea->run();
 
     BOOST_CHECK_EQUAL(spoactest::CountPerceptionHandler::counter, 3);

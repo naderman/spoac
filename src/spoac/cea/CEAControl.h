@@ -82,6 +82,11 @@ namespace spoac
         * @param src The ActivityController which made the request.
         */
         virtual void reset(ActivityControllerPtr src) = 0;
+
+        /**
+        * Getter for the currently executing OAC
+        */
+        virtual OACPtr getCurrentOAC() = 0;
     };
 
     /**

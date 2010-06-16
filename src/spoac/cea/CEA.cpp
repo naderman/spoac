@@ -126,6 +126,11 @@ void CEA::reset(ActivityControllerPtr src)
     paused = false;
 }
 
+OACPtr CEA::getCurrentOAC()
+{
+    return runningOAC;
+}
+
 void CEA::run()
 {
     if (paused)

@@ -143,6 +143,11 @@ namespace spoac
         virtual void reset(ActivityControllerPtr src);
 
         /**
+        * Getter for the currently executing OAC
+        */
+        virtual OACPtr getCurrentOAC();
+
+        /**
         * Execute a step of an action on the robot and/or perception.
         */
         virtual void run();
