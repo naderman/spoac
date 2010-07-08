@@ -80,12 +80,16 @@ void CEA::setActivityControllers(
 
 void CEA::startOAC(ActivityControllerPtr src, OACPtr oac)
 {
+    IceUtil::Mutex::Lock lock(mutex);
+
     plannedOACs.push(oac);
     paused = false;
 }
 
 void CEA::stopOAC(ActivityControllerPtr src, OACPtr oac)
 {
+    IceUtil::Mutex::Lock lock(mutex);
+
     StoppedNotifier n(runningOAC);
     notifyActivityControllers(&n);
 
@@ -95,6 +99,8 @@ void CEA::stopOAC(ActivityControllerPtr src, OACPtr oac)
 
 void CEA::taskCompleted(ActivityControllerPtr src)
 {
+    IceUtil::Mutex::Lock lock(mutex);
+
     runningAction = ActionPtr();
     runningOAC = OACPtr();
 }
@@ -118,16 +124,22 @@ void CEA::reset(ActivityControllerPtr src)
     ResetNotifier n;
     notifyActivityControllers(&n);
 
-    while (!plannedOACs.empty())
     {
-        plannedOACs.pop();
+        IceUtil::Mutex::Lock lock(mutex);
+
+        while (!plannedOACs.empty())
+        {
+            plannedOACs.pop();
+        }
+        runningAction = ActionPtr();
+        paused = false;
     }
-    runningAction = ActionPtr();
-    paused = false;
 }
 
 OACPtr CEA::getCurrentOAC()
 {
+    IceUtil::Mutex::Lock lock(mutex);
+
     return runningOAC;
 }
 
@@ -140,33 +152,48 @@ void CEA::run()
 
     stm->update();
 
-    if (runningAction.get() != NULL)
     {
-        if (!runningAction->isFinished())
+        IceUtil::Mutex::Lock lock(mutex);
+        if (runningAction.get() != NULL)
         {
-            runningAction->run();
+            if (!runningAction->isFinished())
+            {
+                runningAction->run();
+            }
+            else
+            {
+                lock.release();
+
+                FinishedNotifier n(runningOAC);
+                notifyActivityControllers(&n);
+
+                lock.acquire();
+
+                runningAction = ActionPtr();
+                runningOAC = OACPtr();
+            }
         }
         else
         {
-            FinishedNotifier n(runningOAC);
-            notifyActivityControllers(&n);
-            runningAction = ActionPtr();
-            runningOAC = OACPtr();
+            lock.release();
+            nextAction();
         }
-    }
-    else
-    {
-        nextAction();
     }
 }
 
 void CEA::nextAction()
 {
+    IceUtil::Mutex::Lock lock(mutex);
+
     // no action -> try to find one
     if (plannedOACs.empty())
     {
+        lock.release();
+
         RequestActionNotifier r;
         notifyActivityControllers(&r);
+
+        lock.acquire();
     }
 
     // if we have an action now ...
@@ -179,6 +206,8 @@ void CEA::nextAction()
         {
             runningAction = nextOAC->setupAction(manager);
             runningOAC = nextOAC;
+
+            lock.release();
 
             StartedNotifier n(runningOAC);
             notifyActivityControllers(&n);

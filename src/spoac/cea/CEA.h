@@ -35,6 +35,8 @@
 #include <boost/weak_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
+#include <IceUtil/Mutex.h>
+
 namespace spoac
 {
     /**
@@ -281,6 +283,8 @@ namespace spoac
         std::stack<OACPtr> plannedOACs;
         ActionPtr runningAction;
         OACPtr runningOAC;
+
+        IceUtil::Mutex mutex;
 
         typedef DependencyManager::RegisterService<CEA> RegisterService;
         static RegisterService r;
