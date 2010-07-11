@@ -68,7 +68,8 @@ module spoac
         {
             string name;
             ConstantList parameters;
-            double value;
+            double realValue;
+            string constantValue;
         };
         sequence<FunctionValue> FunctionValueList;
 
