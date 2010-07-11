@@ -13,9 +13,9 @@ class CEAController(SymbolicExecutionSlice.CEAControllerTopic):
         print "start"
         print action
 
-        topic = self.stormGetTopic("CEAInfo",
-            SymbolicExecutionSlice.CEAInfoTopic)
-        topic.actionStarted(action)
+        #topic = self.app.stormGetTopic("CEAInfo",
+        #    SymbolicExecutionSlice.CEAInfoTopic)
+        #topic.actionStarted(action)
 
     def stopAction(self, action, current = None):
         print "stop"

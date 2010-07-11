@@ -4,7 +4,7 @@ set(LIB_INSTALL controller)
 set(build TRUE)
 GBX_REQUIRE_OPTION(build LIB ${LIB_NAME} ON)
 
-set( dep_libs SpoacCEA )
+set( dep_libs SpoacCEA SpoacIce )
 GBX_REQUIRE_LIBS( build LIB ${LIB_NAME} ${dep_libs} )
 
 if (build)
