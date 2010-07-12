@@ -22,6 +22,7 @@
 */
 
 #include <spoac/cea/CEA.h>
+#include <spoac/LTM.h>
 
 using namespace spoac;
 
@@ -179,6 +180,35 @@ void CEA::run()
             nextAction();
         }
     }
+}
+
+void CEA::setScenario(const std::string& scenario)
+{
+    if (DependencyManagerPtr manager = weakDependencyManager.lock())
+    {
+        ice::IceHelperPtr iceHelper = manager->getService<ice::IceHelper>();
+
+        LTMSlice::LTMPrx ltm =
+            iceHelper->getProxy<LTMSlice::LTMPrx>("LTM:tcp -p 10099");
+        LTMSlice::Scenario s = ltm->getScenario(scenario);
+
+        setActivityControllers(s.activityControllers, manager);
+        stm->setPerceptionHandlers(s.perceptionHandlers, manager);
+        goals = s.goals;
+    }
+}
+
+void CEA::setGoalExpression(const std::string& goalExpression)
+{
+    GoalNotifier n(goalExpression);
+    notifyActivityControllers(&n);
+}
+
+void CEA::setGoalName(const std::string& goalName)
+{
+    std::string goalExpression = goals[goalName];
+    // TODO: Throw exception if undefined
+    setGoalExpression(goalExpression);
 }
 
 void CEA::nextAction()

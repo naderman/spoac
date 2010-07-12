@@ -63,6 +63,10 @@ void IceNetworkController::reset()
 {
 }
 
+void IceNetworkController::setGoalExpression(const std::string& goalExpression)
+{
+}
+
 void IceNetworkController::startAction(
     const SymbolicExecutionSlice::Action& action,
     const Ice::Current& c)

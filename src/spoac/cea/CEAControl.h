@@ -87,6 +87,27 @@ namespace spoac
         * Getter for the currently executing OAC
         */
         virtual OACPtr getCurrentOAC() = 0;
+
+        /**
+        * Tell the CEA to load a particular scenario from long term memory.
+        *
+        * @param scenario The name of the scenario to be loaded.
+        */
+        virtual void setScenario(const std::string& scenario) = 0;
+
+        /**
+        * Define a goal for the CEA as a PKS expression.
+        *
+        * @param goalExpression A PKS expression that should evaluate to true.
+        */
+        virtual void setGoalExpression(const std::string& goalExpression) = 0;
+
+        /**
+        * Select a named goal from the scenario as the goal.
+        *
+        * @param goalName The name of the goal to be reached.
+        */
+        virtual void setGoalName(const std::string& goalName) = 0;
     };
 
     /**

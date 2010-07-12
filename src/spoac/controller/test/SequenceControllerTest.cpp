@@ -46,6 +46,9 @@ namespace spoactest
         virtual void unpause(spoac::ActivityControllerPtr src) {}
         virtual void reset(spoac::ActivityControllerPtr src) {}
         virtual spoac::OACPtr getCurrentOAC() {return spoac::OACPtr();}
+        virtual void setScenario(const std::string& scenario) {}
+        virtual void setGoalExpression(const std::string& goalExpression) {}
+        virtual void setGoalName(const std::string& goalName) {}
 
         static int requestCount;
     };

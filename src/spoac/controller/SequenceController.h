@@ -21,6 +21,9 @@
 *             GNU General Public License
 */
 
+#ifndef SPOAC_CONTROLLER_SEQUENCECONTROLLER_H
+#define SPOAC_CONTROLLER_SEQUENCECONTROLLER_H
+
 #include <spoac/cea/ActivityController.h>
 
 namespace spoac
@@ -56,6 +59,7 @@ namespace spoac
             virtual void pause();
             virtual void unpause();
             virtual void reset();
+            virtual void setGoalExpression(const std::string& goalExpression);
 
         protected:
             std::vector<OACPtr>::iterator currentOAC;
@@ -68,3 +72,5 @@ namespace spoac
         typedef boost::shared_ptr<SequenceController> SequenceControllerPtr;
     }
 }
+
+#endif

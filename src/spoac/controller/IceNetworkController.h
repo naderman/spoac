@@ -21,6 +21,9 @@
 *             GNU General Public License
 */
 
+#ifndef SPOAC_CONTROLLER_ICENETWORKCONTROLLER_H
+#define SPOAC_CONTROLLER_ICENETWORKCONTROLLER_H
+
 #include <spoac/cea/ActivityController.h>
 #include <spoac/SymbolicExecution.h>
 #include <spoac/ice/IceHelper.h>
@@ -60,6 +63,7 @@ namespace spoac
             virtual void pause();
             virtual void unpause();
             virtual void reset();
+            virtual void setGoalExpression(const std::string& goalExpression);
 
             virtual void startAction(
                 const spoac::SymbolicExecutionSlice::Action& action,
@@ -78,10 +82,6 @@ namespace spoac
             OACPtr actionToOAC(
                 const spoac::SymbolicExecutionSlice::Action& action);
 
-            Ice::CommunicatorPtr ic;
-            Ice::ObjectPrx thisProxy;
-            IceStorm::TopicPrx ceaControllerTopic;
-
             ice::IceHelperPtr iceHelper;
         };
 
@@ -91,3 +91,5 @@ namespace spoac
         typedef boost::shared_ptr<IceNetworkController> IceNetworkControllerPtr;
     }
 }
+
+#endif

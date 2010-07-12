@@ -79,3 +79,7 @@ void SequenceController::reset()
 {
     currentOAC = oacs.begin();
 }
+
+void SequenceController::setGoalExpression(const std::string& goalExpression)
+{
+}

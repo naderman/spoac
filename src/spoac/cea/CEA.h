@@ -27,6 +27,7 @@
 #include <spoac/common/DependencyManager.h>
 #include <spoac/cea/CEAControl.h>
 #include <spoac/cea/ActivityController.h>
+#include <spoac/ice/IceHelper.h>
 
 #include <stack>
 #include <functional>
@@ -154,6 +155,27 @@ namespace spoac
         */
         virtual void run();
 
+        /**
+        * Tell the CEA to load a particular scenario from long term memory.
+        *
+        * @param scenario The name of the scenario to be loaded.
+        */
+        virtual void setScenario(const std::string& scenario);
+
+        /**
+        * Define a goal for the CEA as a PKS expression.
+        *
+        * @param goalExpression A PKS expression that should evaluate to true.
+        */
+        virtual void setGoalExpression(const std::string& goalExpression);
+
+        /**
+        * Select a named goal from the scenario as the goal.
+        *
+        * @param goalName The name of the goal to be reached.
+        */
+        virtual void setGoalName(const std::string& goalName);
+
     protected:
         /**
         * Base class for all notifiers
@@ -263,6 +285,21 @@ namespace spoac
         };
 
         /**
+        * Notifier functor for informing ActivityControllers about goal changes.
+        */
+        class GoalNotifier : public Notifier
+        {
+        public:
+            GoalNotifier(const std::string& goal) : goal(goal) {};
+            virtual void operator()(ActivityControllerPtr c)
+            {
+                c->setGoalExpression(goal);
+            }
+        protected:
+            std::string goal;
+        };
+
+        /**
         * Notifies all ActivityControllers with the given notifier instance.
         *
         * @param notifier The notifier to be applied on every controller.
@@ -283,6 +320,8 @@ namespace spoac
         std::stack<OACPtr> plannedOACs;
         ActionPtr runningAction;
         OACPtr runningOAC;
+
+        std::map<std::string, std::string> goals;
 
         IceUtil::Mutex mutex;
 

@@ -98,6 +98,13 @@ namespace spoac
         */
         virtual void reset() = 0;
 
+        /**
+        * A goal has been set as a PKS expression.
+        *
+        * @param goalExpression A PKS expression that should evaluate to true.
+        */
+        virtual void setGoalExpression(const std::string& goalExpression) = 0;
+
     protected:
         CEAControlWeakPtr weakCEA;
     };

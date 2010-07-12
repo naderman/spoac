@@ -29,6 +29,7 @@
 #include <spoac/stm/STM.h>
 #include <spoac/cea/CEA.h>
 #include <spoac/cea/Action.h>
+#include <spoac/ltm/LTM.h>
 
 #include "DummyActivityController.h"
 #include "CountTwoAction.h"
@@ -71,3 +72,21 @@ BOOST_AUTO_TEST_CASE(testCEAComplete)
     BOOST_CHECK_EQUAL(spoactest::CountTwoAction::counter, 2);
 }
 
+BOOST_AUTO_TEST_CASE(testIceScenario)
+{
+    spoac::DependencyManagerPtr manager(new spoac::DependencyManager);
+
+    spoac::ice::IceHelperPtr iceHelper(new spoac::ice::IceHelper);
+
+    spoac::CEAPtr cea(new spoac::CEA(
+        manager->getService<spoac::STM>(),
+        manager
+    ));
+
+    setenv("MCAPROJECTHOME", "../../ltm/test/", 1);
+
+    Ice::ObjectPtr ltmObject = new spoac::LTM;
+    iceHelper->registerAdapter(ltmObject, "LTM", "tcp -p 10099");
+
+    cea->setScenario("abc");
+}

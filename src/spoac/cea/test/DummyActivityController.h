@@ -59,6 +59,7 @@ namespace spoactest
         virtual void pause() {}
         virtual void unpause() {}
         virtual void reset() {}
+        virtual void setGoalExpression(const std::string& goalExpression) {}
 
     protected:
         spoac::OACPtr oac;
