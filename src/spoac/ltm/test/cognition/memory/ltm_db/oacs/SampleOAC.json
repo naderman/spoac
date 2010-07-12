@@ -1,0 +1,6 @@
+{
+	"name": "SampleOAC",
+	"params": ["x", "y"],
+	"precondition": "p(x)",
+	"effect": "add(Kf, p(y))"
+}
