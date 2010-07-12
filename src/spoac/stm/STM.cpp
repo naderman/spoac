@@ -106,3 +106,28 @@ STM::size_type STM::sizeNonHardcoded() const
 
     return counter;
 }
+
+void STM::setScenario(const LTMSlice::Scenario& scenario)
+{
+    std::vector<PerceptionHandlerPtr>::iterator it;
+
+    for (it = handlers.begin(); it != handlers.end(); ++it)
+    {
+        (*it)->setScenario(scenario);
+    }
+
+}
+
+std::vector<std::string> STM::extractPlanConstants()
+{
+    std::vector<std::string> constants;
+
+    iterator it;
+    for (it = begin(); it != end(); ++it)
+    {
+        // all objects for now
+        constants.push_back((*it)->getId());
+    }
+
+    return constants;
+}

@@ -61,7 +61,8 @@ namespace spoac
             */
             PlanNetworkController(
                 CEAControlWeakPtr cea,
-                ice::IceHelperPtr iceHelper
+                ice::IceHelperPtr iceHelper,
+                STMPtr stm
             );
 
             virtual void oacStarted(OACPtr oac);
@@ -80,9 +81,14 @@ namespace spoac
             virtual void setGoalExpression(const std::string& goalExpression);
 
         protected:
-            OACPtr actionToOAC(
-                const spoac::SymbolicExecutionSlice::Action& action);
+            void sendScenario();
 
+            bool sentScenario;
+
+            LTMSlice::Scenario currentScenario;
+            SymbolicExecutionSlice::Action currentAction;
+
+            STMPtr stm;
             ice::IceHelperPtr iceHelper;
             PlanningSlice::PlanControllerTopicPrx planner;
 

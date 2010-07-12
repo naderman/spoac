@@ -39,10 +39,20 @@ namespace spoactest
     class CheckingPlanner : public PlanControllerTopic
     {
     public:
+        static bool setSymbolDefinitionsCalled;
         void setSymbolDefinitions(
             const SymbolDefinition& symbolDefinition,
             const Ice::Current& c)
         {
+            setSymbolDefinitionsCalled = true;
+
+            BOOST_CHECK_EQUAL(1, symbolDefinition.predicates.size());
+            BOOST_CHECK_EQUAL("p", symbolDefinition.predicates[0].name);
+            BOOST_CHECK_EQUAL(1, symbolDefinition.predicates[0].arguments);
+
+            BOOST_CHECK_EQUAL(1, symbolDefinition.functions.size());
+            BOOST_CHECK_EQUAL("f", symbolDefinition.functions[0].name);
+            BOOST_CHECK_EQUAL(0, symbolDefinition.functions[0].arguments);
         }
 
         static bool setActionDefinitionsCalled;
@@ -53,6 +63,7 @@ namespace spoactest
             setActionDefinitionsCalled = true;
 
             BOOST_CHECK_EQUAL(1, actionList.size());
+            BOOST_CHECK_EQUAL("SampleOAC", actionList[0].name);
         }
 
         void setGoal(const Goal& goal, const Ice::Current& c)
@@ -79,6 +90,8 @@ namespace spoactest
         {
         }
     };
+
+    bool CheckingPlanner::setSymbolDefinitionsCalled;
     bool CheckingPlanner::setActionDefinitionsCalled;
 }
 
@@ -89,11 +102,13 @@ BOOST_AUTO_TEST_CASE(testEmpty)
 {
     boost::shared_ptr<spoactest::CountingCEA> cea(new spoactest::CountingCEA);
     spoac::ice::IceHelperPtr iceHelper(new spoac::ice::IceHelper);
+    spoac::STMPtr stm(new spoac::STM);
 
     PlanNetworkControllerPtr controller(
         new PlanNetworkController(
             spoac::CEAControlWeakPtr(cea),
-            iceHelper
+            iceHelper,
+            stm
         )
     );
 
@@ -108,9 +123,22 @@ BOOST_AUTO_TEST_CASE(testEmpty)
     scenario.name = "testScenario";
     scenario.oacs.push_back("SampleOAC");
 
+    PredicateDefinition p;
+    p.name = "p";
+    p.arguments = 1;
+    FunctionDefinition f;
+    f.name = "f";
+    f.arguments = 0;
+
+    scenario.predicates.push_back(p);
+    scenario.functions.push_back(f);
+
     spoactest::CheckingPlanner::setActionDefinitionsCalled = false;
+    spoactest::CheckingPlanner::setSymbolDefinitionsCalled = false;
     controller->setScenario(scenario);
+    controller->requestAction();
 
     IceUtil::ThreadControl::sleep(IceUtil::Time::milliSeconds(100));
+    BOOST_CHECK(spoactest::CheckingPlanner::setSymbolDefinitionsCalled);
     BOOST_CHECK(spoactest::CheckingPlanner::setActionDefinitionsCalled);
 }

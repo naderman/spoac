@@ -26,6 +26,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <spoac/common/AbstractFactoryMethod.h>
+#include <spoac/LTM.h>
 
 namespace spoac
 {
@@ -45,6 +46,13 @@ namespace spoac
         * Processes sensor input and updates object information.
         */
         virtual void update(STMPtr stm) = 0;
+
+        /**
+        * Let the handler know which scenario is being run.
+        *
+        * @param scenario The scenario definition.
+        */
+        virtual void setScenario(const LTMSlice::Scenario& scenario) = 0;
     };
 
     /**

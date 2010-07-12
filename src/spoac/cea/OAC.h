@@ -30,6 +30,7 @@
 
 #include <spoac/stm/STM.h>
 #include <spoac/cea/Action.h>
+#include <spoac/SymbolicExecution.h>
 
 namespace spoac
 {
@@ -68,6 +69,11 @@ namespace spoac
         * @param manager Required to satisfy the action's dependencies
         */
         ActionPtr setupAction(DependencyManagerPtr manager) const;
+
+        /**
+        * Converts this OAC into an ICE Action for symbolic execution
+        */
+        SymbolicExecutionSlice::Action getIceAction() const;
 
     protected:
         std::string name;

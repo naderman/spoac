@@ -36,15 +36,18 @@ ActivityControllerPtr PlanNetworkController::createInstance(
 {
     ActivityControllerPtr controller(new PlanNetworkController(
         CEAControlWeakPtr(manager->getService<CEA>()),
-        manager->getService<IceHelper>()
+        manager->getService<IceHelper>(),
+        manager->getService<STM>()
     ));
 
     return controller;
 }
 
 PlanNetworkController::PlanNetworkController(
-    CEAControlWeakPtr cea, IceHelperPtr iceHelper) :
+    CEAControlWeakPtr cea, IceHelperPtr iceHelper, STMPtr stm) :
     ActivityController(cea),
+    sentScenario(false),
+    stm(stm),
     iceHelper(iceHelper)
 {
     //iceHelper->stormSubscribeTopic(this, "CEAController", "tcp -p 10001");
@@ -60,38 +63,80 @@ void PlanNetworkController::oacStarted(OACPtr oac)
 
 void PlanNetworkController::oacFinished(OACPtr oac)
 {
+    planner->actionFinished(oac->getIceAction());
 }
 
 void PlanNetworkController::oacStopped(OACPtr oac)
 {
+    reset();
 }
 
 void PlanNetworkController::requestAction()
 {
+    if (!sentScenario)
+    {
+        sendScenario();
+    }
+
+    planner->startPlan(); // only requests a new action
 }
 
 void PlanNetworkController::pause()
 {
+    planner->stopPlan();
 }
 
 void PlanNetworkController::unpause()
 {
+    planner->startPlan();
 }
 
 void PlanNetworkController::reset()
 {
+    planner->stopPlan();
+    planner->resetState();
+
+    sentScenario = false;
 }
 
 void PlanNetworkController::setScenario(const LTMSlice::Scenario& scenario)
 {
+    currentScenario = scenario;
+}
+
+void PlanNetworkController::setGoalExpression(const std::string& goalExpression)
+{
+    Goal g;
+    g.goalExpression = goalExpression;
+
+    planner->setGoal(g);
+}
+
+void PlanNetworkController::sendScenario()
+{
     LTMSlice::LTMPrx ltm =
         iceHelper->getProxy<LTMSlice::LTMPrx>("LTM:tcp -p 10099");
+
+    SymbolDefinition symbols;
+    symbols.predicates = currentScenario.predicates;
+    symbols.functions = currentScenario.functions;
+    symbols.constants = stm->extractPlanConstants();
+
+    // try again if no objects were known
+    if (stm->sizeNonHardcoded() > 0)
+    {
+        sentScenario = true;
+    }
+
+    planner->setSymbolDefinitions(symbols);
 
     ActionDefinitionList actions;
 
     LTMSlice::NameList::const_iterator it;
 
-    for (it = scenario.oacs.begin(); it != scenario.oacs.end(); ++it)
+    for (it = currentScenario.oacs.begin();
+        it != currentScenario.oacs.end();
+        ++it)
     {
         PlanningSlice::ActionDefinition action = ltm->getAction(*it);
 
@@ -102,8 +147,4 @@ void PlanNetworkController::setScenario(const LTMSlice::Scenario& scenario)
     }
 
     planner->setActionDefinitions(actions);
-}
-
-void PlanNetworkController::setGoalExpression(const std::string& goalExpression)
-{
 }

@@ -36,7 +36,9 @@ namespace spoac
     * Abstract base class for all objects any action can deal with.
     */
     class Object : public VariantMap<
-        std::string, std::string, bool, int, double, JSON::ValuePtr
+        std::string,
+        std::string, bool, int, double, JSON::ValuePtr,
+        std::pair<bool, std::string>
     >
     {
     public:
@@ -101,6 +103,17 @@ namespace spoac
             JSON::ValuePtr operator()(const std::string& x) const
             {
                 JSON::ValuePtr value(new JSON::String(x));
+                return value;
+            }
+
+            JSON::ValuePtr operator()(const std::pair<bool, std::string>& rel) const
+            {
+                JSON::ValuePtr value(new JSON::Object);
+                JSON::ValuePtr related(new JSON::Bool(rel.first));
+                JSON::ValuePtr to(new JSON::String(rel.second));
+
+                value->toObject().insert("related", related);
+                value->toObject().insert("to", to);
                 return value;
             }
         };

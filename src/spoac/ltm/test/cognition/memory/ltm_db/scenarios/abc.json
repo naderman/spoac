@@ -4,4 +4,6 @@
     "perceptionHandlers": ["LocationPerceptor", "SelfPerceptor", "IVTPerceptor"],
     "oacs": ["Grasp"],
     "goals": {"undefined": "K(undefined(obj))"},
+    "predicates": [{"name": "p", "arguments": 1}],
+    "functions": [{"name": "f", "arguments": 0}]
 }

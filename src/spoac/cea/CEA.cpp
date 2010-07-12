@@ -200,7 +200,8 @@ void CEA::setScenario(const std::string& scenario)
         LTMSlice::Scenario s = ltm->getScenario(scenario);
 
         setActivityControllers(s.activityControllers, manager);
-        stm->setPerceptionHandlers(s.perceptionHandlers, manager);
+        stm->setScenario(s);
+
         goals = s.goals;
 
         ScenarioNotifier n(s);

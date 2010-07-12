@@ -49,6 +49,38 @@ LTMSlice::Scenario LTM::getScenario(
     scenario.goals = mapFromObject(
         document["goals"]);
 
+    if (document["predicates"]->getType() == JSON::ARRAY)
+    {
+        JSON::Array& array = document["predicates"]->toArray();
+        JSON::Array::const_iterator it;
+
+        for (it = array.begin(); it != array.end(); ++it)
+        {
+            PlanningSlice::PredicateDefinition p;
+            JSON::Object& def = (*it)->toObject();
+            p.name = def["name"]->toString();
+            p.arguments = (short) def["arguments"]->toInt();
+
+            scenario.predicates.push_back(p);
+        }
+    }
+
+    if (document["functions"]->getType() == JSON::ARRAY)
+    {
+        JSON::Array& array = document["functions"]->toArray();
+        JSON::Array::const_iterator it;
+
+        for (it = array.begin(); it != array.end(); ++it)
+        {
+            PlanningSlice::FunctionDefinition f;
+            JSON::Object& def = (*it)->toObject();
+            f.name = def["name"]->toString();
+            f.arguments = (short) def["arguments"]->toInt();
+
+            scenario.functions.push_back(f);
+        }
+    }
+
     return scenario;
 }
 

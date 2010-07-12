@@ -33,6 +33,9 @@ module spoac
             NameList perceptionHandlers;
             NameList oacs;
 
+            PlanningSlice::PredicateDefinitionList predicates;
+            PlanningSlice::FunctionDefinitionList functions;
+
             StringMap goals;
         };
 

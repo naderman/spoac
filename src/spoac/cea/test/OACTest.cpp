@@ -37,4 +37,8 @@ BOOST_AUTO_TEST_CASE(testOAC)
     BOOST_CHECK_EQUAL(oac.getName(), name);
     //BOOST_CHECK(oac.getObjects() == objects);
     BOOST_CHECK(oac.getObjectIds() == objects);
+
+    spoac::SymbolicExecutionSlice::Action action = oac.getIceAction();
+    BOOST_CHECK_EQUAL(action.name, name);
+    BOOST_CHECK_EQUAL(action.parameters.size(), 0);
 }

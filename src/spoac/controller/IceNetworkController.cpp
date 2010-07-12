@@ -89,11 +89,14 @@ void IceNetworkController::startAction(
     const SymbolicExecutionSlice::Action& action,
     const Ice::Current& c)
 {
-    OACPtr oac = actionToOAC(action);
-
-    if (CEAControlPtr cea = weakCEA.lock())
+    if (action.name != "EOP-FAIL")
     {
-        cea->startOAC(shared_from_this(), oac);
+        OACPtr oac = actionToOAC(action);
+
+        if (CEAControlPtr cea = weakCEA.lock())
+        {
+            cea->startOAC(shared_from_this(), oac);
+        }
     }
 }
 

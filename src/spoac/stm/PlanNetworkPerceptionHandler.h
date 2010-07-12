@@ -21,36 +21,40 @@
 *             GNU General Public License
 */
 
-namespace spoactest
+#ifndef SPOAC_STM_PLANNETWORKPERCEPTIONHANDLER
+#define SPOAC_STM_PLANNETWORKPERCEPTIONHANDLER
+
+#include <spoac/stm/PerceptionHandler.h>
+#include <spoac/Planning.h>
+
+namespace spoac
 {
-    class CountPerceptionHandler : public spoac::PerceptionHandler
+    class PlanNetworkPerceptionHandler : public PerceptionHandler
     {
     public:
         static std::string getName()
         {
-            return "CountPerceptionHandler";
+            return "PlanNetworkPerceptionHandler";
         }
 
-        static boost::shared_ptr<spoac::PerceptionHandler> createInstance(
-            spoac::DependencyManagerPtr m)
-        {
-            boost::shared_ptr<spoac::PerceptionHandler> handler(
-                new CountPerceptionHandler);
+        PerceptionHandlerPtr createInstance(DependencyManagerPtr m);
 
-            return handler;
-        }
+        void update(spoac::STMPtr stm);
 
-        void update(spoac::STMPtr stm)
-        {
-            counter++;
-        }
+        void setScenario(const LTMSlice::Scenario& scenario);
 
-        void setScenario(const spoac::LTMSlice::Scenario& scenario) {}
+    protected:
+        PlanningSlice::PredicateDefinitionList predicates;
+        PlanningSlice::FunctionDefinitionList functions;
 
-        static int counter;
-        static Register<CountPerceptionHandler> r;
+        static Register<PlanNetworkPerceptionHandler> r;
     };
-    CountPerceptionHandler::Register<CountPerceptionHandler>
-        CountPerceptionHandler::r;
-    int CountPerceptionHandler::counter = 0;
+
+    /**
+    * Pointer type to reduce typing for shared pointers.
+    */
+    typedef boost::shared_ptr<PlanNetworkPerceptionHandler>
+        PlanNetworkPerceptionHandlerPtr;
 }
+
+#endif

@@ -43,4 +43,9 @@ BOOST_AUTO_TEST_CASE(testGetScenario)
     BOOST_CHECK_EQUAL(std::string("abc"), scenario.name);
     BOOST_CHECK_EQUAL(std::string("IceNetwork"), scenario.activityControllers[0]);
 
+    BOOST_CHECK_EQUAL(1, scenario.predicates.size());
+    BOOST_CHECK_EQUAL(std::string("p"), scenario.predicates[0].name);
+
+    BOOST_CHECK_EQUAL(1, scenario.functions.size());
+    BOOST_CHECK_EQUAL(std::string("f"), scenario.functions[0].name);
 }

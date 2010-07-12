@@ -101,6 +101,21 @@ namespace spoac
         */
         size_type sizeNonHardcoded() const;
 
+        /**
+        * Informs the STM which scenario is being run.
+        *
+        * @param scenario The scenario definition
+        */
+        void setScenario(const LTMSlice::Scenario& scenario);
+
+        /**
+        * Retrieve a list of object ids for planning - low level items are
+        * excluded, as defined by the scenario
+        *
+        * @return A vector of constant names / object ids.
+        */
+        std::vector<std::string> extractPlanConstants();
+
     protected:
         std::vector<PerceptionHandlerPtr> handlers;
 

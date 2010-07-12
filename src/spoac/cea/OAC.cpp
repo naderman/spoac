@@ -62,3 +62,20 @@ ActionPtr OAC::setupAction(DependencyManagerPtr manager) const
     return action;
 }
 
+SymbolicExecutionSlice::Action OAC::getIceAction() const
+{
+    SymbolicExecutionSlice::Action action;
+    action.name = getName();
+
+    std::vector<std::string>::const_iterator it;
+
+    for (it = objectIds.begin(); it != objectIds.end(); ++it)
+    {
+        SymbolicExecutionSlice::Obj obj;
+        obj.id = *it;
+        action.parameters.push_back(obj);
+    }
+
+    return action;
+}
+
