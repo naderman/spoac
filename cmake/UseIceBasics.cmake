@@ -3,8 +3,8 @@
 # (and therefore all standard components use)
 #
 
-include( ${ORCA_CMAKE_DIR}/UseZeroC.cmake )
-include( ${ORCA_CMAKE_DIR}/UseIce.cmake )
+include( ${SPOAC_CMAKE_DIR}/UseZeroC.cmake )
+include( ${SPOAC_CMAKE_DIR}/UseIce.cmake )
 
 if( NOT SPOAC_OS_WIN )
 

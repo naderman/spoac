@@ -3,6 +3,7 @@
 #
 include( ${SPOAC_CMAKE_DIR}/UseBasicRules.cmake )
 include( ${SPOAC_CMAKE_DIR}/UseLibProjectInterfaces.cmake )
+include( ${SPOAC_CMAKE_DIR}/UseIceBasics.cmake )
 
 #
 # Common macro definitions
