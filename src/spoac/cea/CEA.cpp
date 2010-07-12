@@ -57,6 +57,13 @@ void CEA::addActivityController(
         dependencyManager
     );
 
+    if (controller.get() == NULL)
+    {
+        throw Exception(
+            std::string("Could not create controller: ") + controllerName
+        );
+    }
+
     addActivityController(controller);
 }
 
@@ -195,6 +202,9 @@ void CEA::setScenario(const std::string& scenario)
         setActivityControllers(s.activityControllers, manager);
         stm->setPerceptionHandlers(s.perceptionHandlers, manager);
         goals = s.goals;
+
+        ScenarioNotifier n(s);
+        notifyActivityControllers(&n);
     }
 }
 

@@ -40,6 +40,20 @@ namespace spoac
             public spoac::SymbolicExecutionSlice::CEAControllerTopic
         {
         public:
+            static std::string getName()
+            {
+                return "IceNetwork";
+            }
+
+            /**
+            * Creates an instance of this class using the constructor, passing
+            * the necessary dependencies in through the dependency manager
+            *
+            * @param manager The dependency manager providing services
+            */
+            static ActivityControllerPtr createInstance(
+                DependencyManagerPtr manager);
+
             /**
             * Constructor which requires CEA access and a vector of OACs.
             *
@@ -63,6 +77,7 @@ namespace spoac
             virtual void pause();
             virtual void unpause();
             virtual void reset();
+            virtual void setScenario(const LTMSlice::Scenario& scenario);
             virtual void setGoalExpression(const std::string& goalExpression);
 
             virtual void startAction(
@@ -83,6 +98,8 @@ namespace spoac
                 const spoac::SymbolicExecutionSlice::Action& action);
 
             ice::IceHelperPtr iceHelper;
+
+            static Register<IceNetworkController> r;
         };
 
         /**

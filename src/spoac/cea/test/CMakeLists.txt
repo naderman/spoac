@@ -3,6 +3,7 @@ include(${SPOAC_CMAKE_DIR}/UseComponentRules.cmake)
 link_libraries(SpoacLTM)
 link_libraries(SpoacSTM)
 link_libraries(SpoacCEA)
+link_libraries(SpoacController)
 link_libraries(boost_unit_test_framework-mt)
 
 add_executable( OACTest OACTest.cpp )

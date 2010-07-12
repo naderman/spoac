@@ -285,6 +285,22 @@ namespace spoac
         };
 
         /**
+        * Notifier functor for informing ActivityControllers about the scenario.
+        */
+        class ScenarioNotifier : public Notifier
+        {
+        public:
+            ScenarioNotifier(const LTMSlice::Scenario& scenario) :
+                scenario(scenario) {};
+            virtual void operator()(ActivityControllerPtr c)
+            {
+                c->setScenario(scenario);
+            }
+        protected:
+            LTMSlice::Scenario scenario;
+        };
+
+        /**
         * Notifier functor for informing ActivityControllers about goal changes.
         */
         class GoalNotifier : public Notifier

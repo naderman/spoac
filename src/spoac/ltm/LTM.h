@@ -38,8 +38,19 @@ namespace spoac
     class LTM : public LTMSlice::LTM
     {
     public:
+        /**
+        * Retrieves a scenario definition from the filesystem
+        */
         LTMSlice::Scenario getScenario(
             const std::string& name,
+            const Ice::Current& c);
+
+        /**
+        * Retrieves an Action Definition for the planner from OAC definitions
+        * on disk.
+        */
+        PlanningSlice::ActionDefinition getAction(
+            const std::string& oac,
             const Ice::Current& c);
     protected:
         std::vector<std::string> vectorFromArray(JSON::ValuePtr value);

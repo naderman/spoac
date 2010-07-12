@@ -28,38 +28,13 @@
 #include <spoac/cea/CEA.h>
 #include <spoac/controller/SequenceController.h>
 #include "../../cea/test/CountTwoAction.h"
-
-namespace spoactest
-{
-    class CheckingCEA : public spoac::CEAControl
-    {
-    public:
-        virtual void startOAC
-            (spoac::ActivityControllerPtr src, spoac::OACPtr oac)
-        {
-            requestCount++;
-        }
-        virtual void stopOAC
-            (spoac::ActivityControllerPtr src, spoac::OACPtr oac) {}
-        virtual void taskCompleted(spoac::ActivityControllerPtr src) {}
-        virtual void pause(spoac::ActivityControllerPtr src) {}
-        virtual void unpause(spoac::ActivityControllerPtr src) {}
-        virtual void reset(spoac::ActivityControllerPtr src) {}
-        virtual spoac::OACPtr getCurrentOAC() {return spoac::OACPtr();}
-        virtual void setScenario(const std::string& scenario) {}
-        virtual void setGoalExpression(const std::string& goalExpression) {}
-        virtual void setGoalName(const std::string& goalName) {}
-
-        static int requestCount;
-    };
-    int CheckingCEA::requestCount;
-}
+#include "CountingCEA.h"
 
 using spoac::controller::SequenceController;
 
 BOOST_AUTO_TEST_CASE(testEmpty)
 {
-    boost::shared_ptr<spoactest::CheckingCEA> cea(new spoactest::CheckingCEA);
+    boost::shared_ptr<spoactest::CountingCEA> cea(new spoactest::CountingCEA);
 
     spoac::OACPtr oac(new spoac::OAC("CountTwo", std::vector<std::string>()));
 
@@ -73,13 +48,13 @@ BOOST_AUTO_TEST_CASE(testEmpty)
         )
     );
 
-    spoactest::CheckingCEA::requestCount = 0;
+    spoactest::CountingCEA::requestCount = 0;
 
     controller->requestAction();
 
-    BOOST_CHECK_EQUAL(spoactest::CheckingCEA::requestCount, 1);
+    BOOST_CHECK_EQUAL(spoactest::CountingCEA::requestCount, 1);
 
     controller->requestAction();
 
-    BOOST_CHECK_EQUAL(spoactest::CheckingCEA::requestCount, 2);
+    BOOST_CHECK_EQUAL(spoactest::CountingCEA::requestCount, 2);
 }

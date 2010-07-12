@@ -22,10 +22,24 @@
 */
 
 #include <spoac/controller/IceNetworkController.h>
+#include <spoac/cea/CEA.h>
 
 using namespace spoac;
 using namespace spoac::controller;
 using namespace spoac::ice;
+
+IceNetworkController::Register<IceNetworkController> IceNetworkController::r;
+
+ActivityControllerPtr IceNetworkController::createInstance(
+    DependencyManagerPtr manager)
+{
+    ActivityControllerPtr controller(new IceNetworkController(
+        CEAControlWeakPtr(manager->getService<CEA>()),
+        manager->getService<IceHelper>()
+    ));
+
+    return controller;
+}
 
 IceNetworkController::IceNetworkController(
     CEAControlWeakPtr cea, IceHelperPtr iceHelper) :
@@ -60,6 +74,10 @@ void IceNetworkController::unpause()
 }
 
 void IceNetworkController::reset()
+{
+}
+
+void IceNetworkController::setScenario(const LTMSlice::Scenario& scenario)
 {
 }
 

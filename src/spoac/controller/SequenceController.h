@@ -59,6 +59,7 @@ namespace spoac
             virtual void pause();
             virtual void unpause();
             virtual void reset();
+            virtual void setScenario(const LTMSlice::Scenario& scenario);
             virtual void setGoalExpression(const std::string& goalExpression);
 
         protected:

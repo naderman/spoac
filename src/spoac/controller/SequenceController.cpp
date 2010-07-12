@@ -80,6 +80,10 @@ void SequenceController::reset()
     currentOAC = oacs.begin();
 }
 
+void SequenceController::setScenario(const LTMSlice::Scenario& scenario)
+{
+}
+
 void SequenceController::setGoalExpression(const std::string& goalExpression)
 {
 }

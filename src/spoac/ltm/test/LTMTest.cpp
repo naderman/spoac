@@ -41,6 +41,6 @@ BOOST_AUTO_TEST_CASE(testGetScenario)
     spoac::LTMSlice::Scenario scenario = ltm->getScenario("abc");
 
     BOOST_CHECK_EQUAL(std::string("abc"), scenario.name);
-    BOOST_CHECK_EQUAL(std::string("SearchObjects"), scenario.activityControllers[0]);
+    BOOST_CHECK_EQUAL(std::string("IceNetwork"), scenario.activityControllers[0]);
 
 }

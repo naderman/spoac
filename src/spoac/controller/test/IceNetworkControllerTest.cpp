@@ -28,41 +28,16 @@
 #include <spoac/cea/CEA.h>
 #include <spoac/controller/IceNetworkController.h>
 #include "../../cea/test/CountTwoAction.h"
+#include "CountingCEA.h"
 
 using namespace spoac::SymbolicExecutionSlice;
-
-namespace spoactest
-{
-    class CheckingCEA : public spoac::CEAControl
-    {
-    public:
-        virtual void startOAC
-            (spoac::ActivityControllerPtr src, spoac::OACPtr oac)
-        {
-            requestCount++;
-        }
-        virtual void stopOAC
-            (spoac::ActivityControllerPtr src, spoac::OACPtr oac) {}
-        virtual void taskCompleted(spoac::ActivityControllerPtr src) {}
-        virtual void pause(spoac::ActivityControllerPtr src) {}
-        virtual void unpause(spoac::ActivityControllerPtr src) {}
-        virtual void reset(spoac::ActivityControllerPtr src) {}
-        virtual spoac::OACPtr getCurrentOAC() {return spoac::OACPtr();}
-        virtual void setScenario(const std::string& scenario) {}
-        virtual void setGoalExpression(const std::string& goalExpression) {}
-        virtual void setGoalName(const std::string& goalName) {}
-
-        static int requestCount;
-    };
-    int CheckingCEA::requestCount;
-}
 
 using spoac::controller::IceNetworkController;
 using spoac::controller::IceNetworkControllerPtr;
 
 BOOST_AUTO_TEST_CASE(testEmpty)
 {
-    boost::shared_ptr<spoactest::CheckingCEA> cea(new spoactest::CheckingCEA);
+    boost::shared_ptr<spoactest::CountingCEA> cea(new spoactest::CountingCEA);
     spoac::ice::IceHelperPtr iceHelper(new spoac::ice::IceHelper);
 
     IceNetworkControllerPtr controller(
@@ -104,7 +79,7 @@ BOOST_AUTO_TEST_CASE(testEmpty)
         std::cerr << msg << std::endl;
     }
 
-    spoactest::CheckingCEA::requestCount = 0;
+    spoactest::CountingCEA::requestCount = 0;
 
     //controller->requestAction();
     Action action1;
@@ -116,11 +91,11 @@ BOOST_AUTO_TEST_CASE(testEmpty)
     // wait a bit to allow the network message to be processed
     IceUtil::ThreadControl::sleep(IceUtil::Time::milliSeconds(100));
 
-    BOOST_CHECK_EQUAL(spoactest::CheckingCEA::requestCount, 1);
+    BOOST_CHECK_EQUAL(spoactest::CountingCEA::requestCount, 1);
 
     controllerTopic->startAction(action2);
     // wait a bit to allow the network message to be processed
     IceUtil::ThreadControl::sleep(IceUtil::Time::milliSeconds(100));
 
-    BOOST_CHECK_EQUAL(spoactest::CheckingCEA::requestCount, 2);
+    BOOST_CHECK_EQUAL(spoactest::CountingCEA::requestCount, 2);
 }

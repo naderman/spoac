@@ -25,6 +25,7 @@
 #define SPOAC_CEA_ACTIVITYCONTROLLER_H
 
 #include <spoac/cea/CEAControl.h>
+#include <spoac/LTM.h>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
@@ -97,6 +98,13 @@ namespace spoac
         * All processing and communication has to be stopped and reinitialized.
         */
         virtual void reset() = 0;
+
+        /**
+        * The scenario has been changed.
+        *
+        * @param scenario A Scenario definition
+        */
+        virtual void setScenario(const LTMSlice::Scenario& scenario) = 0;
 
         /**
         * A goal has been set as a PKS expression.

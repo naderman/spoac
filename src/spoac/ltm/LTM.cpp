@@ -52,6 +52,43 @@ LTMSlice::Scenario LTM::getScenario(
     return scenario;
 }
 
+PlanningSlice::ActionDefinition LTM::getAction(
+    const std::string& oac,
+    const Ice::Current& c)
+{
+    PlanningSlice::ActionDefinition action;
+
+    JSON::ValuePtr value = findAndParseFile("oacs", oac);
+    JSON::Object& document = value->toObject();
+
+    action.name = document["name"]->toString();
+
+    if (document["precondition"]->getType() == JSON::STRING)
+    {
+        action.precondition = document["precondition"]->toString();
+    }
+    if (document["effect"]->getType() == JSON::STRING)
+    {
+        action.effect = document["effect"]->toString();
+    }
+
+    if (document["params"]->getType() == JSON::ARRAY)
+    {
+        JSON::Array& array = document["params"]->toArray();
+        JSON::Array::const_iterator it;
+
+        for (it = array.begin(); it != array.end(); ++it)
+        {
+            PlanningSlice::ActionParameter p;
+            p.name = (*it)->toString();
+
+            action.parameters.push_back(p);
+        }
+    }
+
+    return action;
+}
+
 std::vector<std::string> LTM::vectorFromArray(JSON::ValuePtr value)
 {
     std::vector<std::string> result;
