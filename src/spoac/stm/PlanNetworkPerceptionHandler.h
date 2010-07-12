@@ -37,7 +37,7 @@ namespace spoac
             return "PlanNetworkPerceptionHandler";
         }
 
-        PerceptionHandlerPtr createInstance(DependencyManagerPtr m);
+        static PerceptionHandlerPtr createInstance(DependencyManagerPtr m);
 
         void update(spoac::STMPtr stm);
 

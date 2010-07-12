@@ -21,6 +21,7 @@
 *             GNU General Public License
 */
 
+#include <spoac/stm/STM.h>
 #include <spoac/stm/PlanNetworkPerceptionHandler.h>
 
 using namespace spoac;
@@ -28,7 +29,7 @@ using namespace spoac;
 PlanNetworkPerceptionHandler::Register<PlanNetworkPerceptionHandler>
     PlanNetworkPerceptionHandler::r;
 
-PerceptionHandlerPtr createInstance(DependencyManagerPtr m)
+PerceptionHandlerPtr PlanNetworkPerceptionHandler::createInstance(DependencyManagerPtr m)
 {
     PerceptionHandlerPtr handler(
         new PlanNetworkPerceptionHandler);
@@ -43,7 +44,7 @@ void PlanNetworkPerceptionHandler::setScenario(
     functions = scenario.functions;
 }
 
-void update(spoac::STMPtr stm)
+void PlanNetworkPerceptionHandler::update(spoac::STMPtr stm)
 {
     PlanningSlice::PredicateDefinitionList::const_iterator pred;
     PlanningSlice::FunctionDefinitionList::const_iterator func;
@@ -53,13 +54,13 @@ void update(spoac::STMPtr stm)
 
     for (pred = predicates.begin(); pred != predicates.end(); ++pred)
     {
-        for (obj = stm->beginMap(); it != stm->endMap(); ++it)
+        for (obj = stm->beginMap(); obj != stm->endMap(); ++obj)
         {
             ObjectPtr object = *(obj->second);
 
             if (object->has_key(pred->name))
             {
-                PredicateInstance p;
+                PlanningSlice::PredicateInstance p;
                 p.name = pred->name;
 
                 if (pred->arguments == 1)
@@ -85,13 +86,13 @@ void update(spoac::STMPtr stm)
 
     for (func = functions.begin(); func != functions.end(); ++func)
     {
-        for (obj = stm->beginMap(); it != stm->endMap(); ++it)
+        for (obj = stm->beginMap(); obj != stm->endMap(); ++obj)
         {
             ObjectPtr object = *(obj->second);
 
             if (object->has_key(func->name))
             {
-                FunctionValue f;
+                PlanningSlice::FunctionValue f;
                 f.name = func->name;
 
                 if (func->arguments == 0)
