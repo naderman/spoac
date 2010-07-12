@@ -1,0 +1,7 @@
+{
+    "name": "abc",
+    "activityControllers": ["SearchObjects", "IceNetwork"],
+    "perceptionHandlers": ["LocationPerceptor", "SelfPerceptor", "IVTPerceptor"],
+    "oacs": ["Grasp"],
+    "goals": {"undefined": "K(undefined(obj))"},
+}

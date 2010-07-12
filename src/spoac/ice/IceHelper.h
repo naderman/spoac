@@ -21,6 +21,9 @@
 *             GNU General Public License
 */
 
+#ifndef SPOAC_ICE_ICEHELPER_H
+#define SPOAC_ICE_ICEHELPER_H
+
 #include <spoac/common/DependencyManager.h>
 
 #include <Ice/Ice.h>
@@ -62,12 +65,56 @@ namespace spoac
             Ice::CommunicatorPtr ic();
 
             /**
+            * Provide the helper with an external Ice Communicator.
+            * Makes sure destroy is never called through fake reference counting
+            *
+            * @param externalIC The Ice Communicator created elsewhere.
+            */
+            void setIC(Ice::CommunicatorPtr externalIC);
+
+            /**
             * Provides access to the Ice Storm Topic Manager.
             * A proxy is created if necessary.
             *
             * @return A proxy of the IceStorm TopicManager.
             */
             IceStorm::TopicManagerPrx topicManager();
+
+            /**
+            * Retrieves a proxy object.
+            *
+            * @param  objectIdentity The object's identity, e.g.
+            *                        LTM:tcp ‑p 10002
+            *
+            * @return           A proxy of the remote instance.
+            */
+            template <class ProxyType>
+            ProxyType getProxy(const std::string& objectIdentity)
+            {
+                Ice::ObjectPrx base = ic()->stringToProxy(objectIdentity);
+                ProxyType proxy = ProxyType::checkedCast(base);
+
+                if (!proxy)
+                {
+                    throw "Invalid proxy!";
+                }
+
+                return proxy;
+            }
+
+            /**
+            * Register an object with Ice for being accessed over the network.
+            *
+            * @param object     The object to be registered, implementing an Ice
+            *                   interface.
+            * @param objectName The name this object should be available as.
+            * @param endpoints  The endpoints for this object, e.g.
+            *                   "tcp -p 10001"
+            */
+            void registerAdapter(
+                Ice::ObjectPtr object,
+                const std::string objectName,
+                const std::string endpoints);
 
             /**
             * Gets an Ice Storm topic for publishing messages.
@@ -134,3 +181,5 @@ namespace spoac
         typedef boost::shared_ptr<IceHelper> IceHelperPtr;
     }
 }
+
+#endif

@@ -78,6 +78,16 @@ Ice::CommunicatorPtr IceHelper::ic()
     return iceCommunicator;
 }
 
+void IceHelper::setIC(Ice::CommunicatorPtr externalIC)
+{
+    if (!globalIC)
+    {
+        icCounter++;
+        globalIC = externalIC;
+        iceCommunicator = externalIC;
+    }
+}
+
 IceStorm::TopicManagerPrx IceHelper::topicManager()
 {
     if (!topicManagerProxy)
@@ -88,6 +98,17 @@ IceStorm::TopicManagerPrx IceHelper::topicManager()
     }
 
     return topicManagerProxy;
+}
+
+void IceHelper::registerAdapter(
+    Ice::ObjectPtr object,
+    const std::string objectName,
+    const std::string endpoints)
+{
+    Ice::ObjectAdapterPtr adapter =
+        ic()->createObjectAdapterWithEndpoints(objectName, endpoints);
+    adapter->add(object, ic()->stringToIdentity(objectName));
+    adapter->activate();
 }
 
 void IceHelper::stormSubscribeTopic(
