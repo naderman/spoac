@@ -26,6 +26,7 @@
 
 #include <spoac/stm/PerceptionHandler.h>
 #include <spoac/Planning.h>
+#include <spoac/ice/IceHelper.h>
 
 namespace spoac
 {
@@ -39,6 +40,8 @@ namespace spoac
 
         static PerceptionHandlerPtr createInstance(DependencyManagerPtr m);
 
+        PlanNetworkPerceptionHandler(ice::IceHelperPtr iceHelper);
+
         void update(spoac::STMPtr stm);
 
         void setScenario(const LTMSlice::Scenario& scenario);
@@ -46,6 +49,9 @@ namespace spoac
     protected:
         PlanningSlice::PredicateDefinitionList predicates;
         PlanningSlice::FunctionDefinitionList functions;
+
+        ice::IceHelperPtr iceHelper;
+        PlanningSlice::PlanControllerTopicPrx planner;
 
         static Register<PlanNetworkPerceptionHandler> r;
     };

@@ -29,12 +29,23 @@ using namespace spoac;
 PlanNetworkPerceptionHandler::Register<PlanNetworkPerceptionHandler>
     PlanNetworkPerceptionHandler::r;
 
-PerceptionHandlerPtr PlanNetworkPerceptionHandler::createInstance(DependencyManagerPtr m)
+PerceptionHandlerPtr PlanNetworkPerceptionHandler::createInstance(
+    DependencyManagerPtr m)
 {
-    PerceptionHandlerPtr handler(
-        new PlanNetworkPerceptionHandler);
+    PerceptionHandlerPtr handler(new PlanNetworkPerceptionHandler(
+        m->getService<ice::IceHelper>()
+    ));
 
     return handler;
+}
+
+PlanNetworkPerceptionHandler::PlanNetworkPerceptionHandler(
+    ice::IceHelperPtr iceHelper) :
+    iceHelper(iceHelper)
+{
+    planner = iceHelper->stormGetTopic<PlanningSlice::PlanControllerTopicPrx>(
+        "PlanController"
+    );
 }
 
 void PlanNetworkPerceptionHandler::setScenario(
@@ -104,4 +115,6 @@ void PlanNetworkPerceptionHandler::update(spoac::STMPtr stm)
             }
         }
     }
+
+    planner->updateState(state);
 }

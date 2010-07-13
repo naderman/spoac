@@ -4,7 +4,7 @@ set(LIB_INSTALL stm)
 set(build TRUE)
 GBX_REQUIRE_OPTION(build LIB ${LIB_NAME} ON)
 
-set( dep_libs SpoacCommon SpoacJSON )
+set( dep_libs SpoacCommon SpoacJSON SpoacIce )
 GBX_REQUIRE_LIBS( build LIB ${LIB_NAME} ${dep_libs} )
 
 if (build)
