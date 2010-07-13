@@ -75,5 +75,30 @@ namespace spoac
     typedef boost::shared_ptr<ActionStateMachine> ActionStateMachinePtr;
 }
 
+/**
+* This macro can be used to generate an action state machine that starts with
+* the given state. E.g.:
+*
+* SPOAC_ACTION_STATE_MACHINE(
+*     MyStartState,
+*     new MyStartState(manager->getService<SomeService>())
+* );
+*/
+#define SPOAC_ACTION_STATE_MACHINE(StartState, newStartState) \
+    class StartState ## StateMachine : public spoac::ActionStateMachine { \
+    public: \
+        static std::string getName() { return #StartState; } \
+        static spoac::ActionPtr createInstance( \
+            spoac::DependencyManagerPtr manager) { \
+            spoac::ActionStatePtr startState(newStartState); \
+            spoac::ActionPtr action(new GraspStateMachine(startState)); \
+            return action; \
+        } \
+        StartState ## StateMachine(spoac::ActionStatePtr startState) : \
+            ActionStateMachine(startState){} \
+    protected: \
+        static Register<StartState ## StateMachine> r; \
+    };
+
 #endif
 
