@@ -43,7 +43,7 @@ LTMSlice::Scenario LTM::getScenario(
         document["activityControllers"]);
     scenario.perceptionHandlers = vectorFromArray(
         document["perceptionHandlers"]);
-    scenario.perceptionHandlers = vectorFromArray(
+    scenario.oacs = vectorFromArray(
         document["oacs"]);
 
     scenario.goals = mapFromObject(

@@ -200,7 +200,7 @@ void CEA::setScenario(const std::string& scenario)
         LTMSlice::Scenario s = ltm->getScenario(scenario);
 
         setActivityControllers(s.activityControllers, manager);
-        stm->setScenario(s);
+        stm->setScenario(s, manager);
 
         goals = s.goals;
 

@@ -104,9 +104,13 @@ namespace spoac
         /**
         * Informs the STM which scenario is being run.
         *
-        * @param scenario The scenario definition
+        * @param scenario          The scenario definition
+        * @param dependencyManager DependencyManager for perception handler
+        *                          instantiation dependencies.
         */
-        void setScenario(const LTMSlice::Scenario& scenario);
+        void setScenario(
+            const LTMSlice::Scenario& scenario,
+            DependencyManagerPtr dependencyManager);
 
         /**
         * Retrieve a list of object ids for planning - low level items are

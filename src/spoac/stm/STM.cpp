@@ -46,6 +46,11 @@ void STM::addPerceptionHandler(
         dependencyManager
     );
 
+    if (handler.get() == NULL)
+    {
+        throw STMException("Unknown PerceptionHandler: " + handlerName);
+    }
+
     addPerceptionHandler(handler);
 }
 
@@ -107,8 +112,12 @@ STM::size_type STM::sizeNonHardcoded() const
     return counter;
 }
 
-void STM::setScenario(const LTMSlice::Scenario& scenario)
+void STM::setScenario(
+    const LTMSlice::Scenario& scenario,
+    DependencyManagerPtr dependencyManager)
 {
+    setPerceptionHandlers(scenario.perceptionHandlers, dependencyManager);
+
     std::vector<PerceptionHandlerPtr>::iterator it;
 
     for (it = handlers.begin(); it != handlers.end(); ++it)

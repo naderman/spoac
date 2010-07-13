@@ -1,7 +1,7 @@
 {
     "name": "abc",
     "activityControllers": ["IceNetwork"],
-    "perceptionHandlers": ["LocationPerceptor", "SelfPerceptor", "IVTPerceptor"],
+    "perceptionHandlers": [],
     "oacs": ["Grasp"],
     "goals": {"undefined": "K(undefined(obj))"},
     "predicates": [{"name": "p", "arguments": 1}],
