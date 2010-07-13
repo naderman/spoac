@@ -54,8 +54,11 @@ namespace spoac
         * Prepares an action for execution with a vector of parameter objects.
         *
         * @param objects The objects this action should be applied on.
+        * @param config  A JSON configuration object retrieved from LTM.
         */
-        virtual void setup(const ObjectVector& objects) = 0;
+        virtual void setup(
+            const ObjectVector& objects,
+            JSON::ValuePtr config) = 0;
 
         /**
         * Executes the action on the robot.

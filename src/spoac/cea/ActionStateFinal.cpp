@@ -25,7 +25,7 @@
 
 using namespace spoac;
 
-void ActionStateFinal::setup(const ObjectVector& objects)
+void ActionStateFinal::setup(const ObjectVector& objects, JSON::ValuePtr config)
 {
 }
 

@@ -35,7 +35,9 @@ namespace spoactest
     public:
         spoac::ObjectPtr counter;
 
-        virtual void setup(const spoac::ObjectVector& objects)
+        virtual void setup(
+            const spoac::ObjectVector& objects,
+            JSON::ValuePtr config)
         {
             counter = objects.getValidated("counter");
         }
@@ -62,7 +64,9 @@ namespace spoactest
     public:
         spoac::ObjectPtr counter;
 
-        virtual void setup(const spoac::ObjectVector& objects)
+        virtual void setup(
+            const spoac::ObjectVector& objects,
+            JSON::ValuePtr config)
         {
             counter = objects.getValidated("counter");
         }
@@ -100,7 +104,7 @@ BOOST_AUTO_TEST_CASE(testDummyActionStateMachine)
     spoac::ObjectVector objects;
     objects.push_back(counter);
 
-    action->setup(objects);
+    action->setup(objects, JSON::ValuePtr());
 
     while (!action->isFinished())
     {

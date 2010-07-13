@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(testCountTwoAction)
 {
     spoactest::CountTwoAction action;
 
-    action.setup(spoac::ObjectVector());
+    action.setup(spoac::ObjectVector(), JSON::ValuePtr());
 
     while (!action.isFinished())
     {

@@ -30,11 +30,14 @@ ActionStateMachine::ActionStateMachine(ActionStatePtr startState) :
 {
 }
 
-void ActionStateMachine::setup(const ObjectVector& objects)
+void ActionStateMachine::setup(
+    const ObjectVector& objects,
+    JSON::ValuePtr config)
 {
     this->objects = objects;
+    this->config = config;
     // setup start state
-    currentState->setup(objects);
+    currentState->setup(objects, config);
 }
 
 void ActionStateMachine::run()
@@ -43,7 +46,7 @@ void ActionStateMachine::run()
 
     if (nextState != currentState)
     {
-        nextState->setup(objects);
+        nextState->setup(objects, config);
 
         currentState = nextState;
     }

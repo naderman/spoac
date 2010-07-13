@@ -28,7 +28,9 @@ namespace spoactest
     public:
         static int counter;
 
-        virtual void setup(const spoac::ObjectVector& objects)
+        virtual void setup(
+            const spoac::ObjectVector& objects,
+            JSON::ValuePtr config)
         {
             counter = 0;
         }

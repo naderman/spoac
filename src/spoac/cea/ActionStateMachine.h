@@ -47,8 +47,9 @@ namespace spoac
         * new state before it is run.
         *
         * @param objects The objects this action should be applied on.
+        * @param config  A JSON configuration object retrieved from LTM.
         */
-        virtual void setup(const ObjectVector& objects);
+        virtual void setup(const ObjectVector& objects, JSON::ValuePtr config);
 
         /**
         * Executes the action on the robot.
@@ -65,6 +66,7 @@ namespace spoac
     protected:
         ActionStatePtr currentState;
         ObjectVector objects;
+        JSON::ValuePtr config;
     };
 
     /**

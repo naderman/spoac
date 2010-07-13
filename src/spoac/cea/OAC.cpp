@@ -25,6 +25,7 @@
 #include <spoac/cea/ActionException.h>
 #include <spoac/ice/IceHelper.h>
 #include <spoac/LTM.h>
+#include <spoac/JSON/Parser.h>
 
 using namespace spoac;
 
@@ -75,7 +76,16 @@ ActionPtr OAC::setupAction(DependencyManagerPtr manager) const
         );
     }
 
-    action->setup(objects);
+    JSON::ValuePtr jsonConfig;
+
+    if (!actionConfig.config.empty())
+    {
+        JSON::Parser jsonParser;
+        jsonParser.read(actionConfig.config);
+        jsonConfig = jsonParser.finish();
+    }
+
+    action->setup(objects, jsonConfig);
 
     return action;
 }

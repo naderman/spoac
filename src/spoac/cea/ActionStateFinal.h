@@ -42,8 +42,9 @@ namespace spoac
         * Generic setup method with parameters that are ignored.
         *
         * @param objects The objects this action should be applied on.
+        * @param config  A JSON configuration object retrieved from LTM.
         */
-        virtual void setup(const ObjectVector& objects);
+        virtual void setup(const ObjectVector& objects, JSON::ValuePtr config);
 
         /**
         * Does nothing but return the same state.
