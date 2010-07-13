@@ -91,7 +91,7 @@ namespace spoac
         static spoac::ActionPtr createInstance( \
             spoac::DependencyManagerPtr manager) { \
             spoac::ActionStatePtr startState(newStartState); \
-            spoac::ActionPtr action(new GraspStateMachine(startState)); \
+            spoac::ActionPtr action(new StartState ## StateMachine(startState)); \
             return action; \
         } \
         StartState ## StateMachine(spoac::ActionStatePtr startState) : \
