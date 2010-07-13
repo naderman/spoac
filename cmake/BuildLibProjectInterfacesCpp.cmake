@@ -39,5 +39,6 @@ if( build )
     endforeach( _gen_header )
 
     #GBX_ADD_HEADERS( ${_lib_namespace} ${slice_generated_headers_full} )
+    GBX_ADD_HEADERS( "" ${slice_generated_headers_full} )
 
 endif( build )
