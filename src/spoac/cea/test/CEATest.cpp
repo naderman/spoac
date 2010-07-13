@@ -41,6 +41,14 @@ BOOST_AUTO_TEST_CASE(testCEAComplete)
 
     spoac::STMPtr stm = manager->getService<spoac::STM>();
 
+    spoac::ice::IceHelperPtr iceHelper =
+        manager->getService<spoac::ice::IceHelper>();
+
+    setenv("MCAPROJECTHOME", "../../ltm/test/", 1);
+
+    Ice::ObjectPtr ltmObject = new spoac::LTM;
+    iceHelper->registerAdapter(ltmObject, "LTM", "tcp -p 10099");
+
     stm->addPerceptionHandler("CountPerceptionHandler", manager);
 
     spoac::CEAPtr cea(new spoac::CEA(
@@ -85,8 +93,9 @@ BOOST_AUTO_TEST_CASE(testIceScenario)
 
     setenv("MCAPROJECTHOME", "../../ltm/test/", 1);
 
-    Ice::ObjectPtr ltmObject = new spoac::LTM;
-    iceHelper->registerAdapter(ltmObject, "LTM", "tcp -p 10099");
+    // set up in previous test - clean up?
+    //Ice::ObjectPtr ltmObject = new spoac::LTM;
+    //iceHelper->registerAdapter(ltmObject, "LTM", "tcp -p 10099");
 
     cea->setScenario("abc");
 }

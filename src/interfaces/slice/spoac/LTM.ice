@@ -39,6 +39,11 @@ module spoac
             StringMap goals;
         };
 
+        struct ActionConfig
+        {
+            string name;
+            string config;
+        };
 
         // Interfaces
 
@@ -46,6 +51,8 @@ module spoac
             idempotent Scenario getScenario(string scenario);
 
             idempotent PlanningSlice::ActionDefinition getAction(string oac);
+
+            ActionConfig getActionConfig(OAC oacInstance);
         };
     };
 };

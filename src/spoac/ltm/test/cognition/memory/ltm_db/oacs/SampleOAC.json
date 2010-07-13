@@ -1,6 +1,25 @@
 {
-	"name": "SampleOAC",
-	"params": ["x", "y"],
-	"precondition": "p(x)",
-	"effect": "add(Kf, p(y))"
+    "name": "SampleOAC",
+    "params": ["x", "y"],
+
+    "match": [
+        {
+            "x": "abc",
+            "action": "ABCAction",
+            "config": "anything"
+        },
+        {
+            "x": {"isLocation": true},
+            "action": "LocationAction",
+            "config": 1.0
+        }
+    ],
+
+    "action": "SampleAction",
+    "config": {
+        "any": "thing"
+    },
+
+    "precondition": "p(x)",
+    "effect": "add(Kf, p(y))"
 }

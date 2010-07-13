@@ -51,3 +51,69 @@ BOOST_AUTO_TEST_CASE(testGetScenario)
     BOOST_CHECK_EQUAL(1, scenario.functions.size());
     BOOST_CHECK_EQUAL(std::string("f"), scenario.functions[0].name);
 }
+
+BOOST_AUTO_TEST_CASE(testParameterMatching)
+{
+    spoac::LTMPtr ltm(new spoac::LTM);
+
+    spoac::LTMSlice::Obj object1;
+    object1.id = "obj1";
+    object1.properties.insert(
+        std::pair<std::string, std::string>("p1", "\"val1\"")); // value is JSON
+
+    spoac::LTMSlice::Obj object2;
+    object2.id = "obj2";
+    object2.properties.insert(
+        std::pair<std::string, std::string>("p1", "\"val2\""));
+    object2.properties.insert(
+        std::pair<std::string, std::string>("p2", "\"val1\""));
+
+    std::map<std::string, int> isParam;
+    isParam.insert(std::pair<std::string, int>("x", 0));
+    isParam.insert(std::pair<std::string, int>("y", 1));
+
+    JSON::Object match1;
+    JSON::ValuePtr val1(new JSON::String("val1"));
+    match1["p1"] = val1;
+    BOOST_CHECK(ltm->checkObjectMatch(object1, match1));
+
+    JSON::Object match2;
+    JSON::ValuePtr val2(new JSON::String("wrong"));
+    match2["p1"] = val2;
+    BOOST_CHECK( ! ltm->checkObjectMatch(object1, match2));
+
+    JSON::Object match3;
+    match3["non-existent"] = val1;
+    BOOST_CHECK( ! ltm->checkObjectMatch(object1, match3));
+
+    spoac::LTMSlice::OAC oac1;
+    oac1.name = "test-oac";
+    oac1.objects.push_back(object1);
+    oac1.objects.push_back(object2);
+
+    JSON::ValuePtr oacMatch1(new JSON::Object());
+    JSON::ValuePtr match4(new JSON::String("obj1"));
+    oacMatch1->toObject().insert("x", match4);
+
+    BOOST_CHECK(ltm->checkOACMatch(oac1, oacMatch1, isParam));
+
+    JSON::ValuePtr oacMatch2(new JSON::Object());
+    JSON::ValuePtr match5(new JSON::String("obj2"));
+    oacMatch2->toObject().insert("x", match4);
+    oacMatch2->toObject().insert("y", match5);
+
+    BOOST_CHECK(ltm->checkOACMatch(oac1, oacMatch2, isParam));
+
+    JSON::ValuePtr oacMatch3(new JSON::Object());
+    JSON::ValuePtr match6(new JSON::Object(match1));
+    oacMatch3->toObject().insert("x", match6);
+    oacMatch3->toObject().insert("y", match5);
+
+    BOOST_CHECK(ltm->checkOACMatch(oac1, oacMatch3, isParam));
+
+    JSON::ValuePtr oacMatch4(new JSON::Object());
+    oacMatch4->toObject().insert("x", match6);
+    oacMatch4->toObject().insert("y", match4);
+
+    BOOST_CHECK( ! ltm->checkOACMatch(oac1, oacMatch4, isParam));
+}

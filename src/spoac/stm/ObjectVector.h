@@ -65,6 +65,14 @@ namespace spoac
         ObjectPtr operator[](const int& i) const;
 
         /**
+        * Get Vector
+        */
+        std::vector<ObjectPtr> getVector()
+        {
+            return objects;
+        }
+
+        /**
         * Throws an ParameterException if the number of elements does not match
         * the specified amount.
         *

@@ -23,6 +23,8 @@
 
 #include <spoac/cea/OAC.h>
 #include <spoac/cea/ActionException.h>
+#include <spoac/ice/IceHelper.h>
+#include <spoac/LTM.h>
 
 using namespace spoac;
 
@@ -44,16 +46,32 @@ std::vector<std::string> OAC::getObjectIds() const
 ActionPtr OAC::setupAction(DependencyManagerPtr manager) const
 {
     STMPtr stm = manager->getService<STM>();
+    ice::IceHelperPtr iceHelper = manager->getService<ice::IceHelper>();
 
     ObjectVector objects = stm->vectorFromIds(getObjectIds());
 
-    ActionPtr action = Action::fromName(getName(), manager);
+    LTMSlice::LTMPrx ltm =
+        iceHelper->getProxy<LTMSlice::LTMPrx>("LTM:tcp -p 10099");
+
+    LTMSlice::OAC oac;
+    oac.name = getName();
+
+    std::vector<ObjectPtr> objectVec = objects.getVector();
+    std::vector<ObjectPtr> ::const_iterator it;
+    for (it = objectVec.begin(); it != objectVec.end(); ++it)
+    {
+        oac.objects.push_back((*it)->toLTMObj());
+    }
+
+    LTMSlice::ActionConfig actionConfig = ltm->getActionConfig(oac);
+
+    ActionPtr action = Action::fromName(actionConfig.name, manager);
 
     if (action.get() == NULL)
     {
         throw ActionException(
-            std::string("Cannot create unregistered action: '") + getName() +
-            std::string("'")
+            std::string("Cannot create unregistered action: '") +
+            actionConfig.name + std::string("'")
         );
     }
 

@@ -61,3 +61,24 @@ JSON::ObjectPtr Object::toJSON()
 
     return object;
 }
+
+LTMSlice::Obj Object::toLTMObj()
+{
+    LTMSlice::Obj obj;
+
+    obj.id = getId();
+
+    JSONVisitor visitor;
+    iterator it;
+
+    for (it = begin(); it != end(); ++it)
+    {
+        obj.properties.insert(
+            std::pair<std::string, std::string>(
+                it->first, boost::apply_visitor(visitor, it->second)->toJSON()
+            )
+        );
+    }
+
+    return obj;
+}

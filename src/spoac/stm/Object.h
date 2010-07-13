@@ -26,6 +26,7 @@
 
 #include <spoac/JSON/AllValueTypes.h>
 #include <spoac/stm/VariantMap.h>
+#include <spoac/LTM.h>
 
 #include <string>
 #include <boost/shared_ptr.hpp>
@@ -76,6 +77,11 @@ namespace spoac
         * @return A JSON string representing this object.
         */
         std::string toJSONString();
+
+        /**
+        * Encodes the object for use with long term memory.
+        */
+        LTMSlice::Obj toLTMObj();
 
     protected:
         /**

@@ -52,6 +52,23 @@ namespace spoac
         PlanningSlice::ActionDefinition getAction(
             const std::string& oac,
             const Ice::Current& c);
+
+        /**
+        * Retrieve an action configuration for execution on the robot.
+        */
+        LTMSlice::ActionConfig getActionConfig(
+            const LTMSlice::OAC& oacInstance,
+            const Ice::Current& c);
+
+        bool checkOACMatch(
+            const LTMSlice::OAC& oac,
+            JSON::ValuePtr match,
+            const std::map<std::string, int>& isParam);
+
+        bool checkObjectMatch(
+            const LTMSlice::Obj& object,
+            const JSON::Object& match);
+
     protected:
         std::vector<std::string> vectorFromArray(JSON::ValuePtr value);
         std::map<std::string, std::string> mapFromObject(JSON::ValuePtr value);

@@ -84,6 +84,69 @@ LTMSlice::Scenario LTM::getScenario(
     return scenario;
 }
 
+LTMSlice::ActionConfig LTM::getActionConfig(
+    const LTMSlice::OAC& oacInstance,
+    const Ice::Current& c)
+{
+    bool found = false;
+    LTMSlice::ActionConfig actionConfig;
+
+    JSON::ValuePtr value = findAndParseFile("oacs", oacInstance.name);
+    JSON::Object& document = value->toObject();
+
+    std::map<std::string, int> isParam;
+
+    if (document["params"]->getType() == JSON::ARRAY)
+    {
+        JSON::Array& params = document["params"]->toArray();
+        JSON::Array::iterator param;
+        int i = 0;
+
+        for (param = params.begin(); param != params.end(); ++param, ++i)
+        {
+            if ((*param)->getType() == JSON::STRING)
+            {
+                isParam[(*param)->toString()] = i;
+            }
+        }
+    }
+
+    if (document["match"]->getType() == JSON::ARRAY)
+    {
+        JSON::Array& matches = document["match"]->toArray();
+        JSON::Array::const_iterator match;
+
+        for (match = matches.begin(); match != matches.end(); ++match)
+        {
+            if (checkOACMatch(oacInstance, *match, isParam))
+            {
+                actionConfig.name = (*match)->toObject()["action"]->toString();
+
+                if ((*match)->toObject()["config"]->getType() != JSON::NULLTYPE)
+                {
+                    actionConfig.config =
+                        (*match)->toObject()["config"]->toJSON();
+                }
+
+                found = true;
+                break;
+            }
+        }
+    }
+
+    if (!found && document["action"]->getType() == JSON::STRING)
+    {
+        actionConfig.name = document["action"]->toString();
+
+        if (document["config"]->getType() != JSON::NULLTYPE)
+        {
+            actionConfig.config = document["config"]->toJSON();
+        }
+    }
+
+    return actionConfig;
+}
+
 PlanningSlice::ActionDefinition LTM::getAction(
     const std::string& oac,
     const Ice::Current& c)
@@ -155,6 +218,88 @@ std::map<std::string, std::string> LTM::mapFromObject(JSON::ValuePtr value)
     }
 
     return result;
+}
+
+bool LTM::checkOACMatch(
+    const LTMSlice::OAC& oac,
+    JSON::ValuePtr match,
+    const std::map<std::string, int>& isParam)
+{
+    if (match->getType() != JSON::OBJECT)
+    {
+        return false;
+    }
+
+    JSON::Object& object = match->toObject();
+    JSON::Object::const_iterator it;
+    std::map<std::string, int>::const_iterator param;
+
+    for (it = object.begin(); it != object.end(); ++it)
+    {
+        param = isParam.find(it->first.getString()->toString());
+        if (param == isParam.end())
+        {
+            return false;
+        }
+
+        size_t offset = param->second;
+
+        if (offset >= oac.objects.size())
+        {
+            return false;
+        }
+
+        LTMSlice::Obj obj = oac.objects[offset];
+
+        if (it->second->getType() == JSON::STRING)
+        {
+            if (it->second->toString() != obj.id)
+            {
+                return false;
+            }
+        }
+        else if (it->second->getType() == JSON::OBJECT)
+        {
+            if (!checkObjectMatch(obj, it->second->toObject()))
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+bool LTM::checkObjectMatch(
+    const LTMSlice::Obj& object,
+    const JSON::Object& match)
+{
+    JSON::Object::const_iterator it;
+
+    for (it = match.begin(); it != match.end(); ++it)
+    {
+        LTMSlice::PropertyMap::const_iterator prop =
+            object.properties.find(it->first.getString()->toString());
+
+        if (prop == object.properties.end())
+        {
+            return false;
+        }
+
+        if (it->second->getType() == JSON::STRING)
+        {
+            if (prop->second !=
+                std::string("\"") + it->second->toString() + "\"")
+            {
+                return false;
+            }
+        }
+        /*else if (it->second->getType() == JSON::NUMBER)
+        {
+        }*/
+    }
+
+    return true;
 }
 
 JSON::ValuePtr LTM::findAndParseFile(
