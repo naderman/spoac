@@ -22,6 +22,7 @@
 */
 
 #include <spoac/ltm/LTM.h>
+#include <spoac/common/Exception.h>
 #include <iostream>
 
 using namespace spoac;
@@ -34,6 +35,12 @@ LTMSlice::Scenario LTM::getScenario(
     LTMSlice::Scenario scenario;
 
     JSON::ValuePtr value = findAndParseFile("scenarios", name);
+
+    if (value->getType() != JSON::OBJECT)
+    {
+        throw Exception(std::string("Scenario ") + name +
+            " is not a JSON object");
+    }
 
     JSON::Object& document = value->toObject();
 
@@ -92,6 +99,13 @@ LTMSlice::ActionConfig LTM::getActionConfig(
     LTMSlice::ActionConfig actionConfig;
 
     JSON::ValuePtr value = findAndParseFile("oacs", oacInstance.name);
+
+    if (value->getType() != JSON::OBJECT)
+    {
+        throw Exception(std::string("OAC ") + oacInstance.name +
+            " is not a JSON object");
+    }
+
     JSON::Object& document = value->toObject();
 
     std::map<std::string, int> isParam;
