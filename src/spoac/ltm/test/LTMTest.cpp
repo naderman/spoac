@@ -32,6 +32,8 @@ BOOST_AUTO_TEST_CASE(testGetScenario)
 {
     spoac::ice::IceHelperPtr iceHelper(new spoac::ice::IceHelper);
 
+    setenv("MCAPROJECTHOME", "./", 1);
+
     Ice::ObjectPtr ltmObject = new spoac::LTM;
     iceHelper->registerAdapter(ltmObject, "LTM", "tcp -p 10099");
 
