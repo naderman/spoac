@@ -109,7 +109,12 @@ void PlanNetworkController::setGoalExpression(const std::string& goalExpression)
     Goal g;
     g.goalExpression = goalExpression;
 
-    planner->setGoal(g);
+    currentGoal = g;
+
+    if (sentScenario)
+    {
+        planner->setGoal(currentGoal);
+    }
 }
 
 void PlanNetworkController::sendScenario()
@@ -147,4 +152,9 @@ void PlanNetworkController::sendScenario()
     }
 
     planner->setActionDefinitions(actions);
+
+    if (!currentGoal.goalExpression.empty())
+    {
+        planner->setGoal(currentGoal);
+    }
 }

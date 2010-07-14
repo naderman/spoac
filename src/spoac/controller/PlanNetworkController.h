@@ -87,6 +87,7 @@ namespace spoac
 
             LTMSlice::Scenario currentScenario;
             SymbolicExecutionSlice::Action currentAction;
+            PlanningSlice::Goal currentGoal;
 
             STMPtr stm;
             ice::IceHelperPtr iceHelper;
