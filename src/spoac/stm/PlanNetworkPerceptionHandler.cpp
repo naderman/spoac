@@ -41,7 +41,8 @@ PerceptionHandlerPtr PlanNetworkPerceptionHandler::createInstance(
 
 PlanNetworkPerceptionHandler::PlanNetworkPerceptionHandler(
     ice::IceHelperPtr iceHelper) :
-    iceHelper(iceHelper)
+    iceHelper(iceHelper),
+    wait(5)
 {
     if (iceHelper.get() != NULL)
     {
@@ -54,13 +55,22 @@ PlanNetworkPerceptionHandler::PlanNetworkPerceptionHandler(
 void PlanNetworkPerceptionHandler::setScenario(
     const spoac::LTMSlice::Scenario& scenario)
 {
+    wait = 5;
+
     predicates = scenario.predicates;
     functions = scenario.functions;
 }
 
 void PlanNetworkPerceptionHandler::update(spoac::STMPtr stm)
 {
-    planner->updateState(getState(stm));
+    if (wait <= 0)
+    {
+        planner->updateState(getState(stm));
+    }
+    else
+    {
+        wait--;
+    }
 }
 
 

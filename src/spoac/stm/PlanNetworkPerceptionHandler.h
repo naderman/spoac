@@ -55,6 +55,8 @@ namespace spoac
         ice::IceHelperPtr iceHelper;
         PlanningSlice::PlanControllerTopicPrx planner;
 
+        int wait;
+
         static Register<PlanNetworkPerceptionHandler> r;
     };
 
