@@ -31,8 +31,12 @@
 BOOST_AUTO_TEST_CASE(testEmpty)
 {
     spoac::STMPtr stm(new spoac::STM());
+    spoac::PKSServicePtr pks(new spoac::PKSService(
+        stm, spoac::ice::IceHelperPtr()));
     spoac::PlanNetworkPerceptionHandlerPtr controller(
-        new spoac::PlanNetworkPerceptionHandler(spoac::ice::IceHelperPtr()));
+        new spoac::PlanNetworkPerceptionHandler(
+            spoac::ice::IceHelperPtr(),
+            pks));
 
     spoac::ObjectPtr obj(new spoac::Object("obj1", "obj1"));
     (*obj)["pred1"] = "foo";

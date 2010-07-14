@@ -27,6 +27,7 @@
 #include <spoac/stm/PerceptionHandler.h>
 #include <spoac/Planning.h>
 #include <spoac/ice/IceHelper.h>
+#include <spoac/stm/PKSService.h>
 
 namespace spoac
 {
@@ -40,7 +41,9 @@ namespace spoac
 
         static PerceptionHandlerPtr createInstance(DependencyManagerPtr m);
 
-        PlanNetworkPerceptionHandler(ice::IceHelperPtr iceHelper);
+        PlanNetworkPerceptionHandler(
+            ice::IceHelperPtr iceHelper,
+            PKSServicePtr pksService);
 
         void update(spoac::STMPtr stm);
 
@@ -53,6 +56,7 @@ namespace spoac
         PlanningSlice::FunctionDefinitionList functions;
 
         ice::IceHelperPtr iceHelper;
+        PKSServicePtr pksService;
         PlanningSlice::PlanControllerTopicPrx planner;
 
         int wait;

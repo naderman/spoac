@@ -37,18 +37,23 @@ ActivityControllerPtr PlanNetworkController::createInstance(
     ActivityControllerPtr controller(new PlanNetworkController(
         CEAControlWeakPtr(manager->getService<CEA>()),
         manager->getService<IceHelper>(),
-        manager->getService<STM>()
+        manager->getService<STM>(),
+        manager->getService<PKSService>()
     ));
 
     return controller;
 }
 
 PlanNetworkController::PlanNetworkController(
-    CEAControlWeakPtr cea, IceHelperPtr iceHelper, STMPtr stm) :
+    CEAControlWeakPtr cea,
+    IceHelperPtr iceHelper,
+    STMPtr stm,
+    PKSServicePtr pksService) :
     ActivityController(cea),
     sentScenario(false),
     stm(stm),
-    iceHelper(iceHelper)
+    iceHelper(iceHelper),
+    pksService(pksService)
 {
     //iceHelper->stormSubscribeTopic(this, "CEAController", "tcp -p 10001");
     //iceHelper->stormGetTopic<PlanControllerTopicPrx>("PlanController", "tcp -p 10005");
@@ -75,7 +80,8 @@ void PlanNetworkController::requestAction()
 {
     if (!sentScenario)
     {
-        sendScenario();
+        pksService->sendScenario();
+        sentScenario = true;
     }
 
     planner->startPlan(); // only requests a new action
@@ -101,7 +107,7 @@ void PlanNetworkController::reset()
 
 void PlanNetworkController::setScenario(const LTMSlice::Scenario& scenario)
 {
-    currentScenario = scenario;
+    pksService->setScenario(scenario);
 }
 
 void PlanNetworkController::setGoalExpression(const std::string& goalExpression)
@@ -110,50 +116,9 @@ void PlanNetworkController::setGoalExpression(const std::string& goalExpression)
     g.goalExpression = goalExpression;
 
     currentGoal = g;
+    pksService->setGoal(currentGoal);
 
     if (sentScenario)
-    {
-        planner->setGoal(currentGoal);
-    }
-}
-
-void PlanNetworkController::sendScenario()
-{
-    LTMSlice::LTMPrx ltm =
-        iceHelper->getProxy<LTMSlice::LTMPrx>("LTM:tcp -p 10099");
-
-    SymbolDefinition symbols;
-    symbols.predicates = currentScenario.predicates;
-    symbols.functions = currentScenario.functions;
-    symbols.constants = stm->extractPlanConstants();
-
-    // try again if no objects were known
-    //if (stm->sizeNonHardcoded() > 0)
-    //{
-    sentScenario = true;
-    //}
-
-    planner->setSymbolDefinitions(symbols);
-
-    ActionDefinitionList actions;
-
-    LTMSlice::NameList::const_iterator it;
-
-    for (it = currentScenario.oacs.begin();
-        it != currentScenario.oacs.end();
-        ++it)
-    {
-        PlanningSlice::ActionDefinition action = ltm->getAction(*it);
-
-        if (!action.effect.empty() && !action.precondition.empty())
-        {
-            actions.push_back(action);
-        }
-    }
-
-    planner->setActionDefinitions(actions);
-
-    if (!currentGoal.goalExpression.empty())
     {
         planner->setGoal(currentGoal);
     }

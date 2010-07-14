@@ -27,6 +27,7 @@
 #include <spoac/cea/ActivityController.h>
 #include <spoac/Planning.h>
 #include <spoac/ice/IceHelper.h>
+#include <spoac/stm/PKSService.h>
 
 namespace spoac
 {
@@ -62,7 +63,8 @@ namespace spoac
             PlanNetworkController(
                 CEAControlWeakPtr cea,
                 ice::IceHelperPtr iceHelper,
-                STMPtr stm
+                STMPtr stm,
+                PKSServicePtr pksService
             );
 
             virtual void oacStarted(OACPtr oac);
@@ -81,16 +83,14 @@ namespace spoac
             virtual void setGoalExpression(const std::string& goalExpression);
 
         protected:
-            void sendScenario();
-
             bool sentScenario;
 
-            LTMSlice::Scenario currentScenario;
             SymbolicExecutionSlice::Action currentAction;
             PlanningSlice::Goal currentGoal;
 
             STMPtr stm;
             ice::IceHelperPtr iceHelper;
+            PKSServicePtr pksService;
             PlanningSlice::PlanControllerTopicPrx planner;
 
             static Register<PlanNetworkController> r;

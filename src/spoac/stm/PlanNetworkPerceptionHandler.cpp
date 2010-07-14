@@ -33,15 +33,17 @@ PerceptionHandlerPtr PlanNetworkPerceptionHandler::createInstance(
     DependencyManagerPtr m)
 {
     PerceptionHandlerPtr handler(new PlanNetworkPerceptionHandler(
-        m->getService<ice::IceHelper>()
+        m->getService<ice::IceHelper>(),
+        m->getService<PKSService>()
     ));
 
     return handler;
 }
 
 PlanNetworkPerceptionHandler::PlanNetworkPerceptionHandler(
-    ice::IceHelperPtr iceHelper) :
+    ice::IceHelperPtr iceHelper, PKSServicePtr pksService) :
     iceHelper(iceHelper),
+    pksService(pksService),
     wait(5)
 {
     if (iceHelper.get() != NULL)
@@ -65,6 +67,8 @@ void PlanNetworkPerceptionHandler::update(spoac::STMPtr stm)
 {
     if (wait <= 0)
     {
+        pksService->checkScenario();
+
         planner->updateState(getState(stm));
     }
     else

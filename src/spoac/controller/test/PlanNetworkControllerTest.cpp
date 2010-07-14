@@ -103,12 +103,15 @@ BOOST_AUTO_TEST_CASE(testEmpty)
     boost::shared_ptr<spoactest::CountingCEA> cea(new spoactest::CountingCEA);
     spoac::ice::IceHelperPtr iceHelper(new spoac::ice::IceHelper);
     spoac::STMPtr stm(new spoac::STM);
+    spoac::PKSServicePtr pks(new spoac::PKSService(
+        stm, iceHelper));
 
     PlanNetworkControllerPtr controller(
         new PlanNetworkController(
             spoac::CEAControlWeakPtr(cea),
             iceHelper,
-            stm
+            stm,
+            pks
         )
     );
 
