@@ -89,6 +89,12 @@ namespace spoac
         */
         struct JSONVisitor : boost::static_visitor<JSON::ValuePtr>
         {
+            JSON::ValuePtr operator()(const bool& x) const
+            {
+                JSON::ValuePtr value(new JSON::Bool(x));
+                return value;
+            }
+
             JSON::ValuePtr operator()(const int& x) const
             {
                 JSON::ValuePtr value(new JSON::Number(x));
