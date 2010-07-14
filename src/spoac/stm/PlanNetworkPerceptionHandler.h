@@ -46,6 +46,8 @@ namespace spoac
 
         void setScenario(const LTMSlice::Scenario& scenario);
 
+        PlanningSlice::StateUpdate getState(spoac::STMPtr stm);
+
     protected:
         PlanningSlice::PredicateDefinitionList predicates;
         PlanningSlice::FunctionDefinitionList functions;

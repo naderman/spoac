@@ -14,3 +14,6 @@ GBX_ADD_TEST( spoac_ObjectSet ObjectSetTest )
 
 add_executable( STMTest STMTest.cpp )
 GBX_ADD_TEST( spoac_STM STMTest )
+
+add_executable( PlanNetworkPerceptionHandlerTest PlanNetworkPerceptionHandlerTest.cpp )
+GBX_ADD_TEST( spoac_PlanNetworkPerceptionHandler PlanNetworkPerceptionHandlerTest )

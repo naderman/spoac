@@ -43,9 +43,12 @@ PlanNetworkPerceptionHandler::PlanNetworkPerceptionHandler(
     ice::IceHelperPtr iceHelper) :
     iceHelper(iceHelper)
 {
-    planner = iceHelper->stormGetTopic<PlanningSlice::PlanControllerTopicPrx>(
-        "PlanController"
-    );
+    if (iceHelper.get() != NULL)
+    {
+        planner = iceHelper->stormGetTopic<PlanningSlice::PlanControllerTopicPrx>(
+            "PlanController"
+        );
+    }
 }
 
 void PlanNetworkPerceptionHandler::setScenario(
@@ -56,6 +59,13 @@ void PlanNetworkPerceptionHandler::setScenario(
 }
 
 void PlanNetworkPerceptionHandler::update(spoac::STMPtr stm)
+{
+    planner->updateState(getState(stm));
+}
+
+
+PlanningSlice::StateUpdate PlanNetworkPerceptionHandler::getState(
+    spoac::STMPtr stm)
 {
     PlanningSlice::PredicateDefinitionList::const_iterator pred;
     PlanningSlice::FunctionDefinitionList::const_iterator func;
@@ -108,13 +118,13 @@ void PlanNetworkPerceptionHandler::update(spoac::STMPtr stm)
 
                 if (func->arguments == 0)
                 {
-                    f.constantValue = object->get<std::string>(pred->name);
-                    f.realValue = object->get<double>(pred->name);
+                    f.constantValue = object->get<std::string>(func->name);
+                    f.realValue = object->get<double>(func->name);
                     state.knownFunctionValues.push_back(f);
                 }
             }
         }
     }
 
-    planner->updateState(state);
+    return state;
 }
