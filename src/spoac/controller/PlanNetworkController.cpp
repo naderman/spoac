@@ -128,10 +128,10 @@ void PlanNetworkController::sendScenario()
     symbols.constants = stm->extractPlanConstants();
 
     // try again if no objects were known
-    if (stm->sizeNonHardcoded() > 0)
-    {
+    //if (stm->sizeNonHardcoded() > 0)
+    //{
         sentScenario = true;
-    }
+    //}
 
     planner->setSymbolDefinitions(symbols);
 
