@@ -49,7 +49,8 @@ void ObjectVector::validate(ObjectVector::size_type n) const
     {
         throw ParameterException(
             std::string("Incorrect number of parameters: ") +
-            boost::lexical_cast<std::string>(objects.size())
+            boost::lexical_cast<std::string>(objects.size()) +
+            std::string(" expected ") + boost::lexical_cast<std::string>(n)
         );
     }
 }
