@@ -98,19 +98,22 @@ void CEA::stopOAC(ActivityControllerPtr src, OACPtr oac)
 {
     IceUtil::Mutex::Lock lock(mutex);
 
-    StoppedNotifier n(runningOAC);
-    notifyActivityControllers(&n);
+    if (oac == runningOAC)
+    {
+        StoppedNotifier n(runningOAC);
+        notifyActivityControllers(&n);
 
-    runningAction = ActionPtr();
-    runningOAC = OACPtr();
+        runningAction = ActionPtr();
+        runningOAC = OACPtr();
+    }
 }
 
 void CEA::taskCompleted(ActivityControllerPtr src)
 {
     IceUtil::Mutex::Lock lock(mutex);
 
-    runningAction = ActionPtr();
-    runningOAC = OACPtr();
+    //runningAction = ActionPtr();
+    //runningOAC = OACPtr();
 }
 
 void CEA::pause(ActivityControllerPtr src)

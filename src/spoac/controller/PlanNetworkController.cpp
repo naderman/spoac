@@ -130,7 +130,7 @@ void PlanNetworkController::sendScenario()
     // try again if no objects were known
     //if (stm->sizeNonHardcoded() > 0)
     //{
-        sentScenario = true;
+    sentScenario = true;
     //}
 
     planner->setSymbolDefinitions(symbols);
