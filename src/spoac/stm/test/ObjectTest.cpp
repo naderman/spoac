@@ -53,6 +53,16 @@ BOOST_AUTO_TEST_CASE(testOneElementObject)
     BOOST_CHECK_EQUAL(object.get<int>("bar", 5), 5);
 }
 
+BOOST_AUTO_TEST_CASE(testReadConst)
+{
+    spoac::Object object("foo", "foo1");
+
+    BOOST_CHECK_EQUAL(object.get<std::string>("bar"), std::string());
+    BOOST_CHECK_EQUAL(object.get<int>("bar"), 0);
+
+    BOOST_CHECK( ! object.has_key("bar"));
+}
+
 BOOST_AUTO_TEST_CASE(testJSON)
 {
     spoac::Object object("foo", "foo1");

@@ -199,7 +199,14 @@ namespace spoac
         T get(const Key& key, T default_value = T())
         {
             visitor_settype<T> visitor(default_value);
-            return apply_visitor(visitor, map[key]);
+
+            iterator it = find(key);
+            if (it == end())
+            {
+                return default_value;
+            }
+
+            return apply_visitor(visitor, it->second);
         }
 
         /**
@@ -309,12 +316,12 @@ namespace spoac
 
         iterator find(const Key& key)
         {
-            return find(key);
+            return map.find(key);
         }
 
         const_iterator find(const Key& key) const
         {
-            return find(key);
+            return map.find(key);
         }
 
         allocator_type get_allocator() const
