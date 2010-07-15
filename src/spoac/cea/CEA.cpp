@@ -146,6 +146,8 @@ void CEA::reset(ActivityControllerPtr src)
         runningAction = ActionPtr();
         paused = false;
     }
+
+    perceptionDisabled = false;
 }
 
 OACPtr CEA::getCurrentOAC()
