@@ -59,14 +59,16 @@ namespace spoac
         void setGoal(const PlanningSlice::Goal& goal);
 
         void sendScenario();
+        void sendGoal();
 
-        void checkScenario();
+        void updateState(const PlanningSlice::StateUpdate& state);
 
     protected:
         STMPtr stm;
         ice::IceHelperPtr iceHelper;
 
         size_t stmSize;
+        bool sentGoal;
 
         PlanningSlice::PlanControllerTopicPrx planner;
         LTMSlice::Scenario currentScenario;

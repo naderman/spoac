@@ -47,6 +47,7 @@ PKSService::PKSService(STMPtr stm, ice::IceHelperPtr iceHelper):
             "PlanController");
     }
     stmSize = -1;
+    sentGoal = false;
 }
 
 void PKSService::setScenario(const LTMSlice::Scenario& scenario)
@@ -90,16 +91,30 @@ void PKSService::sendScenario()
 
     planner->setActionDefinitions(actions);
 
+    sentGoal = false;
+}
+
+void PKSService::sendGoal()
+{
     if (!currentGoal.goalExpression.empty())
     {
         planner->setGoal(currentGoal);
     }
+    sentGoal = true;
 }
 
-void PKSService::checkScenario()
+void PKSService::updateState(const StateUpdate& state)
 {
     if (stm->extractPlanConstants().size() != stmSize)
     {
         sendScenario();
     }
+
+    planner->updateState(state);
+
+    if (!sentGoal)
+    {
+        sendGoal();
+    }
 }
+

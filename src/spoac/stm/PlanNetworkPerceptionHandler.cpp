@@ -67,9 +67,7 @@ void PlanNetworkPerceptionHandler::update(spoac::STMPtr stm)
 {
     if (wait <= 0)
     {
-        pksService->checkScenario();
-
-        planner->updateState(getState(stm));
+        pksService->updateState(getState(stm));
     }
     else
     {
