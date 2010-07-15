@@ -40,7 +40,8 @@ boost::shared_ptr<void> CEA::createService(DependencyManagerPtr manager)
 CEA::CEA(STMPtr stm, DependencyManagerWeakPtr weakDependencyManager) :
     stm(stm),
     weakDependencyManager(weakDependencyManager),
-    paused(false)
+    paused(false),
+    perceptionDisabled(false)
 {
 }
 
@@ -161,7 +162,10 @@ void CEA::run()
         return;
     }
 
-    stm->update();
+    if (!perceptionDisabled)
+    {
+        stm->update();
+    }
 
     {
         IceUtil::Mutex::Lock lock(mutex);
@@ -223,6 +227,16 @@ void CEA::setGoalName(const std::string& goalName)
     std::string goalExpression = goals[goalName];
     // TODO: Throw exception if undefined
     setGoalExpression(goalExpression);
+}
+
+void CEA::disablePerception()
+{
+    perceptionDisabled = true;
+}
+
+void CEA::enablePerception()
+{
+    perceptionDisabled = false;
 }
 
 void CEA::nextAction()

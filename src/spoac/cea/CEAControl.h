@@ -108,6 +108,16 @@ namespace spoac
         * @param goalName The name of the goal to be reached.
         */
         virtual void setGoalName(const std::string& goalName) = 0;
+
+        /**
+        * Disable perception to improve performance of self-perceiving actions.
+        */
+        virtual void disablePerception() {};
+
+        /**
+        * Enable regular perception after it has been disabled
+        */
+        virtual void enablePerception() {};
     };
 
     /**

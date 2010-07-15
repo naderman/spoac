@@ -176,6 +176,16 @@ namespace spoac
         */
         virtual void setGoalName(const std::string& goalName);
 
+        /**
+        * Disable perception to improve performance of self-perceiving actions.
+        */
+        virtual void disablePerception();
+
+        /**
+        * Enable regular perception after it has been disabled
+        */
+        virtual void enablePerception();
+
     protected:
         /**
         * Base class for all notifiers
@@ -331,6 +341,7 @@ namespace spoac
         DependencyManagerWeakPtr weakDependencyManager;
 
         bool paused;
+        bool perceptionDisabled;
 
         std::vector<ActivityControllerPtr> activityControllers;
         std::stack<OACPtr> plannedOACs;
