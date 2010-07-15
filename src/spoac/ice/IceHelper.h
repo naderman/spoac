@@ -50,6 +50,11 @@ namespace spoac
                 DependencyManagerPtr manager);
 
             /**
+            * Constructor only initialises counters
+            */
+            IceHelper();
+
+            /**
             * Closes Ice connections if necessary and unsubscribes from storm
             * topics if subscribed.
             */
@@ -148,6 +153,13 @@ namespace spoac
                 const std::string& topicName,
                 const std::string& endpoints);
 
+            /**
+            * Unsubscribe from a topic previously subscribed to.
+            *
+            * @param topicName The name of the subscribed topic.
+            */
+            void stormTopicUnsubscribe(const std::string& topicName);
+
         protected:
             static Ice::CommunicatorPtr globalIC;
             static int icCounter;
@@ -169,6 +181,8 @@ namespace spoac
             std::map<std::string, IceStorm::TopicPrx> topics;
             std::vector<std::pair<std::string, Ice::ObjectPrx> >
                 subscriptions;
+
+            int subscriptionCounter;
 
             typedef DependencyManager::RegisterService<IceHelper>
                 RegisterService;

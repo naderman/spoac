@@ -65,6 +65,11 @@ namespace spoac
                 ice::IceHelperPtr iceHelper
             );
 
+            /**
+            * Unsubscribes from the ICE Storm topic
+            */
+            ~IceNetworkController();
+
             virtual void oacStarted(OACPtr oac);
             virtual void oacFinished(OACPtr oac);
             virtual void oacStopped(OACPtr oac);

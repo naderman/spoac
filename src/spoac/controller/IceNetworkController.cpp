@@ -49,6 +49,11 @@ IceNetworkController::IceNetworkController(
     iceHelper->stormSubscribeTopic(this, "CEAController", "tcp -p 10001");
 }
 
+IceNetworkController::~IceNetworkController()
+{
+    iceHelper->stormTopicUnsubscribe("CEAController");
+}
+
 void IceNetworkController::oacStarted(OACPtr oac)
 {
 }

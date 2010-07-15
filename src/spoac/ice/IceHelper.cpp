@@ -22,6 +22,7 @@
 */
 
 #include <spoac/ice/IceHelper.h>
+#include <boost/lexical_cast.hpp>
 
 using namespace spoac;
 using namespace spoac::ice;
@@ -34,6 +35,10 @@ boost::shared_ptr<void> IceHelper::createService(DependencyManagerPtr manager)
 {
     boost::shared_ptr<void> iceHelper(new IceHelper());
     return iceHelper;
+}
+
+IceHelper::IceHelper() : subscriptionCounter(0)
+{
 }
 
 IceHelper::~IceHelper()
@@ -127,10 +132,31 @@ void IceHelper::stormSubscribeTopic(
     IceStorm::QoS qos;
     topic->subscribeAndGetPublisher(qos, subscriberProxy);
 
-    adapter->add(subscriber, ic()->stringToIdentity(topicName));
+    adapter->add(subscriber, ic()->stringToIdentity(topicName
+        + boost::lexical_cast<std::string>(subscriptionCounter++)));
     adapter->activate();
 
     subscriptions.push_back(std::pair<std::string, Ice::ObjectPrx>(topicName, subscriberProxy));
+}
+
+void IceHelper::stormTopicUnsubscribe(const std::string& topicName)
+{
+    std::vector<std::pair<std::string, Ice::ObjectPrx> >::iterator it;
+    std::vector<std::pair<std::string, Ice::ObjectPrx> >::iterator toDelete;
+
+    for (it = subscriptions.begin(); it != subscriptions.end(); ++it)
+    {
+        if (it->first == topicName)
+        {
+            stormTopicRetrieve(it->first)->unsubscribe(it->second);
+            toDelete = it;
+        }
+    }
+
+    if (toDelete != subscriptions.end())
+    {
+        subscriptions.erase(toDelete);
+    }
 }
 
 IceStorm::TopicPrx IceHelper::stormTopicRetrieve(const std::string& topicName)
