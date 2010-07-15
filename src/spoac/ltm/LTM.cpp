@@ -168,6 +168,13 @@ PlanningSlice::ActionDefinition LTM::getAction(
     PlanningSlice::ActionDefinition action;
 
     JSON::ValuePtr value = findAndParseFile("oacs", oac);
+
+    if (value->getType() != JSON::OBJECT)
+    {
+        throw Exception(std::string("OAC ") + oac +
+            " is not a JSON object");
+    }
+
     JSON::Object& document = value->toObject();
 
     action.name = document["name"]->toString();
@@ -337,8 +344,14 @@ JSON::ValuePtr LTM::findAndParseFile(
 
     if (findFile(base, name + ".json", path))
     {
+        std::cout << "Reading file: " << path.string() << std::endl;
         JSON::Parser jsonParser;
         result = jsonParser.readFromFile(path.string());
+    }
+    else
+    {
+        throw Exception(std::string("Could not find file ") + name + ".json" +
+            " in " + base.string());
     }
 
     return result;
