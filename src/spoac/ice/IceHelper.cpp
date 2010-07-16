@@ -121,9 +121,12 @@ void IceHelper::stormSubscribeTopic(
     const std::string& topicName,
     const std::string& endpoints)
 {
+    std::string adapterName =
+        topicName + boost::lexical_cast<std::string>(subscriptionCounter++);
+
     Ice::ObjectAdapterPtr adapter =
         ic()->createObjectAdapterWithEndpoints(
-        topicName, endpoints);
+        adapterName, endpoints);
 
     Ice::ObjectPrx subscriberProxy = adapter->addWithUUID(subscriber)->ice_oneway();
 
@@ -132,8 +135,7 @@ void IceHelper::stormSubscribeTopic(
     IceStorm::QoS qos;
     topic->subscribeAndGetPublisher(qos, subscriberProxy);
 
-    adapter->add(subscriber, ic()->stringToIdentity(topicName
-        + boost::lexical_cast<std::string>(subscriptionCounter++)));
+    adapter->add(subscriber, ic()->stringToIdentity(adapterName));
     adapter->activate();
 
     subscriptions.push_back(std::pair<std::string, Ice::ObjectPrx>(topicName, subscriberProxy));
