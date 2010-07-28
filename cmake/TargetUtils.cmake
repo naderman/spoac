@@ -59,6 +59,11 @@ macro( GBX_ADD_EXECUTABLE name )
     message( STATUS "Planning to build executable:      ${name}" )
 endmacro( GBX_ADD_EXECUTABLE name )
 
+macro( GBX_ADD_BIN_SCRIPTS )
+    install( PROGRAMS ${ARGN}
+             DESTINATION ${GBX_BIN_INSTALL_SUFFIX} )
+endmacro( GBX_ADD_BIN_SCRIPTS )
+
 #
 # Libraries should add themselves by calling 'GBX_ADD_LIBRARY'
 # instead of 'ADD_LIBRARY' in CMakeLists.txt.
@@ -158,6 +163,13 @@ macro( GBX_ADD_SHARED_FILES install_subdir )
                  DESTINATION ${GBX_SHARE_INSTALL_SUFFIX}/${install_subdir} )
     endif()
 endmacro( GBX_ADD_SHARED_FILES install_subdir )
+
+macro( GBX_ADD_SHARED_PROGRAMS install_subdir )
+    if (GBX_INSTALL_SHARED_FILES )
+        install( PROGRAMS ${ARGN}
+                 DESTINATION ${GBX_SHARE_INSTALL_SUFFIX}/${install_subdir} )
+    endif()
+endmacro( GBX_ADD_SHARED_PROGRAMS install_subdir )
 
 #
 # GBX_ADD_CMAKE_SCRIPTS( FILE0 [FILE1 FILE2 ...] )
