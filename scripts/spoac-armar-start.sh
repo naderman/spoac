@@ -9,7 +9,7 @@ else
      spoac_dir=$MCAPROJECTHOME/spoac
      spoac_install_dir=$MCAPROJECTHOME/spoac-install
 fi
-spoac_log_dir="$spoac_install_dir/var/log"
+spoac_log_dir="$spoac_install_dir/var/log/spoac"
 spoac_var_dir="$spoac_install_dir/var/lib/spoac"
 
 if [ ! -d $spoac_log_dir ]; then
@@ -23,7 +23,7 @@ fi
 cd $spoac_var_dir
 source $spoac_install_dir/share/spoac/scripts/spoac-armar-setenv.sh
 echo "    ICE ..."
-$spoac_install_dir/share/spoac/scripts/ice-start.sh > $spoac_log_dir/ice-start.log 2>&1 &
+$spoac_install_dir/share/spoac/scripts/ice-start.sh $spoac_install_dir/share/spoac/ > $spoac_log_dir/ice-start.log 2>&1 &
 
 echo "    LTM ..."
 $spoac_install_dir/bin/ltmserver > $spoac_log_dir/ltmserver.log 2>&1 &

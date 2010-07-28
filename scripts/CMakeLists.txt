@@ -10,7 +10,13 @@ SET(spoac_other_scripts
     spoac-armar-setenv.sh
 )
 
+SET(spoac_ice_config
+    ice-config/icebox_icestorm.cfg
+)
+
 GBX_ADD_SHARED_PROGRAMS(scripts ${spoac_other_scripts})
 
 GBX_ADD_BIN_SCRIPTS(${spoac_path_scripts})
+
+GBX_ADD_SHARED_FILES(scripts/ice-config ${spoac_ice_config})
 
