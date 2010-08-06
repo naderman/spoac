@@ -2,6 +2,11 @@
 
 echo "Starting SPOAC services:"
 
+if [ -z "$MCAPROJECTHOME" ]; then
+    echo "Run mcasetenv first!"
+    exit 1
+fi
+
 if [ -d $HOME/spoac/spoac-install ]; then
      spoac_dir=$HOME/spoac
      spoac_install_dir=$HOME/spoac/spoac-install
