@@ -25,6 +25,7 @@
 #define SPOAC_CEA_ACTION_H
 
 #include <boost/shared_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
 
 #include <spoac/common/AbstractFactoryMethod.h>
 #include <spoac/common/DependencyManager.h>
@@ -35,7 +36,9 @@ namespace spoac
     /**
     * Abstract base class for all actions the CEA should be able to execute.
     */
-    class Action : public AbstractFactoryMethod<Action, DependencyManagerPtr>
+    class Action :
+        public AbstractFactoryMethod<Action, DependencyManagerPtr>,
+        public boost::enable_shared_from_this<Action>
     {
     public:
         /**

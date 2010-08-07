@@ -33,6 +33,7 @@
 
 #include "DummyActivityController.h"
 #include "CountTwoAction.h"
+#include "CountTwoSuperAction.h"
 #include "../../stm/test/CountPerceptionHandler.h"
 
 BOOST_AUTO_TEST_CASE(testCEAComplete)
@@ -98,4 +99,51 @@ BOOST_AUTO_TEST_CASE(testIceScenario)
     //iceHelper->registerAdapter(ltmObject, "LTM", "tcp -p 10099");
 
     cea->setScenario("abc");
+}
+
+BOOST_AUTO_TEST_CASE(testCEAsuperOACs)
+{
+    spoac::DependencyManagerPtr manager(new spoac::DependencyManager);
+
+    spoac::STMPtr stm = manager->getService<spoac::STM>();
+
+    spoac::ice::IceHelperPtr iceHelper =
+        manager->getService<spoac::ice::IceHelper>();
+
+    //setenv("MCAPROJECTHOME", "../../ltm/test/", 1);
+
+    //Ice::ObjectPtr ltmObject = new spoac::LTM;
+    //iceHelper->registerAdapter(ltmObject, "LTM", "tcp -p 10099");
+
+    spoac::CEAPtr cea = manager->getService<spoac::CEA>();
+
+    spoac::OACPtr superOAC(
+        new spoac::OAC("CountTwoSuper", std::vector<std::string>()));
+
+    spoactest::CountTwoAction::counter = 0;
+
+    cea->startOAC(spoac::ActivityControllerPtr(), superOAC);
+
+    BOOST_CHECK_EQUAL(spoactest::CountTwoAction::counter, 0);
+
+    cea->run(); // first action
+    cea->run(); // super OAC yields to CountTwo
+    cea->run(); // 0
+    cea->run(); // +1
+    cea->run(); // +2
+
+    BOOST_CHECK_EQUAL(spoactest::CountTwoAction::counter, 2);
+
+    cea->run(); // finish first sub action
+    cea->run(); // 0
+
+    BOOST_CHECK_EQUAL(spoactest::CountTwoAction::counter, 0);
+
+    cea->run(); // +1
+    cea->run(); // +2
+    cea->run(); // finish second sub action
+    cea->run(); // finish super OAC
+
+    BOOST_CHECK_EQUAL(cea->getCurrentOAC(), superOAC);
+    BOOST_CHECK_EQUAL(spoactest::CountTwoAction::counter, 2);
 }

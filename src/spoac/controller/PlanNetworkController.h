@@ -67,7 +67,6 @@ namespace spoac
                 PKSServicePtr pksService
             );
 
-            virtual void oacStarted(OACPtr oac);
             virtual void oacFinished(OACPtr oac);
             virtual void oacStopped(OACPtr oac);
 

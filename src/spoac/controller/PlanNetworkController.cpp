@@ -62,12 +62,9 @@ PlanNetworkController::PlanNetworkController(
         "PlanController");
 }
 
-void PlanNetworkController::oacStarted(OACPtr oac)
-{
-}
-
 void PlanNetworkController::oacFinished(OACPtr oac)
 {
+    //pksService->updateState();
     planner->actionFinished(oac->getIceAction());
 }
 

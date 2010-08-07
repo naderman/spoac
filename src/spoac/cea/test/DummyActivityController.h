@@ -49,9 +49,6 @@ namespace spoactest
             }
         }
 
-        virtual void oacStarted(spoac::OACPtr oac) {}
-        virtual void oacFinished(spoac::OACPtr oac) {}
-        virtual void oacStopped(spoac::OACPtr oac) {}
         virtual void requestAction()
         {
             start();
@@ -59,8 +56,6 @@ namespace spoactest
         virtual void pause() {}
         virtual void unpause() {}
         virtual void reset() {}
-        virtual void setScenario(const spoac::LTMSlice::Scenario& scenario) {}
-        virtual void setGoalExpression(const std::string& goalExpression) {}
 
     protected:
         spoac::OACPtr oac;

@@ -55,18 +55,25 @@ namespace spoac
         ActivityController(CEAControlWeakPtr cea);
 
         /**
+        * Informs the ActivityController that the CEA is about to start an OAC.
+        *
+        * @param oac The OAC which will start execution on the robot.
+        */
+        virtual void oacStarting(OACPtr oac) {};
+
+        /**
         * Informs the ActivityController that the CEA has started an OAC.
         *
         * @param oac The OAC which has started execution on the robot.
         */
-        virtual void oacStarted(OACPtr oac) = 0;
+        virtual void oacStarted(OACPtr oac) {};
 
         /**
         * Informs the ActivityController about a finished OAC.
         *
         * @param oac The OAC which has finished execution on the robot.
         */
-        virtual void oacFinished(OACPtr oac) = 0;
+        virtual void oacFinished(OACPtr oac) {};
 
         /**
         * Informs the ActivityController about an OAC that has been stopped
@@ -74,12 +81,12 @@ namespace spoac
         *
         * @param oac The OAC which has been stopped.
         */
-        virtual void oacStopped(OACPtr oac) = 0;
+        virtual void oacStopped(OACPtr oac) {};
 
         /**
         * The robot does not know what to do, so it is requesting an action.
         */
-        virtual void requestAction() = 0;
+        virtual void requestAction() {};
 
         /**
         * The robot is being paused.
@@ -104,14 +111,14 @@ namespace spoac
         *
         * @param scenario A Scenario definition
         */
-        virtual void setScenario(const LTMSlice::Scenario& scenario) = 0;
+        virtual void setScenario(const LTMSlice::Scenario& scenario) {};
 
         /**
         * A goal has been set as a PKS expression.
         *
         * @param goalExpression A PKS expression that should evaluate to true.
         */
-        virtual void setGoalExpression(const std::string& goalExpression) = 0;
+        virtual void setGoalExpression(const std::string& goalExpression) {};
 
     protected:
         CEAControlWeakPtr weakCEA;

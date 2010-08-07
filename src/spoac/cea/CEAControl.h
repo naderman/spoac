@@ -40,12 +40,23 @@ namespace spoac
     {
     public:
         /**
-        * Starts a particular OAC's execution.
+        * Schedules an OAC for execution after all current OACs are finished.
         *
         * @param src The instructing ActivityController.
         * @param oac The OAC which shall be started
         */
         virtual void startOAC(ActivityControllerPtr src, OACPtr oac) = 0;
+
+        /**
+        * Injects an OAC to be executed immediately.
+        *
+        * If an OAC is still running it will be finished first, unless it is
+        * stopped.
+        *
+        * @param src The instructing ActivityController.
+        * @param oac The OAC which shall be injected
+        */
+        virtual void injectOAC(ActivityControllerPtr src, OACPtr oac) {};
 
         /**
         * Stops a particular OAC's execution.
@@ -118,6 +129,14 @@ namespace spoac
         * Enable regular perception after it has been disabled
         */
         virtual void enablePerception() {};
+
+        /**
+        * Allows an action to yield to sub OACs
+        *
+        * @param src The instructing Action
+        * @param oac The OACs which shall be started
+        */
+        virtual void yieldSubOACs(ActionPtr src, std::vector<OACPtr> oacs) {};
     };
 
     /**

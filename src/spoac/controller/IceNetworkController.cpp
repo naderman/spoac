@@ -54,22 +54,6 @@ IceNetworkController::~IceNetworkController()
     iceHelper->stormTopicUnsubscribe("CEAController");
 }
 
-void IceNetworkController::oacStarted(OACPtr oac)
-{
-}
-
-void IceNetworkController::oacFinished(OACPtr oac)
-{
-}
-
-void IceNetworkController::oacStopped(OACPtr oac)
-{
-}
-
-void IceNetworkController::requestAction()
-{
-}
-
 void IceNetworkController::pause()
 {
 }
@@ -79,14 +63,6 @@ void IceNetworkController::unpause()
 }
 
 void IceNetworkController::reset()
-{
-}
-
-void IceNetworkController::setScenario(const LTMSlice::Scenario& scenario)
-{
-}
-
-void IceNetworkController::setGoalExpression(const std::string& goalExpression)
 {
 }
 

@@ -89,24 +89,42 @@ void CEA::setActivityControllers(
 
 void CEA::startOAC(ActivityControllerPtr src, OACPtr oac)
 {
+    if (oac == OACPtr())
+    {
+        throw Exception("Cannot start an OAC with a null pointer.");
+    }
+
     IceUtil::Mutex::Lock lock(mutex);
 
-    plannedOACs.push(oac);
-    paused = false;
+    plannedOACs.push_back(oac);
+}
+
+void CEA::injectOAC(ActivityControllerPtr src, OACPtr oac)
+{
+    if (oac == OACPtr())
+    {
+        throw Exception("Cannot inject an OAC with a null pointer.");
+    }
+
+    IceUtil::Mutex::Lock lock(mutex);
+
+    plannedOACs.push_front(oac);
 }
 
 void CEA::stopOAC(ActivityControllerPtr src, OACPtr oac)
 {
     IceUtil::Mutex::Lock lock(mutex);
 
-    if (oac == runningOAC)
+    if (oac != runningOAC) // TODO: value compare instead?
     {
-        StoppedNotifier n(runningOAC);
-        notifyActivityControllers(&n);
-
-        runningAction = ActionPtr();
-        runningOAC = OACPtr();
+        throw Exception("Only the currently running OAC can be stopped");
     }
+
+    StoppedNotifier n(runningOAC);
+    notifyActivityControllers(&n);
+
+    runningAction = ActionPtr();
+    runningOAC = OACPtr();
 }
 
 void CEA::taskCompleted(ActivityControllerPtr src)
@@ -141,7 +159,7 @@ void CEA::reset(ActivityControllerPtr src)
 
         while (!plannedOACs.empty())
         {
-            plannedOACs.pop();
+            plannedOACs.pop_front();
         }
         runningAction = ActionPtr();
         paused = false;
@@ -175,6 +193,8 @@ void CEA::run()
         {
             if (!runningAction->isFinished())
             {
+                lock.release();
+
                 runningAction->run();
             }
             else
@@ -241,6 +261,31 @@ void CEA::enablePerception()
     perceptionDisabled = false;
 }
 
+void CEA::yieldSubOACs(ActionPtr src, std::vector<OACPtr> oacs)
+{
+    IceUtil::Mutex::Lock lock(mutex);
+
+    if (src != runningAction)
+    {
+        throw new Exception("Only the running Action can yield to sub OACs");
+    }
+
+    // insert empty pointer to force return
+    plannedOACs.push_front(OACPtr());
+
+    std::vector<OACPtr>::reverse_iterator it;
+    for (it = oacs.rbegin(); it != oacs.rend(); ++it)
+    {
+        plannedOACs.push_front(*it);
+    }
+
+    blockedActions.push(runningAction);
+    blockedOACs.push(runningOAC);
+
+    runningAction = ActionPtr();
+    runningOAC = OACPtr();
+}
+
 void CEA::nextAction()
 {
     IceUtil::Mutex::Lock lock(mutex);
@@ -249,29 +294,54 @@ void CEA::nextAction()
     if (plannedOACs.empty())
     {
         lock.release();
-
         RequestActionNotifier r;
         notifyActivityControllers(&r);
-
         lock.acquire();
     }
 
-    // if we have an action now ...
-    if (!plannedOACs.empty())
+    // only continue if we have an action now
+    if (plannedOACs.empty())
     {
-        OACPtr nextOAC = plannedOACs.top();
-        plannedOACs.pop();
+        return;
+    }
 
-        if (DependencyManagerPtr manager = weakDependencyManager.lock())
-        {
-            runningAction = nextOAC->setupAction(manager);
-            runningOAC = nextOAC;
+    // this is the next OAC
+    OACPtr nextOAC = plannedOACs.front();
 
-            lock.release();
+    // tell controllers about the next OAC
+    lock.release();
+    StartingNotifier n(nextOAC);
+    notifyActivityControllers(&n);
+    lock.acquire();
 
-            StartedNotifier n(runningOAC);
-            notifyActivityControllers(&n);
-        }
+    // if an OAC was injected restart this process
+    if (nextOAC != plannedOACs.front())
+    {
+        return;
+    }
+
+    plannedOACs.pop_front();
+
+    // do we need to return from a sub OAC yield?
+    if (nextOAC.get() == NULL)
+    {
+        runningAction = blockedActions.top();
+        runningOAC = blockedOACs.top();
+
+        blockedActions.pop();
+        blockedOACs.pop();
+
+        lock.release();
+    }
+    else if (DependencyManagerPtr manager = weakDependencyManager.lock())
+    {
+        runningAction = nextOAC->setupAction(manager);
+        runningOAC = nextOAC;
+
+        lock.release();
+
+        StartedNotifier n(runningOAC);
+        notifyActivityControllers(&n);
     }
 }
 

@@ -47,10 +47,6 @@ namespace spoac
                 std::vector<OACPtr> oacs
             );
 
-            virtual void oacStarted(OACPtr oac);
-            virtual void oacFinished(OACPtr oac);
-            virtual void oacStopped(OACPtr oac);
-
             /**
             * Send the next action to the CEA if any are left or otherwise
             * informs the CEA about task completion.
@@ -59,8 +55,6 @@ namespace spoac
             virtual void pause();
             virtual void unpause();
             virtual void reset();
-            virtual void setScenario(const LTMSlice::Scenario& scenario);
-            virtual void setGoalExpression(const std::string& goalExpression);
 
         protected:
             std::vector<OACPtr>::iterator currentOAC;

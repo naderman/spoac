@@ -70,20 +70,9 @@ namespace spoac
             */
             ~IceNetworkController();
 
-            virtual void oacStarted(OACPtr oac);
-            virtual void oacFinished(OACPtr oac);
-            virtual void oacStopped(OACPtr oac);
-
-            /**
-            * Send the next action to the CEA if any are left or otherwise
-            * informs the CEA about task completion.
-            */
-            virtual void requestAction();
             virtual void pause();
             virtual void unpause();
             virtual void reset();
-            virtual void setScenario(const LTMSlice::Scenario& scenario);
-            virtual void setGoalExpression(const std::string& goalExpression);
 
             virtual void startAction(
                 const spoac::SymbolicExecutionSlice::Action& action,

@@ -35,18 +35,6 @@ SequenceController::SequenceController(
     reset();
 }
 
-void SequenceController::oacStarted(OACPtr oac)
-{
-}
-
-void SequenceController::oacFinished(OACPtr oac)
-{
-}
-
-void SequenceController::oacStopped(OACPtr oac)
-{
-}
-
 void SequenceController::requestAction()
 {
     if (currentOAC == oacs.end())
@@ -80,10 +68,3 @@ void SequenceController::reset()
     currentOAC = oacs.begin();
 }
 
-void SequenceController::setScenario(const LTMSlice::Scenario& scenario)
-{
-}
-
-void SequenceController::setGoalExpression(const std::string& goalExpression)
-{
-}

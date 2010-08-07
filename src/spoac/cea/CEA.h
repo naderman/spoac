@@ -29,8 +29,9 @@
 #include <spoac/cea/ActivityController.h>
 #include <spoac/ice/IceHelper.h>
 
-#include <stack>
 #include <functional>
+#include <list>
+#include <stack>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
@@ -102,12 +103,23 @@ namespace spoac
         );
 
         /**
-        * Starts a particular OAC's execution.
+        * Schedules an OAC for execution after all current OACs are finished.
         *
         * @param src The instructing ActivityController.
         * @param oac The OAC which shall be started
         */
         virtual void startOAC(ActivityControllerPtr src, OACPtr oac);
+
+        /**
+        * Injects an OAC to be executed immediately.
+        *
+        * If an OAC is still running it will be finished first, unless it is
+        * stopped.
+        *
+        * @param src The instructing ActivityController.
+        * @param oac The OAC which shall be injected
+        */
+        virtual void injectOAC(ActivityControllerPtr src, OACPtr oac);
 
         /**
         * Stops a particular OAC's execution.
@@ -186,6 +198,14 @@ namespace spoac
         */
         virtual void enablePerception();
 
+        /**
+        * Allows an action to yield to sub OACs
+        *
+        * @param src The instructing Action
+        * @param oac The OACs which shall be started
+        */
+        virtual void yieldSubOACs(ActionPtr src, std::vector<OACPtr> oacs);
+
     protected:
         /**
         * Base class for all notifiers
@@ -253,6 +273,20 @@ namespace spoac
             OACNotifier(OACPtr oac) : oac(oac) {};
         protected:
             OACPtr oac;
+        };
+
+        /**
+        * Notifier functor for informing ActivityControllers about OACs
+        * about to be started.
+        */
+        class StartingNotifier : public OACNotifier
+        {
+        public:
+            StartingNotifier(OACPtr oac) : OACNotifier(oac) {};
+            virtual void operator()(ActivityControllerPtr c)
+            {
+                c->oacStarting(oac);
+            }
         };
 
         /**
@@ -344,9 +378,11 @@ namespace spoac
         bool perceptionDisabled;
 
         std::vector<ActivityControllerPtr> activityControllers;
-        std::stack<OACPtr> plannedOACs;
+        std::list<OACPtr> plannedOACs;
         ActionPtr runningAction;
         OACPtr runningOAC;
+        std::stack<ActionPtr> blockedActions;
+        std::stack<OACPtr> blockedOACs;
 
         std::map<std::string, std::string> goals;
 
