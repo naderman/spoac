@@ -53,7 +53,15 @@ namespace spoactest
     {
     public:
         // depends on UnsharedService
-        SharedService(boost::shared_ptr<UnsharedService> u) {};
+        SharedService(boost::shared_ptr<UnsharedService> u)
+        {
+            destructed = false;
+        };
+
+        virtual ~SharedService()
+        {
+            destructed = true;
+        };
 
         static boost::shared_ptr<void> createService(
             spoac::DependencyManagerPtr manager)
@@ -63,6 +71,7 @@ namespace spoactest
             );
             return instance;
         }
+        static bool destructed;
     private:
         typedef spoac::DependencyManager::RegisterService<
             SharedService, true
@@ -71,6 +80,7 @@ namespace spoactest
         static RegisterService r;
     };
     SharedService::RegisterService SharedService::r;
+    bool SharedService::destructed;
 
     class LegacyService
     {
@@ -109,19 +119,23 @@ BOOST_AUTO_TEST_CASE(testUnsharedService)
 
 BOOST_AUTO_TEST_CASE(testSharedService)
 {
-    spoac::DependencyManagerPtr manager(new spoac::DependencyManager);
+    {
+        spoac::DependencyManagerPtr manager(new spoac::DependencyManager);
 
-    boost::shared_ptr<spoactest::SharedService> s1, s2;
+        boost::shared_ptr<spoactest::SharedService> s1, s2;
 
-    BOOST_REQUIRE_NO_THROW(
-        s1 = manager->getService<spoactest::SharedService>()
-    );
-    BOOST_REQUIRE_NO_THROW(
-        s2 = manager->getService<spoactest::SharedService>()
-    );
+        BOOST_REQUIRE_NO_THROW(
+            s1 = manager->getService<spoactest::SharedService>()
+        );
+        BOOST_REQUIRE_NO_THROW(
+            s2 = manager->getService<spoactest::SharedService>()
+        );
 
-    BOOST_CHECK(s1.get() != NULL);
-    BOOST_CHECK(s1.get() == s2.get());
+        BOOST_CHECK(!spoactest::SharedService::destructed);
+        BOOST_CHECK(s1.get() != NULL);
+        BOOST_CHECK(s1.get() == s2.get());
+    }
+    BOOST_CHECK(spoactest::SharedService::destructed);
 }
 
 BOOST_AUTO_TEST_CASE(testSetSharedService)
