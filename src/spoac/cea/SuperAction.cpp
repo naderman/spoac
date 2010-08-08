@@ -37,22 +37,30 @@ void SuperAction::setup(
     const ObjectVector& objects,
     JSON::ValuePtr config)
 {
-    if (config->getType() != JSON::OBJECT)
+    if (config->getType() != JSON::ARRAY)
     {
-        throw Exception("SuperAction config is not a JSON object");
+        throw Exception("SuperAction config is not a JSON array");
     }
 
     std::string oacName;
     std::vector<std::string> oacObjIds;
     JSON::ValuePtr oacParams;
-    JSON::Object::const_iterator it;
-    JSON::Object& object = config->toObject();
+    JSON::Array::const_iterator it;
+    JSON::Array& array = config->toArray();
 
-    for (it = object.begin(); it != object.end(); ++it)
+    for (it = array.begin(); it != array.end(); ++it)
     {
-        oacName = it->first.getString()->toString();
+        if ((*it)->getType() != JSON::OBJECT)
+        {
+            throw Exception(
+                "SuperAction config array contains non-object element"
+            );
+        }
+
+        JSON::Object& object = (*it)->toObject();
+        oacName = object["name"]->toString();
         oacObjIds.clear();
-        oacParams = it->second;
+        oacParams = object["params"];
 
         if (oacParams->getType() != JSON::ARRAY)
         {
@@ -60,12 +68,12 @@ void SuperAction::setup(
                 oacName + std::string("are not an array of numbers"));
         }
 
-        JSON::Array& array = oacParams->toArray();
-        JSON::Array::const_iterator it;
+        JSON::Array& paramArray = oacParams->toArray();
+        JSON::Array::const_iterator param;
 
-        for (it = array.begin(); it != array.end(); ++it)
+        for (param = paramArray.begin(); param != paramArray.end(); ++param)
         {
-            int paramOffset = (*it)->toInt();
+            int paramOffset = (*param)->toInt();
             oacObjIds.push_back(objects.getValidated(paramOffset)->getId());
         }
 
